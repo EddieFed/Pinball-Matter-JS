@@ -1,2 +1,2 @@
 // Hello!
-// THis is the main javascript file
+// This is the main javascript file
