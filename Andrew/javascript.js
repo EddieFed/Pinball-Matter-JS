@@ -23,7 +23,7 @@ window.addEventListener('load', function() {
     bodies = [];
 
     //Add a ball
-    var ball = Matter.Bodies.circle(250, 250, 4, {
+    var ball = Matter.Bodies.circle(250, 250, 10, {
         radius: 15,
         density: 0.04,
         friction: 0.01,
@@ -75,7 +75,7 @@ window.addEventListener('load', function() {
     });
     Matter.World.add(world, ceiling);
 
-    //Add a ball
+    //Add a paddle
     var paddle2 = Matter.Bodies.trapezoid(100, 250, 20, 80, .33, {
         angle: 1.57,
         density: 0.04,
@@ -134,13 +134,14 @@ window.addEventListener('keyup', function (event) {
     }
 
     var key = event.key || event.keyCode;
-    alert(key)
 
     if (key === "ArrowLeft") {
-        alert(bodies[0].radius)
-        bodies[0].render.circleRadius = 20;
-        alert(bodies[0].radius)
+        // alert(bodies[0].radius);
+        Matter.Body.scale(bodies[0], 2, 2);
+        // alert(bodies[0].radius)
     } else if (key === "ArrowRight") {
-        alert("right")
+        // Matter.Body.rotate(bodies[1], -1)
+        Matter.Body.setAngularVelocity(bodies[1], 1)
+
     }
 });
