@@ -59,7 +59,7 @@ window.addEventListener("load", () => {
     // Add all bodies to the world
     Matter.World.add(world, [
 
-        staticBox(500, 780, 50, 50, "#000000"),
+        staticBox(500, c.height - 50, 50, 50, "#000000"),
         ball(500, 400, 20),
 
         // Window edges (top, bottom, left, right)
