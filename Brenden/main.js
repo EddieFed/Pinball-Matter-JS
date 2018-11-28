@@ -37,7 +37,7 @@ window.addEventListener('load', function() {
     });
     Matter.World.add(world, ball);
     bodies.push(ball);
-    alert(ball.radius)
+    // alert(ball.radius)
 
     //Add a floor
     var floor = Matter.Bodies.rectangle(0, 500, 1000, 40, {
@@ -134,13 +134,18 @@ window.addEventListener('keyup', function (event) {
     }
 
     var key = event.key || event.keyCode;
-    alert(key)
+    // alert(key)
 
     if (key === "ArrowLeft") {
-        alert(bodies[0].radius)
-        bodies[0].render.circleRadius = 20;
-        alert(bodies[0].radius)
+        bodies.setAngularVelocity(paddle2,23);
+        // alert(bodies[0].radius)
+        bodies[0].render.circleRadius += 20;
+        // alert(bodies[0].radius)
     } else if (key === "ArrowRight") {
-        alert("right")
+        // alert("right")
+        // Matter.Body.setAngularVelocity(bodies[1], 1)
+        // Matter.Body.applyForce(bodies[1],23,86);
+        // Matter.Body.applyForce(bodies[1],{x: bodies[1].position.x, y: bodies[1].position.y}, {x: 0, y: -0.05});
+
     }
 });
