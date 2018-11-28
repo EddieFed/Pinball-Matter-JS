@@ -11,40 +11,124 @@
  **/
 
 
+var c;
+var engine;
+var world;
+var render;
+var mouseConstraint;
 
 
-window.addEventListener('load', function() {
+// Wait until window finishes loading!
+window.addEventListener("load", () => {
 
-    var myCanvas = document.getElementById('world');
-    var engine = Matter.Engine.create();
-    var world = engine.world;
 
-    var render = Matter.Render.create({
-        canvas: myCanvas,
+    // Canvas reference
+    c = document.getElementById("ca");
+
+    // Tracks mouse movement
+    c.addEventListener('dblclick', (event) => {
+        var rect = c.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+
+        Matter.World.add(world, staticBox(x, y, 50, 50, "#554C78"));
+
+    }, false);
+
+
+    // Matter.js setup
+    engine = Matter.Engine.create();
+    world = engine.world;
+    world.bounds = {
+        min: { x: 0, y: 0},
+        max: { x: 1000, y: 800 }
+    };
+
+    mouseConstraint = Matter.MouseConstraint.create(engine, {
+        element: c,
+        constraint: {
+            render: {
+                visible: true
+            },
+            stiffness:0.8
+        }
+    });
+    Matter.World.add(world, mouseConstraint);
+
+
+    // Add all bodies to the world
+    Matter.World.add(world, [
+
+        staticBox(500, 780, 50, 50, "#000000"),
+        ball(500, 400, 20),
+
+        // Window edges (top, bottom, left, right)
+        border(500, -5, 1000, 10),
+        border(500, 805, 1000, 10),
+        border(-5, 400, 10, 800),
+        border(1005, 400, 10, 800)
+    ]);
+
+
+// **!!REMEMBER!!** Set Renderer to match Canvas
+    render = Matter.Render.create({
+        canvas: c,
         engine: engine,
         options: {
-            width: 200,
-            height: 200,
-            background: '#000000',
+            width: c.width,
+            height: c.height,
+            background: c.style.backgroundColor,
             wireframes: false,
             showAngleIndicator: false
         }
     });
-    var ball = Matter.Bodies.circle(100, 100, 10, {
-        density: 0.04,
-        friction: 0.01,
-        frictionAir: 0.00001,
-        restitution: 0.8,
+
+
+    // Basic render
+    Matter.Engine.run(engine);
+    Matter.Render.run(render);
+
+});
+
+
+
+// ** Body Functions!! ** //
+
+function border(x, y, width, height) {
+    return Matter.Bodies.rectangle(x, y, width, height, {
+        isStatic: true,
         render: {
-            fillStyle: '#F35e66',
-            strokeStyle: 'black',
+            fillStyle: "#000000",
+            // strokeStyle: "black",
             lineWidth: 1
         }
     });
+}
 
 
+function ball(x, y, r) {
+    return Matter.Bodies.circle(x, y, r, {
+        density: 0.05,
+        friction: 0.008,
+        frictionAir: 0.00032,
+        restitution: 1,
+        render: {
+            fillStyle: "#F35e66",
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
+}
 
-    Matter.World.add(world, ball);
-    Matter.Engine.run(engine);
-    Matter.Render.run(render);
-});
+
+function staticBox(x, y, width, height, colorHex) {
+    return Matter.Bodies.rectangle(x, y, width, height, {
+        isStatic: true,
+        angle: Math.random() * Math.PI,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
+}

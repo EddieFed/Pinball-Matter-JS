@@ -50,7 +50,7 @@ window.addEventListener('load', function() {
     });
     Matter.World.add(world, wall);
 
-    //Add a wall
+    //Add a border
     var wall2 = Matter.Bodies.rectangle(500, 0, 40, 1000, {
         isStatic: true, //An immovable object
         render: {
