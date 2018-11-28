@@ -4,7 +4,7 @@ body {
 }
 
 
-canvas {
+#ca {
     background-color: #313d3c;
 
     padding: 0;
@@ -17,6 +17,24 @@ canvas {
     bottom: 0;
     left: 0;
     right: 0;
+
 }
+
+
+#bu {
+    background-color: grey;
+    border: grey;
+
+}  #bu:active {
+    background-color: darkgray;
+    border: darkgray;
+
+}  #bu:focus {
+    outline: transparent;
+
+}
+
+
+
 
 
