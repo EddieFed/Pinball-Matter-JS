@@ -23,18 +23,19 @@ window.addEventListener('load', function() {
     bodies = [];
 
     //Add a ball
-    var ball = Matter.Bodies.circle(250, 250, 4, {
-        radius: 15,
+    var ball = Matter.Bodies.circle(250, 250, 10, {
+        radius: 200,
         density: 0.04,
         friction: 0.01,
         frictionAir: 0.00001,
-        restitution: 0.8,
+        restitution: 1,
         render: {
             fillStyle: '#F35e66',
             strokeStyle: 'black',
             lineWidth: 1
         }
     });
+    world.gravity.y = .75;
     Matter.World.add(world, ball);
     bodies.push(ball);
     // alert(ball.radius)
@@ -91,6 +92,22 @@ window.addEventListener('load', function() {
     Matter.World.add(world, paddle2);
     bodies.push(paddle2);
 
+    let bumper1 = Matter.Bodies.circle(100, 250, 40, {
+        angle: 1.57,
+        isStatic: true, //An immovable object
+        density: 0.4,
+        friction: 0.01,
+        frictionAir: 0.00001,
+        restitution: 1.5,
+        render: {
+            fillStyle: '#0036f3',
+            strokeStyle: 'black',
+            lineWidth: 1
+        }
+    });
+    bumper1.restitution =1.75;
+    Matter.World.add(world, bumper1);
+    bodies.push(bumper1);
 
 
     // // keyboard paddle events
