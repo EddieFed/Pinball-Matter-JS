@@ -16,6 +16,7 @@ var engine;
 var world;
 var render;
 var mouseConstraint;
+var paddle = {};
 
 
 // Wait until window finishes loading!
@@ -25,13 +26,22 @@ window.addEventListener("load", () => {
     // Canvas reference
     c = document.getElementById("ca");
 
-    // Tracks mouse movement
-    c.addEventListener('dblclick', (event) => {
-        var rect = c.getBoundingClientRect();
-        var x = event.clientX - rect.left;
-        var y = event.clientY - rect.top;
 
-        Matter.World.add(world, staticBox(x, y, 50, 50, "#554C78"));
+
+
+    // Tracks mouse movement
+    c.addEventListener('click', () => {
+        // alert("Click");
+
+        Matter.Body.applyForce(paddle.thing, {
+            x: paddle.thing.position.x - 1,
+            y: paddle.thing.position.y - 1
+        }, Matter.Vector.create(0,-0.05));
+
+        // setTimeout(function() {
+        //     Matter.Body.setAngularVelocity(paddle.thing, 0);
+        //     Matter.Body.setVelocity(paddle.thing, 0);
+        // }, 1000);
 
     }, false);
 
@@ -44,23 +54,65 @@ window.addEventListener("load", () => {
         max: { x: 1000, y: 800 }
     };
 
+
     mouseConstraint = Matter.MouseConstraint.create(engine, {
         element: c,
         constraint: {
             render: {
-                visible: true
+                visible: false
             },
             stiffness:0.8
         }
     });
-    Matter.World.add(world, mouseConstraint);
+
+    paddle.thing = Matter.Bodies.rectangle(c.width/2 + 35, c.height/2, 70, 15,  {
+        label: "paddle",
+        render: {
+            fillStyle: "#000000",
+            strokeStyle: "#000000",
+            lineWidth: 1
+        }
+    });
+
+    paddle.const = Matter.Bodies.circle(c.width/2, c.height/2, 5, {
+        isStatic: true,
+        render: {
+            visible: false,
+            fillStyle: "#F35e66",
+            strokeStyle: "#000000",
+            lineWidth: 1
+        },
+        slop: 0
+    });
+
+    paddle.constrained = Matter.Constraint.create({
+        bodyA: paddle.thing,
+        pointA: { x: -35, y: 0},
+        bodyB: paddle.const,
+        length: 0,
+        stiffness: 0,
+        render: {
+            visible: false
+        }
+    });
+
+
+
+
 
 
     // Add all bodies to the world
     Matter.World.add(world, [
+        mouseConstraint,
 
-        staticBox(500, c.height - 50, 50, 50, "#000000"),
-        ball(500, 400, 20),
+        paddle.thing,
+        paddle.const,
+        paddle.constrained,
+
+
+        staticBox(c.width/2 + 25, c.height/2 + 40, 80, 10, "#FFFFFF", (Math.PI) / 4),
+        staticBox(c.width/2 + 40, c.height/2 - 15, 80, 10, "#FFFFFF", 0),
+        ball(700, 400, 20),
 
         // Window edges (top, bottom, left, right)
         border(500, -5, 1000, 10),
@@ -68,7 +120,6 @@ window.addEventListener("load", () => {
         border(-5, 400, 10, 800),
         border(1005, 400, 10, 800)
     ]);
-
 
 // **!!REMEMBER!!** Set Renderer to match Canvas
     render = Matter.Render.create({
@@ -92,6 +143,29 @@ window.addEventListener("load", () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ** Body Functions!! ** //
 
 function border(x, y, width, height) {
@@ -99,7 +173,6 @@ function border(x, y, width, height) {
         isStatic: true,
         render: {
             fillStyle: "#000000",
-            // strokeStyle: "black",
             lineWidth: 1
         }
     });
@@ -114,20 +187,23 @@ function ball(x, y, r) {
         restitution: 1,
         render: {
             fillStyle: "#F35e66",
-            strokeStyle: "black",
+            strokeStyle: "#000000",
             lineWidth: 1
-        }
+        },
+        slop: 0
     });
 }
 
 
-function staticBox(x, y, width, height, colorHex) {
+function staticBox(x, y, width, height, colorHex, rotate) {
     return Matter.Bodies.rectangle(x, y, width, height, {
         isStatic: true,
-        angle: Math.random() * Math.PI,
+        angle: rotate,
+        inertia: Infinity,
         render: {
+            visible: false,
             fillStyle: colorHex,
-            strokeStyle: "black",
+            strokeStyle: "#000000",
             lineWidth: 1
         }
     });
