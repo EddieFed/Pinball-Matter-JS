@@ -19,7 +19,6 @@ var mouseConstraint;
 var paddle = {};
 
 var defaultCategory = 0x0001,
-    ballCategory = 0x0003,
     paddleCategory = 0x0004;
 
 
@@ -40,7 +39,7 @@ window.addEventListener("load", () => {
         Matter.Body.applyForce(paddle.thing, {
             x: paddle.thing.position.x,
             y: paddle.thing.position.y
-        }, Matter.Vector.create(0,-0.1));
+        }, Matter.Vector.create(0,-100));
 
     }, false);
 
@@ -71,8 +70,10 @@ window.addEventListener("load", () => {
 
     paddle.thing = Matter.Bodies.rectangle(c.width/2 + 35, c.height/2, 70, 15,  {
         label: "paddle",
+        density: 2/3,
         collisionFilter: {
-            mask: defaultCategory
+            category: defaultCategory,
+            mask: paddleCategory | defaultCategory
         },
         render: {
             fillStyle: "#000000",
@@ -125,7 +126,7 @@ window.addEventListener("load", () => {
 
 
         staticBox(c.width/2 + 30, c.height/2 + 45, 80, 10, "#FFFFFF", (Math.PI) / 4),
-        staticBox(c.width/2 + 39, c.height/2 - 15, 80, 10, "#FFFFFF", 0),
+        staticBox(c.width/2 + 70, c.height/2 - 20, 50, 10, "#FFFFFF", 0),
 
         // Matter.Bodies.circle(c.width/2 + 20, c.height/2 - 10, 10, {
         //     isStatic: true,
@@ -209,7 +210,8 @@ function ball(x, y, r) {
         frictionAir: 0.00032,
         restitution: 1,
         collisionFilter: {
-            category: defaultCategory
+            category: defaultCategory,
+            mask: defaultCategory
         },
         render: {
             fillStyle: "#F35e66",
@@ -227,7 +229,8 @@ function staticBox(x, y, width, height, colorHex, rotate) {
         angle: rotate,
         inertia: Infinity,
         collisionFilter: {
-            category: paddleCategory
+            category: paddleCategory,
+            mask: defaultCategory, paddleCategory
         },
         render: {
             visible: true,

@@ -142,10 +142,10 @@ window.addEventListener('keyup', function (event) {
         // Matter.Body.rotate(bodies[1], -1)
         // Matter.Body.setAngularVelocity(bodies[1], )
         Matter.Body.applyForce(bodies[1], {x:bodies[1].position.x+20, y:bodies[1].position.y}, {x: 0, y: -6})
-        setTimeout(function() {
-            Matter.Body.setAngularVelocity(bodies[1], 0)
-            Matter.Body.setVelocity(bodies[1], 0)
-        }, 1000);
+        // setTimeout(function() {
+        //     Matter.Body.setAngularVelocity(bodies[1], 0)
+        //     Matter.Body.setVelocity(bodies[1], 0)
+        // }, 1000);
         // Matter.Body.setAngularVelocity(bodies[1], 1)
 
     }
