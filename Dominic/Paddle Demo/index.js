@@ -41,20 +41,20 @@ window.addEventListener("load", () => {
 
 
     // keyboard paddle events
-    $('body').on('keydown', function(e) {
-        if (e.which === 37) { // left arrow key
-            alert("left")
-        } else if (e.which === 39) { // right arrow key
-            alert("right")
-        }
-    });
-    $('body').on('keyup', function(e) {
-        if (e.which === 37) { // left arrow key
-            isLeftPaddleUp = false;
-        } else if (e.which === 39) { // right arrow key
-            isRightPaddleUp = false;
-        }
-    });
+    // $('body').on('keydown', function(e) {
+    //     if (e.which === 37) { // left arrow key
+    //         alert("left")
+    //     } else if (e.which === 39) { // right arrow key
+    //         alert("right")
+    //     }
+    // });
+    // $('body').on('keyup', function(e) {
+    //     if (e.which === 37) { // left arrow key
+    //         isLeftPaddleUp = false;
+    //     } else if (e.which === 39) { // right arrow key
+    //         isRightPaddleUp = false;
+    //     }
+    // });
 
 
 
