@@ -29,15 +29,33 @@ var render = Matter.Render.create({
 
 var ball = Matter.Bodies.circle(100, 100, 40, {
     density: 0.94,
-    friction: 1,
+    friction: .04,
     frictionAir: 0.00001,
-    restitution: .99,
+    restitution: .7,
     render: {
         fillStyle: '#F35e66',
         strokeStyle: 'black',
         lineWidth: 1
     }
 });
+    // var bumper = Matter.Bodies.circle(440, 440, 40, {
+    //     isStatic: true,
+    //
+    //     friction: 1,
+    //     frictionAir: 0.00001,
+    //     restitution: 1.5,
+    //     render: {
+    //         fillStyle: '#00FF00',
+    //         strokeStyle: 'black',
+    //         lineWidth: 1
+    //     }
+    // });
+    var donthitball = 0x0001;
+    var hitball = 0x0004;
+
+
+
+
 
     var floor = Matter.Bodies.rectangle(250, 495, 500, 10, {
         isStatic: true,
@@ -47,7 +65,6 @@ var ball = Matter.Bodies.circle(100, 100, 40, {
             visible: true
         }
     });
-
     var wall1 = Matter.Bodies.rectangle(5, 0, 10, 1000, {
         isStatic: true,
         render: {
@@ -56,7 +73,6 @@ var ball = Matter.Bodies.circle(100, 100, 40, {
             visible: true
         }
     });
-    Matter.World.add(world, wall1);
     var wall2 = Matter.Bodies.rectangle(495, 250, 10, 500, {
         isStatic: true,
         render: {
@@ -73,11 +89,23 @@ var ball = Matter.Bodies.circle(100, 100, 40, {
             visible: true
         }
     });
+    var test = Matter.Bodies.rectangle(60, 440, 100, 100, {
+        isStatic: true,
+        isSensor:true,
+        render: {
+            fillStyle: '#00FF00',
+            strokeStyle: 'black',
+            visible: true
+        }
+    });
 
+    Matter.World.add(world, test);
+
+    Matter.World.add(world, wall1);
     Matter.World.add(world, top);
     Matter.World.add(world, wall2);
     Matter.World.add(world, floor);
-
+//Matter.World.add(world,bumper);
 Matter.World.add(world, ball);
 Matter.Engine.run(engine);
 Matter.Render.run(render);
