@@ -23,7 +23,7 @@ window.addEventListener('load', function() {
     bodies = [];
 
     //Add a ball
-    var ball = Matter.Bodies.circle(250, 250, 10, {
+    var ball = Matter.Bodies.circle(100, 0, 10, {
         radius: 15,
         density: 0.04,
         friction: 0.01,
@@ -74,8 +74,32 @@ window.addEventListener('load', function() {
     });
     Matter.World.add(world, ceiling);
 
+    var launcher = Matter.Bodies.rectangle(100,250,20,80);
+    Matter.World.add(world,launcher);
+    bodies.push(launcher);
+
+    var lWall = Matter.Bodies.rectangle(80,0,20,1000, {
+        isStatic: true, //An immovable object
+        render: {
+            visible: true
+        }
+    });
+    Matter.World.add(world,lWall);
+    bodies.push(lWall);
+
+    var lWall2 = Matter.Bodies.rectangle(120,0,20,1000, {
+        isStatic: true, //An immovable object
+        render: {
+            visible: true
+        }
+    });
+    Matter.World.add(world,lWall2);
+    bodies.push(lWall2);
+
+
+
     //Add a paddle
-    var paddle2 = Matter.Bodies.trapezoid(100, 250, 20, 80, .33, {
+    var paddle2 = Matter.Bodies.trapezoid(900, 250, 20, 80, .33, {
         angle: 1.57,
         density: 0.2,
         friction: 0.01,
@@ -142,10 +166,10 @@ window.addEventListener('keyup', function (event) {
         // Matter.Body.rotate(bodies[1], -1)
         // Matter.Body.setAngularVelocity(bodies[1], )
         Matter.Body.applyForce(bodies[1], {x:bodies[1].position.x+20, y:bodies[1].position.y}, {x: 0, y: -6})
-        // setTimeout(function() {
-        //     Matter.Body.setAngularVelocity(bodies[1], 0)
-        //     Matter.Body.setVelocity(bodies[1], 0)
-        // }, 1000);
+        setTimeout(function() {
+            Matter.Body.setAngularVelocity(bodies[1], 0);
+            Matter.Body.setVelocity(bodies[1], 0);
+        }, 1000);
         // Matter.Body.setAngularVelocity(bodies[1], 1)
 
     }

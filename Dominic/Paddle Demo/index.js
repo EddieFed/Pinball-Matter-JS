@@ -18,9 +18,6 @@ var render;
 var mouseConstraint;
 var paddle = {};
 
-var defaultCategory = 0x0001,
-    paddleCategory = 0x0004;
-
 
 // Wait until window finishes loading!
 window.addEventListener("load", () => {
@@ -35,13 +32,30 @@ window.addEventListener("load", () => {
     // Tracks mouse movement
     c.addEventListener('click', () => {
         // alert("Click");
-
         Matter.Body.applyForce(paddle.thing, {
-            x: paddle.thing.position.x,
-            y: paddle.thing.position.y
-        }, Matter.Vector.create(0,-100));
-
+            x: paddle.thing.position.x - 1,
+            y: paddle.thing.position.y - 1
+        }, Matter.Vector.create(0.0,-0.05));
     }, false);
+
+
+
+    // keyboard paddle events
+    $('body').on('keydown', function(e) {
+        if (e.which === 37) { // left arrow key
+            alert("left")
+        } else if (e.which === 39) { // right arrow key
+            alert("right")
+        }
+    });
+    $('body').on('keyup', function(e) {
+        if (e.which === 37) { // left arrow key
+            isLeftPaddleUp = false;
+        } else if (e.which === 39) { // right arrow key
+            isRightPaddleUp = false;
+        }
+    });
+
 
 
     // Matter.js setup
@@ -51,11 +65,6 @@ window.addEventListener("load", () => {
         min: { x: 0, y: 0},
         max: { x: 1000, y: 800 }
     };
-
-
-
-
-
 
 
     mouseConstraint = Matter.MouseConstraint.create(engine, {
@@ -70,11 +79,6 @@ window.addEventListener("load", () => {
 
     paddle.thing = Matter.Bodies.rectangle(c.width/2 + 35, c.height/2, 70, 15,  {
         label: "paddle",
-        density: 2/3,
-        collisionFilter: {
-            category: defaultCategory,
-            mask: paddleCategory | defaultCategory
-        },
         render: {
             fillStyle: "#000000",
             strokeStyle: "#000000",
@@ -85,7 +89,7 @@ window.addEventListener("load", () => {
     paddle.const = Matter.Bodies.circle(c.width/2, c.height/2, 5, {
         isStatic: true,
         render: {
-            visible: true,
+            visible: true,//what the paddle revolves around
             fillStyle: "#F35e66",
             strokeStyle: "#000000",
             lineWidth: 1
@@ -93,23 +97,16 @@ window.addEventListener("load", () => {
         slop: 0
     });
 
-    let paddleGroup = Matter.Body.nextGroup(true);
-
-    Object.values(paddle).forEach((p) => {
-        p.collisionFilter.group = paddleGroup;
-    });
-
     paddle.constrained = Matter.Constraint.create({
         bodyA: paddle.thing,
         pointA: { x: -35, y: 0},
         bodyB: paddle.const,
-        length: -1,
+        length: 0,
         stiffness: 0,
         render: {
-            visible: true
+            visible: false
         }
     });
-
 
 
 
@@ -125,17 +122,8 @@ window.addEventListener("load", () => {
         paddle.constrained,
 
 
-        staticBox(c.width/2 + 30, c.height/2 + 45, 80, 10, "#FFFFFF", (Math.PI) / 4),
-        staticBox(c.width/2 + 70, c.height/2 - 20, 50, 10, "#FFFFFF", 0),
-
-        // Matter.Bodies.circle(c.width/2 + 20, c.height/2 - 10, 10, {
-        //     isStatic: true,
-        //     render: {
-        //
-        //     }
-        //
-        // }),
-
+        staticBox(c.width/2 + 25, c.height/2 + 40, 80, 10, "#FFFFFF", (Math.PI) / 4),
+        staticBox(c.width/2 + 40, c.height/2 - 15, 80, 10, "#FFFFFF", 0),
         ball(700, 400, 20),
 
         // Window edges (top, bottom, left, right)
@@ -209,10 +197,6 @@ function ball(x, y, r) {
         friction: 0.008,
         frictionAir: 0.00032,
         restitution: 1,
-        collisionFilter: {
-            category: defaultCategory,
-            mask: defaultCategory
-        },
         render: {
             fillStyle: "#F35e66",
             strokeStyle: "#000000",
@@ -228,12 +212,8 @@ function staticBox(x, y, width, height, colorHex, rotate) {
         isStatic: true,
         angle: rotate,
         inertia: Infinity,
-        collisionFilter: {
-            category: paddleCategory,
-            mask: defaultCategory, paddleCategory
-        },
         render: {
-            visible: true,
+            visible: false,
             fillStyle: colorHex,
             strokeStyle: "#000000",
             lineWidth: 1
