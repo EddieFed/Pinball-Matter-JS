@@ -19,7 +19,9 @@ var mouseConstraint;
 var paddle = {};
 
 var defaultCategory = 0x0001,
-    paddleCategory = 0x0004;
+    paddleCategory = 0x0004,
+
+    mouseCategory = 0x0008;
 
 
 // Wait until window finishes loading!
@@ -60,6 +62,9 @@ window.addEventListener("load", () => {
 
     mouseConstraint = Matter.MouseConstraint.create(engine, {
         element: c,
+        collisionFilter: {
+          group: mouseCategory
+        },
         constraint: {
             render: {
                 visible: false
@@ -71,6 +76,7 @@ window.addEventListener("load", () => {
     paddle.thing = Matter.Bodies.rectangle(c.width/2 + 35, c.height/2, 70, 15,  {
         label: "paddle",
         density: 2/3,
+        restitution: 1,
         collisionFilter: {
             category: defaultCategory,
             mask: paddleCategory | defaultCategory
@@ -211,7 +217,7 @@ function ball(x, y, r) {
         restitution: 1,
         collisionFilter: {
             category: defaultCategory,
-            mask: defaultCategory
+            mask: defaultCategory || mouseCategory
         },
         render: {
             fillStyle: "#F35e66",

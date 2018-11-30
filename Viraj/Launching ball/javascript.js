@@ -1,6 +1,7 @@
 var engine, world, render;
 var bodies;
 
+
 window.addEventListener('load', function() {
 
     //Fetch our canvas
@@ -77,7 +78,9 @@ window.addEventListener('load', function() {
     var launcher = Matter.Bodies.rectangle(100,250,20,80);
     Matter.World.add(world,launcher);
     bodies.push(launcher);
-
+    Matter.Constraint.create(lWall);
+    Matter.Constraint.create(lWall2);
+    launcher.constrain();
     var lWall = Matter.Bodies.rectangle(80,0,20,1000, {
         isStatic: true, //An immovable object
         render: {
