@@ -68,7 +68,7 @@ window.addEventListener("load", () => {
         }
     });
 
-    paddle.thing = Matter.Bodies.rectangle(c.width/2 + 35, c.height/2, 70, 15,  {
+    paddle.thing = Matter.Bodies.rectangle(c.width/2 -200, c.height/2, 70, 15,  {
         label: "paddle",
         density: 2/3,
         collisionFilter: {

@@ -105,6 +105,29 @@ function border(x, y, width, height) {
     });
 }
 
+window.addEventListener('keyup', function (event) {
+    if (event.defaultPrevented) {
+        return;
+    }
+
+    var key = event.key || event.keyCode;
+
+    if (key === "ArrowLeft") {
+        // alert(bodies[0].radius);
+        Matter.Body.scale(bodies[0], 2, 2);
+        // alert(bodies[0].radius)
+    } else if (key === "ArrowRight") {
+        // Matter.Body.rotate(bodies[1], -1)
+        // Matter.Body.setAngularVelocity(bodies[1], )
+        Matter.Body.applyForce(bodies[1], {x:bodies[1].position.x+20, y:bodies[1].position.y}, {x: 0, y: -6})
+        // setTimeout(function() {
+        //     Matter.Body.setAngularVelocity(bodies[1], 0)
+        //     Matter.Body.setVelocity(bodies[1], 0)
+        // }, 1000);
+        // Matter.Body.setAngularVelocity(bodies[1], 1)
+
+    }
+});
 
 function ball(x, y, r) {
     return Matter.Bodies.circle(x, y, r, {
