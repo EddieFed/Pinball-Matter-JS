@@ -99,16 +99,45 @@ var ball = Matter.Bodies.circle(100, 100, 40, {
         }
     });
 
+
+
+    Matter.Events.on(engine, 'collisionStart', function(event) {
+       // var pairs = event.pairs;
+        //let a = event.pairs.bodyA;
+        //let b = event.pairs.bodyB;
+        // if((a===ball&&b===floor)||(b===ball&&a===floor)){
+        //     alert("rawr");
+        //     Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0, y: -5.05});
+        // }
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === collider) {
+                pair.bodyB.render.strokeStyle = redColor;
+            } else if (pair.bodyB === collider) {
+                pair.bodyA.render.strokeStyle = redColor;
+            }
+        }
+    });
+
+   // Event.on(test,'collisionEnd',function(event) {});
+
+
     Matter.World.add(world, test);
 
     Matter.World.add(world, wall1);
     Matter.World.add(world, top);
     Matter.World.add(world, wall2);
     Matter.World.add(world, floor);
-//Matter.World.add(world,bumper);
 Matter.World.add(world, ball);
 Matter.Engine.run(engine);
 Matter.Render.run(render);
 //https://blog.alexandergottlieb.com/matter-js-the-missing-tutorial-70aafc06b167
 //https://codepen.io/lonekorean/pen/KXLrVX
+
+
+
+
 });
