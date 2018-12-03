@@ -134,7 +134,7 @@ window.addEventListener('load', function() {
     //         isRightPaddleUp = false;
     //     }
     // });
-
+    //
     //Make interactive
     var mouseConstraint = Matter.MouseConstraint.create(engine, { //Create Constraint
         element: canvas,
