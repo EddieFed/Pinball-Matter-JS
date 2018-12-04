@@ -102,22 +102,16 @@ var ball = Matter.Bodies.circle(100, 100, 40, {
 
 
     Matter.Events.on(engine, 'collisionStart', function(event) {
-       // var pairs = event.pairs;
-        //let a = event.pairs.bodyA;
-        //let b = event.pairs.bodyB;
-        // if((a===ball&&b===floor)||(b===ball&&a===floor)){
-        //     alert("rawr");
-        //     Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0, y: -5.05});
-        // }
+
         var pairs = event.pairs;
 
         for (var i = 0, j = pairs.length; i != j; ++i) {
             var pair = pairs[i];
 
-            if (pair.bodyA === collider) {
-                pair.bodyB.render.strokeStyle = redColor;
-            } else if (pair.bodyB === collider) {
-                pair.bodyA.render.strokeStyle = redColor;
+            if (pair.bodyA === ball&&pair.bodyB === test) {
+              alert("rawr");
+            } else if (pair.bodyB === ball&&pair.bodyA === test) {
+               alert("rawr")
             }
         }
     });
