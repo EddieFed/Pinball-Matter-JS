@@ -4,6 +4,7 @@ var world;
 var render;
 var mouseConstraint;
 var paddle = {};
+var pinball;
 
 var defaultCategory = 0x0001,
     paddleCategory = 0x0004;
@@ -28,7 +29,7 @@ window.addEventListener("load", () => {
             Matter.Body.applyForce(paddle.thing, {
                 x: paddle.thing.position.x,
                 y: paddle.thing.position.y
-            }, Matter.Vector.create(0,-100));
+            }, Matter.Vector.create(0,-200));
         } else if (key === "ArrowRight") {
 
         }
@@ -66,7 +67,7 @@ window.addEventListener("load", () => {
         }
     });
 
-    paddle.thing = Matter.Bodies.rectangle(c.width/2-300, c.height/2, 100, 15,  {
+    paddle.thing = Matter.Bodies.rectangle(c.width/2+200, c.height/2, 100, 15,  {
         label: "paddle",
         density: 2/3,
         collisionFilter: {
@@ -74,6 +75,8 @@ window.addEventListener("load", () => {
             mask: paddleCategory | defaultCategory
         },
         render: {
+            ignoreGravity: true,
+
             fillStyle: "#000000",
             strokeStyle: "#000000",
             lineWidth: 1
@@ -108,8 +111,8 @@ window.addEventListener("load", () => {
         }
     });
 
-
-
+    pinball = ball(700, 400, 20);
+    staticCircleBot =
 
 
 
@@ -136,7 +139,7 @@ window.addEventListener("load", () => {
         //
         // }),
 
-        ball(700, 400, 20),
+        pinball,
 
         // Window edges (top, bottom, left, right)
         border(500, -5, 1000, 10),
@@ -163,6 +166,35 @@ window.addEventListener("load", () => {
     Matter.Engine.run(engine);
     Matter.Render.run(render);
 
+    Matter.Events.on(engine, 'beforeUpdate', function() {
+            var gravity = engine.world.gravity;
+            // alert(gravity.y*gravity.scale*pinball.mass)
+            // if (noGravity) {
+            Matter.Body.applyForce(paddle.thing, {
+                x: 0,
+                y: 0
+            }, {
+                x: -gravity.x * gravity.scale * paddle.thing.mass/2,
+                y: -gravity.y * gravity.scale * paddle.thing.mass/2
+            });
+
+        }
+    );
+
+    Matter.Events.on(engine, 'collisionStart', function(event) {
+
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === paddle.thing&&pair.bodyB === test) {
+                alert("rawr");
+            } else if (pair.bodyB === ball&&pair.bodyA === test) {
+                alert("rawr")
+            }
+        }
+    });
 });
 
 
@@ -238,3 +270,4 @@ function staticCircle(x, y, radius, colorHex) {
         }
     });
 }
+
