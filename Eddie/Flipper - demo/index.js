@@ -114,9 +114,11 @@ window.addEventListener("load", () => {
     ]);
 
 
-
+    game.runner = Matter.Runner.create({
+        isFixed: true
+    });
     // Basic render
-    Matter.Engine.run(game.engine);
+    Matter.Runner.start(game.runner, game.engine);
     Matter.Render.run(game.render);
 
 });
@@ -143,14 +145,6 @@ window.addEventListener("keyup", function (event) {
 
 
 // <- Creation functions ->
-
-
-
-
-
-
-
-
 
 function border(x, y, width, height) {
     return Matter.Bodies.rectangle(x, y, width, height, {
