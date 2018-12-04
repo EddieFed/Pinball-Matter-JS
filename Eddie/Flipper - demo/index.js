@@ -15,6 +15,9 @@ var game = {};
 
 var paddle = {};
 
+var defaultCategory = 0x0001;
+var paddleCategory = 0x0004;
+
 
 // Wait until window finishes loading!
 window.addEventListener("load", () => {
@@ -47,12 +50,40 @@ window.addEventListener("load", () => {
         }
     });
 
+    // Game object creation
+    makePaddle();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Add all bodies to the world
     Matter.World.add(game.world, [
-        mouseConstraint,
+        mouseConstraint(),
 
-        Matter.Bodies.circle(500, 500, 10, {
-            density: 0.05,
+        Matter.Bodies.circle(550, 20, 10, {
+            density: 0.1,
             friction: 0.008,
             frictionAir: 0.00032,
             restitution: 1,
@@ -61,11 +92,19 @@ window.addEventListener("load", () => {
                 fillStyle: "#F35e66",
                 strokeStyle: "#000000",
                 lineWidth: 1
+            },
+            collisionFilter: {
+                category: defaultCategory,
+                mask: defaultCategory
             }
         }),
 
 
-
+        paddle.ball,
+        paddle.paddle,
+        paddle.constrainter,
+        staticCircle(c.width/2 + 20, c.height/2 + 45, 10, "#FFFFFF"),
+        staticCircle(c.width/2 + 60, c.height/2 - 20, 10, "#FFFFFF"),
 
         // Window edges (top, bottom, left, right)
         border(500, -5, 1000, 10),
@@ -75,12 +114,30 @@ window.addEventListener("load", () => {
     ]);
 
 
+
     // Basic render
     Matter.Engine.run(game.engine);
     Matter.Render.run(game.render);
 
 });
 
+
+
+
+window.addEventListener("keyup", function (event) {
+    if (event.defaultPrevented) {
+        return;
+    }
+
+    var key = event.code;
+
+    if (key === "Space") {
+        Matter.Body.applyForce(paddle.paddle, {
+            x: paddle.paddle.position.x,
+            y: paddle.paddle.position.y
+        }, Matter.Vector.create(0, -100));
+    }
+});
 
 
 
@@ -105,15 +162,81 @@ function border(x, y, width, height) {
     });
 }
 
+
 function mouseConstraint() {
     return Matter.MouseConstraint.create(game.engine, {
         element: c,
         constraint: {
             render: {
-                visible: false
+                visible: true
             }
         },
         stiffness: 0.8
 
+    });
+}
+
+
+function makePaddle() {
+    paddle.paddle = Matter.Bodies.rectangle(c.width/2 + 300, c.height/2, 100, 15,  {
+        label: "paddle",
+        density: 2/3,
+        collisionFilter: {
+            category: defaultCategory,
+            mask: paddleCategory | defaultCategory
+        },
+        render: {
+            fillStyle: "#000000",
+            strokeStyle: "#000000",
+            lineWidth: 1
+        }
+    });
+
+    paddle.ball = Matter.Bodies.circle(c.width/2, c.height/2, 5, {
+        isStatic: true,
+        render: {
+            visible: false,
+            fillStyle: "#F35e66",
+            strokeStyle: "#000000",
+            lineWidth: 1
+        },
+        slop: 0
+    });
+
+    let paddleGroup = Matter.Body.nextGroup(true);
+
+    Object.values(paddle).forEach((p) => {
+        p.collisionFilter.group = paddleGroup;
+    });
+
+    paddle.constrainter = Matter.Constraint.create({
+        bodyA: paddle.paddle,
+        pointA: { x: -35, y: 0},
+        bodyB: paddle.ball,
+        length: 0.01,
+        stiffness: 0,
+        render: {
+            visible: false
+        }
+    });
+
+}
+
+
+function staticCircle(x, y, radius, colorHex) {
+    return Matter.Bodies.circle(x, y, radius, {
+        isStatic: true,
+        inertia: Infinity,
+        restitution: 0,
+        collisionFilter: {
+            category: paddleCategory,
+            mask: defaultCategory, paddleCategory
+        },
+        render: {
+            visible: false,
+            fillStyle: colorHex,
+            strokeStyle: "#000000",
+            lineWidth: 1
+        }
     });
 }
