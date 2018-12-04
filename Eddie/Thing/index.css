@@ -26,15 +26,10 @@ body {
     border: grey;
 
 }  #bu:active {
-    background-color: darkgray;
-    border: darkgray;
+       background-color: darkgray;
+       border: darkgray;
 
-}  #bu:focus {
-    outline: transparent;
+   }  #bu:focus {
+          outline: transparent;
 
-}
-
-
-
-
-
+      }

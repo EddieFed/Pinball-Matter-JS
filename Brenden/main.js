@@ -21,7 +21,10 @@ window.addEventListener('load', function() {
         }
     });
     bodies = [];
-
+    const COLOR = {
+        BUMPER: '#0036f3',
+        BUMPER_ALT: '#fff3bf',
+    };
     //Add a ball
     var ball = Matter.Bodies.circle(250, 250, 10, {
         radius: 200,
@@ -112,22 +115,22 @@ window.addEventListener('load', function() {
     Matter.World.add(world, bumper1);
     bodies.push(bumper1);
 
+    Matter.Events.on(engine, 'collisionStart', function(event) {
 
-    // // keyboard paddle events
-    // $('body').on('keydown', function(e) {
-    //     if (e.which === 37) { // left arrow key
-    //         alert("left")
-    //     } else if (e.which === 39) { // right arrow key
-    //         alert("right")
-    //     }
-    // });
-    // $('body').on('keyup', function(e) {
-    //     if (e.which === 37) { // left arrow key
-    //         isLeftPaddleUp = false;
-    //     } else if (e.which === 39) { // right arrow key
-    //         isRightPaddleUp = false;
-    //     }
-    // });
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === ball&&pair.bodyB === bumper1) {
+                bumper1.render.fillStyle = COLOR.BUMPER_ALT;
+                setTimeout(function() {
+                 bumper1.render.fillStyle = COLOR.BUMPER;
+                 }, 300);
+            }
+
+        }
+    });
 
     //Make interactive
     var mouseConstraint = Matter.MouseConstraint.create(engine, { //Create Constraint
@@ -169,3 +172,10 @@ window.addEventListener('keyup', function (event) {
 
     }
 });
+
+// Matter.Events.on(engine, 'beforeUpdate', function(event) {
+//     // bumpers can quickly multiply velocity, so keep that in check
+//     Matter.Body.setVelocity(pinball, {
+//         x: Math.max(Math.min(pinball.velocity.x, MAX_VELOCITY), -MAX_VELOCITY),
+//         y: Math.max(Math.min(pinball.velocity.y, MAX_VELOCITY), -MAX_VELOCITY),
+//     });
