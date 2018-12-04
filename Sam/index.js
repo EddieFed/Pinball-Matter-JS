@@ -1,5 +1,6 @@
-window.addEventListener('load', function() {
 
+window.addEventListener('load', function() {
+    var boolea = false;
     var myCanvas = document.getElementById('world');
 var engine = Matter.Engine.create();
 var world = engine.world;
@@ -28,10 +29,11 @@ var render = Matter.Render.create({
     Matter.World.add(world, mouseConstraint);
 
 var ball = Matter.Bodies.circle(100, 100, 40, {
-    density: 0.94,
+    mass: 1,
     friction: .04,
     frictionAir: 0.00001,
     restitution: .7,
+    inertia:0,
     render: {
         fillStyle: '#F35e66',
         strokeStyle: 'black',
@@ -109,14 +111,33 @@ var ball = Matter.Bodies.circle(100, 100, 40, {
             var pair = pairs[i];
 
             if (pair.bodyA === ball&&pair.bodyB === test) {
-              alert("rawr");
+              boolea=true;
             } else if (pair.bodyB === ball&&pair.bodyA === test) {
-               alert("rawr")
+
+                boolea=true;
             }
         }
     });
+    Matter.Events.on(engine, 'collisionEnd', function(event) {
 
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === ball&&pair.bodyB === test) {
+
+                boolea=false;
+            } else if (pair.bodyB === ball&&pair.bodyA === test) {
+
+                boolea=false;
+            }
+        }
+    });
    // Event.on(test,'collisionEnd',function(event) {});
+
+
+
 
 
     Matter.World.add(world, test);
@@ -131,7 +152,14 @@ Matter.Render.run(render);
 //https://blog.alexandergottlieb.com/matter-js-the-missing-tutorial-70aafc06b167
 //https://codepen.io/lonekorean/pen/KXLrVX
 
+    Matter.Events.on(engine, 'afterUpdate', function(event) {
 
+        if(boolea==true){
+
+            Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0, y: -1});
+
+        }
+    });
 
 
 });
