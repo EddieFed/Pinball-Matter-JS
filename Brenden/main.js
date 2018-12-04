@@ -23,7 +23,7 @@ window.addEventListener('load', function() {
     bodies = [];
     const COLOR = {
         BUMPER: '#0036f3',
-        BUMPER_ALT: '#fff3bf',
+        BUMPER_ALT: '#00e5ff',
     };
     //Add a ball
     var ball = Matter.Bodies.circle(250, 250, 10, {
