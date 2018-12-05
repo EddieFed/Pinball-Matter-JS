@@ -13,7 +13,9 @@
 var c;
 var game = {};
 
-var paddle = {};
+var paddleLeft = {};
+var paddleRight = {};
+
 
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
@@ -32,8 +34,8 @@ window.addEventListener("load", () => {
             y: 0
         },
         max: {
-            x: 1000,
-            y: 800
+            x: 750,
+            y: 750
         }
     };
 
@@ -51,7 +53,8 @@ window.addEventListener("load", () => {
     });
 
     // Game object creation
-    makePaddle();
+    paddleLeft = makePaddle(400, 400);
+    paddleRight = makePaddle(200, 400);
 
     // Add all bodies to the world
     Matter.World.add(game.world, [
@@ -75,17 +78,21 @@ window.addEventListener("load", () => {
         }),
 
 
-        paddle.ball,
-        paddle.paddle,
-        paddle.constrainter,
+        paddleLeft.ball,
+        paddleLeft.paddle,
+        paddleLeft.constrainter,
+
+        paddleRight.ball,
+        paddleRight.paddle,
+        paddleRight.constrainter,
         staticCircle(c.width/2 + 20, c.height/2 + 45, 10, "#FFFFFF"),
         staticCircle(c.width/2 + 60, c.height/2 - 20, 10, "#FFFFFF"),
 
         // Window edges (top, bottom, left, right)
-        border(500, -5, 1000, 10),
-        border(500, 805, 1000, 10),
-        border(-5, 400, 10, 800),
-        border(1005, 400, 10, 800)
+        border(200, -5, 1500, 10),
+        border(200, 755, 1500, 10),
+        border(-5, 200, 10, 1500),
+        border(755, 200, 10, 1500)
     ]);
 
 
@@ -105,11 +112,15 @@ window.addEventListener("keyup", function (event) {
     }
 
     var key = event.code;
-
-    if (key === "Space") {
-        Matter.Body.applyForce(paddle.paddle, {
-            x: paddle.paddle.position.x,
-            y: paddle.paddle.position.y
+    if (key === "ArrowLeft") {
+        Matter.Body.applyForce(paddleLeft.paddle, {
+            x: paddleLeft.paddle.position.x,
+            y: paddleLeft.paddle.position.y
+        }, Matter.Vector.create(0, -100));
+    } else if (key === "ArrowRight") {
+        Matter.Body.applyForce(paddleRight.paddle, {
+            x: paddleRight.paddle.position.x,
+            y: paddleRight.paddle.position.y
         }, Matter.Vector.create(0, -100));
     }
 });
@@ -143,8 +154,9 @@ function mouseConstraint() {
 }
 
 
-function makePaddle() {
-    paddle.paddle = Matter.Bodies.rectangle(c.width/2 + 300, c.height/2, 100, 15,  {
+function makePaddle(x, y) {
+    var paddleTemp= {};
+    paddleTemp.paddle = Matter.Bodies.rectangle(x, y, 100, 15,  {
         label: "paddle",
         density: 2/3,
         collisionFilter: {
@@ -158,7 +170,7 @@ function makePaddle() {
         }
     });
 
-    paddle.ball = Matter.Bodies.circle(c.width/2, c.height/2, 5, {
+    paddleTemp.ball = Matter.Bodies.circle(c.width/2, c.height/2, 5, {
         isStatic: true,
         render: {
             visible: false,
@@ -171,20 +183,21 @@ function makePaddle() {
 
     let paddleGroup = Matter.Body.nextGroup(true);
 
-    Object.values(paddle).forEach((p) => {
+    Object.values(paddleTemp).forEach((p) => {
         p.collisionFilter.group = paddleGroup;
     });
 
-    paddle.constrainter = Matter.Constraint.create({
-        bodyA: paddle.paddle,
+    paddleTemp.constrainter = Matter.Constraint.create({
+        bodyA: paddleTemp.paddle,
         pointA: { x: -35, y: 0},
-        bodyB: paddle.ball,
+        bodyB: paddleTemp.ball,
         length: 0.01,
         stiffness: 0,
         render: {
             visible: false
         }
     });
+    return paddleTemp;
 
 }
 
