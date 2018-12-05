@@ -93,6 +93,10 @@ window.addEventListener("load", () => {
         staticBox3(100, 500, 1000, 50, "#000000", 1),//left slide
         staticBox3(200, 900, 450, 350, "#000000", 0),//left small box
         staticBox3(800, 900, 450, 350, "#000000", 0),//right small box
+        staticBox(0,100,1,10),//rounded top
+        staticBox(5,95,1,10),//rounded top
+        staticBox(10,90,1,10),//rounded top
+        staticBox(15,85,1,10),//rounded top
 
         // Window edges (top, bottom, left, right)
         border(500, -5, 1000, 10),//top
@@ -150,26 +154,38 @@ function border(x, y, width, height) {
     });
 }
 
-    function staticBox2(x, y, width, height, colorHex) {
-        return Matter.Bodies.rectangle(900, 500, 1000, height, {
-            isStatic: true,
-            angle: 2,
-            render: {
-                fillStyle: colorHex,
-                strokeStyle: "black",
-                lineWidth: 1
-            }
-        });
-    }
-    function staticBox3(x, y, width, height, colorHex, angles) {
-        return Matter.Bodies.rectangle(x, y, width, height, {
-            isStatic: true,
+function staticBox(x, y, width, height) {//working on rounded top
+    return Matter.Bodies.rectangle(x, y, width, height,  {
+        isStatic: true,
+        angle: .4,
+        render: {
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
 
-            angle: angles,
-            render: {
-                fillStyle: colorHex,
-                strokeStyle: "black",
-                lineWidth: 1
-            }
-        });
+
+}
+function staticBox2(x, y, width, height, colorHex) {
+    return Matter.Bodies.rectangle(900, 500, 1000, height, {
+        isStatic: true,
+        angle: 2,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
+}
+function staticBox3(x, y, width, height, colorHex, angles) {
+    return Matter.Bodies.rectangle(x, y, width, height, {
+        isStatic: true,
+
+        angle: angles,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
 }

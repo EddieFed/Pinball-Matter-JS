@@ -22,8 +22,8 @@ window.addEventListener('load', function() {
     });
     bodies = [];
     const COLOR = {
-        BUMPER: '#fa0a00',
-        BUMPER_ALT: '#fff3bf',
+        BUMPER: '#0036f3',
+        BUMPER_ALT: '#00e5ff',
     };
     //Add a ball
     var ball = Matter.Bodies.circle(250, 250, 10, {
@@ -114,48 +114,23 @@ window.addEventListener('load', function() {
     bumper1.restitution =1.5;
     Matter.World.add(world, bumper1);
     bodies.push(bumper1);
-    // function hitBumper(bumper1) {
-    //     // flash color
-    //     bumper.render.fillStyle = COLOR.BUMPER_ALT;
-    //     setTimeout(function() {
-    //         bumper1.render.fillStyle = COLOR.BUMPER;
-    //     }, 100);
-    // }
-    // function makeEvents(){
-        Matter.Events.on(engine, 'collisionStart', function(event) {
-            let pairs = event.pairs;
-            pairs.forEach(function(pair) {
-                if (pair.bodyB.label === 'ball'&&pair.bodyA.label==='bumper1') {
-                    // switch (pair.bodyA.label) {
-                    //     case 'reset':
-                    //         break;
-                    //     case 'bumper1':
-                            bumper1.render.fillStyle = COLOR.BUMPER_ALT;
-                                // setTimeout(function() {
-                                //     bumper1.render.fillStyle = COLOR.BUMPER;
-                                // }, 100);
-                    //         break;
-                    // }
-                }
-            });
-    //
-        });
-    // makeEvents();
-    // // keyboard paddle events
-    // $('body').on('keydown', function(e) {
-    //     if (e.which === 37) { // left arrow key
-    //         alert("left")
-    //     } else if (e.which === 39) { // right arrow key
-    //         alert("right")
-    //     }
-    // });
-    // $('body').on('keyup', function(e) {
-    //     if (e.which === 37) { // left arrow key
-    //         isLeftPaddleUp = false;
-    //     } else if (e.which === 39) { // right arrow key
-    //         isRightPaddleUp = false;
-    //     }
-    // });
+
+    Matter.Events.on(engine, 'collisionStart', function(event) {
+
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === ball&&pair.bodyB === bumper1) {
+                bumper1.render.fillStyle = COLOR.BUMPER_ALT;
+                setTimeout(function() {
+                 bumper1.render.fillStyle = COLOR.BUMPER;
+                 }, 300);
+            }
+
+        }
+    });
 
     //Make interactive
     var mouseConstraint = Matter.MouseConstraint.create(engine, { //Create Constraint
