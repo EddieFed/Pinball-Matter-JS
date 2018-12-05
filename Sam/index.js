@@ -4,6 +4,7 @@ window.addEventListener('load', function() {
     var myCanvas = document.getElementById('world');
 var engine = Matter.Engine.create();
 var world = engine.world;
+ var   Body = Matter.Body;
 
 var render = Matter.Render.create({
     canvas: myCanvas,
@@ -13,7 +14,7 @@ var render = Matter.Render.create({
         height: 500,
         background: '#888888',
         wireframes: false,
-        showAngleIndicator: false
+        showAngleIndicator: true
     }
 });
 
@@ -28,10 +29,10 @@ var render = Matter.Render.create({
     });
     Matter.World.add(world, mouseConstraint);
 
-var ball = Matter.Bodies.circle(100, 100, 40, {
+var ball = Matter.Bodies.circle(100, 100, 20, {
     mass: 1,
     friction: .04,
-    frictionAir: 0.00001,
+    frictionAir: 0.001,
     restitution: .7,
     inertia:0,
     render: {
@@ -40,20 +41,7 @@ var ball = Matter.Bodies.circle(100, 100, 40, {
         lineWidth: 1
     }
 });
-    // var bumper = Matter.Bodies.circle(440, 440, 40, {
-    //     isStatic: true,
-    //
-    //     friction: 1,
-    //     frictionAir: 0.00001,
-    //     restitution: 1.5,
-    //     render: {
-    //         fillStyle: '#00FF00',
-    //         strokeStyle: 'black',
-    //         lineWidth: 1
-    //     }
-    // });
-    var donthitball = 0x0001;
-    var hitball = 0x0004;
+
 
 
 
@@ -118,6 +106,8 @@ var ball = Matter.Bodies.circle(100, 100, 40, {
             }
         }
     });
+
+
     Matter.Events.on(engine, 'collisionEnd', function(event) {
 
         var pairs = event.pairs;
@@ -126,6 +116,7 @@ var ball = Matter.Bodies.circle(100, 100, 40, {
             var pair = pairs[i];
 
             if (pair.bodyA === ball&&pair.bodyB === test) {
+
 
                 boolea=false;
             } else if (pair.bodyB === ball&&pair.bodyA === test) {
@@ -155,8 +146,7 @@ Matter.Render.run(render);
     Matter.Events.on(engine, 'afterUpdate', function(event) {
 
         if(boolea==true){
-
-            Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0, y: -1});
+            Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0.000, y: -.003});
 
         }
     });
