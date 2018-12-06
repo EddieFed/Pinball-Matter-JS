@@ -10,8 +10,8 @@ body {
     padding: 0;
     margin: auto;
     display: block;
-    width: 720px;
-    height: 480px;
+    width: 1000px;
+    height: 800px;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -26,10 +26,15 @@ body {
     border: grey;
 
 }  #bu:active {
-       background-color: darkgray;
-       border: darkgray;
+    background-color: darkgray;
+    border: darkgray;
 
-   }  #bu:focus {
-          outline: transparent;
+}  #bu:focus {
+    outline: transparent;
 
-      }
+}
+
+
+
+
+

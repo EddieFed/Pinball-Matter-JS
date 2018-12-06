@@ -91,6 +91,7 @@ window.addEventListener('load', function() {
             visible: true
         }
     });
+    
     Matter.World.add(world,invisCheck);
     bodies.push(invisCheck);
 
@@ -114,6 +115,7 @@ window.addEventListener('load', function() {
             visible: true
         }
     });
+    //k
     Matter.World.add(world,lWall);
     bodies.push(lWall);
 
