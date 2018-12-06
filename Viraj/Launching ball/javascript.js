@@ -6,6 +6,7 @@ window.addEventListener('load', function() {
 
     //Fetch our canvas
     var canvas = document.getElementById('world');
+    var Body =Matter.body;
 
     //Setup Matter JS
     engine = Matter.Engine.create();
@@ -17,8 +18,7 @@ window.addEventListener('load', function() {
             width: 500,
             height: 500,
             background: 'transparent',
-            wireframes: false,
-            showAngleIndicator: false
+            wireframes: false
         }
     });
     bodies = [];
@@ -78,19 +78,31 @@ window.addEventListener('load', function() {
     var launcher = Matter.Bodies.rectangle(100,250,20,80);
     Matter.World.add(world,launcher);
     bodies.push(launcher);
-    Matter.Constraint.create(lWall);
-    Matter.Constraint.create(lWall2);
-    launcher.constrain();
+
+    var invisCheck = Matter.Bodies.rectangle(100,150,20,50, {
+        isStatic: true,
+        isSensor: true,
+        render:{
+            visible: true
+        }
+    });
+    
+    Matter.World.add(world,invisCheck);
+    bodies.push(invisCheck);
+    // Matter.Constraint.create(lWall);
+    // Matter.Constraint.create(lWall2);
+    // launcher.constrain();
     var lWall = Matter.Bodies.rectangle(80,0,20,1000, {
         isStatic: true, //An immovable object
         render: {
             visible: true
         }
     });
+    //k
     Matter.World.add(world,lWall);
     bodies.push(lWall);
 
-    var lWall2 = Matter.Bodies.rectangle(120,0,20,1000, {
+    var lWall2 = Matter.Bodies.rectangle(120,400,20,500, {
         isStatic: true, //An immovable object
         render: {
             visible: true
@@ -117,6 +129,54 @@ window.addEventListener('load', function() {
     Matter.World.add(world, paddle2);
     bodies.push(paddle2);
 
+    // Matter.Events.on(engine, 'collisionStart', function (event) {
+    //     var pairs = event.pairs;
+    //     for(var i=0, j=pairs.length;i!=j;++i){
+    //         var pair =pairs[i];
+    //         if(pair.bodyA === ball && pair.bodyB === invisCheck){
+    //
+    //             Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: .50, y: 0});
+    //         }
+    //             //alert("yo");
+    //             //Matter.Body.applyForce(bodies[0],{x:bodies[0].position.x, y: bodies[0].position.y}, {x:.5, y: 0});            }
+    //     }
+    // });
+
+    Matter.Events.on(engine, 'collisionStart', function(event) {
+
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === ball&&pair.bodyB === invisCheck) {
+                boolea=true;
+            } else if (pair.bodyB === ball&&pair.bodyA === invisCheck) {
+
+                boolea=true;
+            }
+        }
+    });
+    Matter.Events.on(engine, 'collisionEnd', function(event) {
+
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === ball&&pair.bodyB === invisCheck) {
+
+                boolea=false;
+            } else if (pair.bodyB === ball&&pair.bodyA === invisCheck) {
+
+                boolea=false;
+            }
+        }
+    });
+
+    // Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0.05, y: 0});
+
+
 
 
     // // keyboard paddle events
@@ -136,20 +196,29 @@ window.addEventListener('load', function() {
     // });
     //
     //Make interactive
-    var mouseConstraint = Matter.MouseConstraint.create(engine, { //Create Constraint
-        element: canvas,
-        constraint: {
-            render: {
-                visible: false
-            },
-            stiffness:0.8
-        }
-    });
-    Matter.World.add(world, mouseConstraint);
+    // var mouseConstraint = Matter.MouseConstraint.create(engine, { //Create Constraint
+    //     element: canvas,
+    //     constraint: {
+    //         render: {
+    //             visible: false
+    //         },
+    //         stiffness:0.8
+    //     }
+    // });
+    // Matter.World.add(world, mouseConstraint);
 
     //Start the engine
     Matter.Engine.run(engine);
     Matter.Render.run(render);
+
+    Matter.Events.on(engine, 'afterUpdate', function(event) {
+
+        if(boolea==true){
+
+            Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: .50, y: 0});
+
+        }
+    });
 
 });
 
@@ -163,17 +232,22 @@ window.addEventListener('keyup', function (event) {
 
     if (key === "ArrowLeft") {
         // alert(bodies[0].radius);
-        Matter.Body.scale(bodies[0], 2, 2);
-        // alert(bodies[0].radius)
-    } else if (key === "ArrowRight") {
-        // Matter.Body.rotate(bodies[1], -1)
-        // Matter.Body.setAngularVelocity(bodies[1], )
-        Matter.Body.applyForce(bodies[1], {x:bodies[1].position.x+20, y:bodies[1].position.y}, {x: 0, y: -6})
-        setTimeout(function() {
-            Matter.Body.setAngularVelocity(bodies[1], 0);
-            Matter.Body.setVelocity(bodies[1], 0);
-        }, 1000);
-        // Matter.Body.setAngularVelocity(bodies[1], 1)
+        Matter.Body.scale(bodies[1], 1, .5);
+        Matter.Body.applyForce(bodies[0],{x:bodies[0].position.x, y: bodies[0].position.y}, {x: 0, y: -0.75});
+
+        //Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0, y: -0.05});
 
     }
+        // alert(bodies[0].radius)
+    // } else if (key === "ArrowRight") {
+    //     // Matter.Body.rotate(bodies[1], -1)
+    //     // Matter.Body.setAngularVelocity(bodies[1], )
+    //     Matter.Body.applyForce(bodies[1], {x:bodies[1].position.x+20, y:bodies[1].position.y}, {x: 0, y: -6})
+    //     setTimeout(function() {
+    //         Matter.Body.setAngularVelocity(bodies[1], 0);
+    //         Matter.Body.setVelocity(bodies[1], 0);
+    //     }, 1000);
+    //     // Matter.Body.setAngularVelocity(bodies[1], 1)
+    //
+    // }
 });
