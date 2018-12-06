@@ -16,6 +16,8 @@ var game = {};
 var paddleLeft = {};
 var paddleRight = {};
 
+var ball;
+
 
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
@@ -29,14 +31,8 @@ window.addEventListener("load", () => {
     game.engine = Matter.Engine.create();
     game.world = game.engine.world;
     game.world.bounds = {
-        min: {
-            x: 0,
-            y: 0
-        },
-        max: {
-            x: 750,
-            y: 750
-        }
+        min: { x: 0, y: 0},
+        max: { x: c.width, y: c.height }
     };
 
     // **!!REMEMBER!!** Set Renderer to match Canvas
@@ -53,31 +49,33 @@ window.addEventListener("load", () => {
     });
 
     // Game object creation
-    paddleLeft = makePaddle(100, 600);
+    paddleLeft = makePaddle(250, 600);
     paddleRight = makePaddle(500, 600);
+
+    ball = Matter.Bodies.circle(450, 20, 10, {
+        density: 0.1,
+        friction: 0.008,
+        frictionAir: 0.00032,
+        restitution: 1,
+
+        inertia: Infinity,
+        slop: 0,
+        render: {
+            fillStyle: "#F35e66",
+            strokeStyle: "#000000",
+            lineWidth: 1
+        },
+        collisionFilter: {
+            category: defaultCategory,
+            mask: defaultCategory
+        }
+    }),
 
     // Add all bodies to the world
     Matter.World.add(game.world, [
         mouseConstraint(),
 
-        Matter.Bodies.circle(550, 20, 10, {
-            density: 0.1,
-            friction: 0.008,
-            frictionAir: 0.00032,
-            restitution: 1,
-            
-            inertia: Infinity,
-            slop: 0,
-            render: {
-                fillStyle: "#F35e66",
-                strokeStyle: "#000000",
-                lineWidth: 1
-            },
-            collisionFilter: {
-                category: defaultCategory,
-                mask: defaultCategory
-            }
-        }),
+        ball,
 
 
         paddleLeft.ball,
@@ -91,24 +89,36 @@ window.addEventListener("load", () => {
         staticCircle(paddleLeft.ball.position.x + 20, paddleLeft.ball.position.y + 45, 10, "#FFFFFF"),
         staticCircle(paddleLeft.ball.position.x + 60, paddleLeft.ball.position.y - 20, 10, "#FFFFFF"),
 
-        staticCircle(paddleRight.ball.position.x + 20, paddleRight.ball.position.y + 45, 10, "#FFFFFF"),
-        staticCircle(paddleRight.ball.position.x + 60, paddleRight.ball.position.y - 20, 10, "#FFFFFF"),
+        staticCircle(paddleRight.ball.position.x - 20, paddleRight.ball.position.y + 45, 10, "#FFFFFF"),
+        staticCircle(paddleRight.ball.position.x - 60, paddleRight.ball.position.y - 20, 10, "#FFFFFF"),
 
-        // Window edges (top, bottom, left, right)
-        border(200, -5, 1500, 10),
-        border(200, 755, 1500, 10),
-        border(-5, 200, 10, 1500),
-        border(755, 200, 10, 1500)
+        //              ** Window borders **
+        border(c.width/2, -5, c.width, 10),             // Top
+        border(c.width/2, c.height + 5, c.width, 10),   // Bottom
+        border(-5, c.height/2, 10, c.height),           // Left
+        border(c.width + 5, c.height/2, 10, c.height)   // Right
     ]);
-
-
 
     // Basic render
     Matter.Engine.run(game.engine);
     Matter.Render.run(game.render);
 
-});
+    Matter.Events.on(game.engine, 'beforeUpdate', function(event) {
+        // bumpers can quickly multiply velocity, so keep that in check
+        Matter.Body.setVelocity(ball, {
+            x: Math.max(Math.min(ball.velocity.x, 20), -20),
+            y: Math.max(Math.min(ball.velocity.y, 20), -20),
+        });
 
+        // // cheap way to keep ball from going back down the shooter lane
+        // if (ball.position.x > 500 && ball.velocity.y > 0) {
+        //     Matter.Body.setVelocity(ball, { x: 0, y: -10 });
+        // }
+        // if (ball.position.x > 20 && ball.velocity.y <50) {
+        //     Matter.Body.setVelocity(ball, { x: 20, y: -10 });
+        // }
+    });
+});
 
 
 
@@ -162,7 +172,7 @@ function mouseConstraint() {
 
 function makePaddle(x, y) {
     var paddleTemp= {};
-    paddleTemp.paddle = Matter.Bodies.rectangle(x, y, 100, 15,  {
+    paddleTemp.paddle = Matter.Bodies.rectangle(x-100000, y, 100, 15,  {
         label: "paddle",
         density: 2/3,
         collisionFilter: {
@@ -218,7 +228,7 @@ function staticCircle(x, y, radius, colorHex) {
             mask: defaultCategory, paddleCategory
         },
         render: {
-            visible: true,
+            visible: false,
             fillStyle: colorHex,
             strokeStyle: "#000000",
             lineWidth: 1
