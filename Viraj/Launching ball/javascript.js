@@ -97,6 +97,7 @@ window.addEventListener('load', function() {
             visible: true
         }
     });
+    //k
     Matter.World.add(world,lWall);
     bodies.push(lWall);
 
