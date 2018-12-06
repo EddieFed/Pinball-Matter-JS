@@ -8,7 +8,7 @@ window.addEventListener('load', function() {
     var canvas = document.getElementById('world');
     var Body =Matter.body;
 
-    //Setup Matter JS
+    //Setup Matter JS j
     engine = Matter.Engine.create();
     world = engine.world;
     render = Matter.Render.create({
@@ -22,6 +22,11 @@ window.addEventListener('load', function() {
         }
     });
     bodies = [];
+
+    
+
+
+        
 
     //Add a ball
     var ball = Matter.Bodies.circle(100, 0, 10, {
@@ -88,6 +93,18 @@ window.addEventListener('load', function() {
     });
     Matter.World.add(world,invisCheck);
     bodies.push(invisCheck);
+
+    // const CUSTOM_PATH = '425.6 327 273.8 315.6...';
+
+    // function customShape(x, y) {
+    //     let vertices = Matter.Vertices.fromPath(CUSTOM_PATH);
+    //     return Matter.Bodies.fromVertices(x, y, vertices, {
+    //         // set options if you need them...
+    //     });
+    // }
+
+    // Matter.World.add(customShape(100,100));
+
     // Matter.Constraint.create(lWall);
     // Matter.Constraint.create(lWall2);
     // launcher.constrain();
@@ -132,7 +149,7 @@ window.addEventListener('load', function() {
     //     for(var i=0, j=pairs.length;i!=j;++i){
     //         var pair =pairs[i];
     //         if(pair.bodyA === ball && pair.bodyB === invisCheck){
-    //
+    
     //             Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: .50, y: 0});
     //         }
     //             //alert("yo");
