@@ -53,8 +53,8 @@ window.addEventListener("load", () => {
     });
 
     // Game object creation
-    paddleLeft = makePaddle(400, 400);
-    paddleRight = makePaddle(200, 400);
+    paddleLeft = makePaddle(100, 600);
+    paddleRight = makePaddle(500, 600);
 
     // Add all bodies to the world
     Matter.World.add(game.world, [
@@ -65,6 +65,8 @@ window.addEventListener("load", () => {
             friction: 0.008,
             frictionAir: 0.00032,
             restitution: 1,
+            
+            inertia: Infinity,
             slop: 0,
             render: {
                 fillStyle: "#F35e66",
@@ -85,8 +87,12 @@ window.addEventListener("load", () => {
         paddleRight.ball,
         paddleRight.paddle,
         paddleRight.constrainter,
-        staticCircle(c.width/2 + 20, c.height/2 + 45, 10, "#FFFFFF"),
-        staticCircle(c.width/2 + 60, c.height/2 - 20, 10, "#FFFFFF"),
+
+        staticCircle(paddleLeft.ball.position.x + 20, paddleLeft.ball.position.y + 45, 10, "#FFFFFF"),
+        staticCircle(paddleLeft.ball.position.x + 60, paddleLeft.ball.position.y - 20, 10, "#FFFFFF"),
+
+        staticCircle(paddleRight.ball.position.x + 20, paddleRight.ball.position.y + 45, 10, "#FFFFFF"),
+        staticCircle(paddleRight.ball.position.x + 60, paddleRight.ball.position.y - 20, 10, "#FFFFFF"),
 
         // Window edges (top, bottom, left, right)
         border(200, -5, 1500, 10),
@@ -170,7 +176,7 @@ function makePaddle(x, y) {
         }
     });
 
-    paddleTemp.ball = Matter.Bodies.circle(c.width/2, c.height/2, 5, {
+    paddleTemp.ball = Matter.Bodies.circle(x, y, 5, {
         isStatic: true,
         render: {
             visible: false,
@@ -212,7 +218,7 @@ function staticCircle(x, y, radius, colorHex) {
             mask: defaultCategory, paddleCategory
         },
         render: {
-            visible: false,
+            visible: true,
             fillStyle: colorHex,
             strokeStyle: "#000000",
             lineWidth: 1
