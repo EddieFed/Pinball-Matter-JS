@@ -147,6 +147,18 @@ window.addEventListener('load', function() {
     //Start the engine
     Matter.Engine.run(engine);
     Matter.Render.run(render);
+    Matter.Events.on(engine, 'beforeUpdate', function(event) {
+        // bumpers can quickly multiply velocity, so keep that in check
+        Matter.Body.setVelocity(ball, {
+            x: Math.max(Math.min(ball.velocity.x, 25), -25),
+            y: Math.max(Math.min(ball.velocity.y, 25), -25),
+        });
+
+        // cheap way to keep ball from going back down the shooter lane
+        if (ball.position.x > 500 && ball.velocity.y > 0) {
+            Matter.Body.setVelocity(ball, { x: 0, y: -10 });
+        }
+    });
 
 });
 
