@@ -158,6 +158,9 @@ window.addEventListener('load', function() {
         if (ball.position.x > 500 && ball.velocity.y > 0) {
             Matter.Body.setVelocity(ball, { x: 0, y: -10 });
         }
+        if (ball.position.x > 20 && ball.velocity.y <50) {
+            Matter.Body.setVelocity(ball, { x: 20, y: -10 });
+        }
     });
 
 });
