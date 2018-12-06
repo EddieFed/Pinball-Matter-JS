@@ -79,7 +79,6 @@ window.addEventListener("load", () => {
     ]);
 
     // Basic renderer and runner
-
     Matter.Runner.run(game.engine);
     Matter.Render.run(game.render);
 });
