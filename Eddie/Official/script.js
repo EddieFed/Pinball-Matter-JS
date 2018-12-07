@@ -117,11 +117,13 @@ window.addEventListener("load", () => {
         paddleRight.paddle,
         paddleRight.constrainter,
 
-        staticCircle(paddleLeft.ball.position.x + 20, paddleLeft.ball.position.y + 45, 10, "#FFFFFF"),
-        staticCircle(paddleLeft.ball.position.x + 60, paddleLeft.ball.position.y - 20, 10, "#FFFFFF"),
+        // Left side paddle stop things
+        staticCircle(paddleLeft.ball.position.x + 20, paddleLeft.ball.position.y + 45, 20, "#FFFFFF"),  // Bottom
+        staticCircle(paddleLeft.ball.position.x + 70, paddleLeft.ball.position.y - 30, 20, "#FFFFFF"),  // Top
 
-        staticCircle(paddleRight.ball.position.x - 20, paddleRight.ball.position.y + 45, 10, "#FFFFFF"),
-        staticCircle(paddleRight.ball.position.x - 60, paddleRight.ball.position.y - 20, 10, "#FFFFFF"),
+        // Right side paddle stop things
+        staticCircle(paddleRight.ball.position.x - 20, paddleRight.ball.position.y + 45, 20, "#FFFFFF"), // Bottom
+        staticCircle(paddleRight.ball.position.x - 70, paddleRight.ball.position.y - 30, 20, "#FFFFFF"), // Top
 
         //              ** Window borders **
         border(c.width/2, -15, c.width, 30),             // Top
@@ -177,10 +179,7 @@ window.addEventListener("keyup", function (event) {
 
     var key = event.code;
     if (key === "ArrowLeft") {
-        Matter.Body.applyForce(paddleLeft.paddle, {
-            x: paddleLeft.paddle.position.x,
-            y: paddleLeft.paddle.position.y
-        }, Matter.Vector.create(0, -100));
+        Matter.Body.applyForce(paddleLeft.paddle, Matter.Vector.create(paddleLeft.paddle.positionX, paddleLeft.paddle.positionY), Matter.Vector.create(0, 20));
     } else if (key === "ArrowRight") {
         Matter.Body.applyForce(paddleRight.paddle, {
             x: paddleRight.paddle.position.x,
@@ -237,7 +236,7 @@ function makePaddle(x, y, direction) {
     paddleTemp.ball = Matter.Bodies.circle(x, y, 5, {
         isStatic: true,
         render: {
-            visible: false,
+            visible: true,
             fillStyle: "#F35e66",
             strokeStyle: "#000000",
             lineWidth: 1
@@ -253,10 +252,10 @@ function makePaddle(x, y, direction) {
 
     paddleTemp.constrainter = Matter.Constraint.create({
         bodyA: paddleTemp.paddle,
-        pointA: { x: direction*35, y: 0},
+        pointA: { x: direction * 35, y: 0},
         bodyB: paddleTemp.ball,
         length: 0.01,
-        stiffness: 0,
+        stiffness: 1,
         render: {
             visible: false
         }
@@ -276,7 +275,7 @@ function staticCircle(x, y, radius, colorHex) {
             mask: defaultCategory, paddleCategory
         },
         render: {
-            visible: false,
+            visible: true,
             fillStyle: colorHex,
             strokeStyle: "#000000",
             lineWidth: 1
