@@ -28,7 +28,7 @@ var paddleLeft = {};
 var paddleRight = {};
 
 var ball;
-var bumpers = [];
+var bumper1;
 
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
@@ -101,16 +101,13 @@ window.addEventListener("load", () => {
         }
     });
     bumper1.restitution =1.25;
-    bumpers.push(makeBumper(200, 250, 40));
-    bumpers.push(makeBumper(600, 250, 40));
 
     // Add all bodies to the world
     Matter.World.add(game.world, [
         mouseConstraint(),
 
         ball,
-        bumpers[0],
-        bumpers[1],
+        bumper1,
 
         paddleLeft.ball,
         paddleLeft.paddle,
@@ -143,6 +140,14 @@ window.addEventListener("load", () => {
             x: Math.max(Math.min(ball.velocity.x, 20), -20),
             y: Math.max(Math.min(ball.velocity.y, 20), -20),
         });
+
+        // // cheap way to keep ball from going back down the shooter lane
+        // if (ball.position.x > 500 && ball.velocity.y > 0) {
+        //     Matter.Body.setVelocity(ball, { x: 0, y: -10 });
+        // }
+        // if (ball.position.x > 20 && ball.velocity.y <50) {
+        //     Matter.Body.setVelocity(ball, { x: 20, y: -10 });
+        // }
     });
 
     Matter.Events.on(game.engine, 'collisionStart', function(event) {
@@ -152,16 +157,12 @@ window.addEventListener("load", () => {
         for (var i = 0, j = pairs.length; i !== j; ++i) {
             var pair = pairs[i];
 
-            for ( k = 0; k<bumpers.length; ++k) {
-                if (pair.bodyA === ball&&pair.bodyB === bumpers[k]) {
-                    bumpers[k].render.fillStyle = COLOR.BUMPER_ALT;
-                    setTimeout(function() {
-                        bumpers[k].render.fillStyle = COLOR.BUMPER;
-                    }, 200);
-                    break;
-                }
+            if (pair.bodyA === ball&&pair.bodyB === bumper1) {
+                bumper1.render.fillStyle = COLOR.BUMPER_ALT;
+                setTimeout(function() {
+                    bumper1.render.fillStyle = COLOR.BUMPER;
+                }, 300);
             }
-
 
         }
     });
@@ -264,23 +265,6 @@ function makePaddle(x, y, direction) {
 
 }
 
-function makeBumper(x, y, radius) {
-    bumper =  Matter.Bodies.circle(x, y, radius, {
-        angle: 1.57,
-        isStatic: true, //An immovable object
-        density: 0.4,
-        friction: 0.01,
-        frictionAir: 0.00001,
-        restitution: 1.25,
-        render: {
-            fillStyle: '#0036f3',
-            strokeStyle: 'black',
-            lineWidth: 1
-        }
-    });
-    bumper.restitution = 1.25;
-    return bumper;
-}
 
 function staticCircle(x, y, radius, colorHex) {
     return Matter.Bodies.circle(x, y, radius, {
