@@ -34,7 +34,7 @@ window.addEventListener("load", () => {
     // Matter.js setup
     game.engine = Matter.Engine.create();
     game.world = game.engine.world;
-    world.bounds = {
+    game.world.bounds = {
         min: { x: 0, y: 0},
         max: { x: c.width, y: c.height }
     };
@@ -79,7 +79,6 @@ window.addEventListener("load", () => {
     ]);
 
     // Basic renderer and runner
-
     Matter.Runner.run(game.engine);
     Matter.Render.run(game.render);
 });

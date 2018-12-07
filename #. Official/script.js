@@ -1,12 +1,23 @@
 /**
 
+ ## Company B
+ |      Pinball Game
 
+ ## Reference Tools:
+ |      https://blog.alexandergottlieb.com/matter-js-the-missing-tutorial-70aafc06b167
+ |      https://codepen.io/lonekorean/pen/KXLrVX
 
- Hello!
+ ## Contributors:
+ |      Andrew Milas
+ |      Viraj Sule
+ |      Brenden Mitra
+ |      Sam Lundstrum
+ |      Eddie Federmeyer
+ |      Dominic Laskero
 
- https://blog.alexandergottlieb.com/matter-js-the-missing-tutorial-70aafc06b167
- https://codepen.io/lonekorean/pen/KXLrVX
-
+ ## Physics Engine:
+ |      matter.js
+ |      http://brm.io/matter-js/
 
  **/
 

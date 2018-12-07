@@ -22,7 +22,7 @@ window.addEventListener("load", () => {
     // Canvas reference
     c = document.getElementById("ca");
 
-        // Matter.js setup
+    // Matter.js setup
     engine = Matter.Engine.create();
     world = engine.world;
     world.bounds = {
@@ -30,7 +30,7 @@ window.addEventListener("load", () => {
         max: { x: 1000, y: 800 }
     };
 
-    var ball = Matter.Bodies.circle(900, 100, 25, {//this is the pinball
+    var ball = Matter.Bodies.polygon(900, 100, 1, 25, {//this is the pinball
         density: 0.94,
         friction: .04,
         frictionAir: 0.00001,
@@ -47,7 +47,8 @@ window.addEventListener("load", () => {
         isStatic: true, //An immovable object
         isSensor:true,
         render: {
-            fillStyle: '#990000',
+            fillStyle: '#FF0000',
+            strokeStyle: "black",
             visible: true
         }
     });
@@ -57,7 +58,8 @@ window.addEventListener("load", () => {
         isStatic: true, //An immovable object
         isSensor:true,
         render: {
-            fillStyle: '#990000',
+            fillStyle: '#FF0000',
+            strokeStyle: "black",
             visible: true
         }
     });
@@ -67,7 +69,8 @@ window.addEventListener("load", () => {
         isStatic: true, //An immovable object
         isSensor:true,
         render: {
-            fillStyle: '#990000',
+            fillStyle: '#FF0000',
+            strokeStyle: "black",
             visible: true
         }
     });
@@ -78,7 +81,8 @@ window.addEventListener("load", () => {
         element: c,
         constraint: {
             render: {
-                fillStyle: '#990000',
+                fillStyle: '#FF0000',
+                strokeStyle: "black",
                 visible: true
             },
             stiffness:0.8
@@ -90,15 +94,21 @@ window.addEventListener("load", () => {
     // Add all bodies to the world
     Matter.World.add(world, [
         staticBox2(500, 780, 50, 50, "#000000"),//right slide
-        staticBox3(100, 500, 1000, 50, "#000000", 1),//left slide
-        staticBox3(200, 900, 450, 350, "#000000", 0),//left small box
-        staticBox3(800, 900, 450, 350, "#000000", 0),//right small box
+        staticBox3(100, 500, 1000, 50, "#000000", 1.03),//left slide
+        staticBox3(198, 900, 450, 350, "#000000", 0),//left small box
+        staticBox3(802, 900, 450, 350, "#000000", 0),//right small box
+
 
         // Window edges (top, bottom, left, right)
-        border(500, -5, 1000, 10),//top
-        border(500, 850, 1000, 10),//bottom
-        border(-5, 400, 10, 800),//left
-        border(1005, 400, 10, 800),//right
+        border(500, -5, 1000, 100),//top
+        border(500, 852, 1000, 100),//bottom
+        border(-25, 400, 100, 800),//left
+        border(1025, 400, 100, 800),//right
+        //for the rounded top
+        border(0,100,1,10),
+        border(5,95,1,10),
+        border(10,90,1,10),
+        border(15,85,1,10),
     ]);
 
 // **!!REMEMBER!!** Set Renderer to match Canvas
@@ -119,11 +129,11 @@ window.addEventListener("load", () => {
         for (var i = 0, j = pairs.length; i != j; ++i) {
             var pair = pairs[i];
             if (pair.bodyA === ball && pair.bodyB === wall) {
-                Matter.Body.setPosition(ball, { x: 900, y: 100 });
+                Matter.Body.setPosition(ball, { x: Math.random()*800+100, y: 100 });//respawns the ball x 100-900,y 100
             } else if (pair.bodyA === ball && pair.bodyB === wall2) {
-                Matter.Body.setPosition(ball, { x: 900, y: 100 });
+                Matter.Body.setPosition(ball, { x: Math.random()*800+100, y: 100 });
             } else if (pair.bodyA === ball && pair.bodyB === wall3) {
-                Matter.Body.setPosition(ball, { x: 900, y: 100 });
+                Matter.Body.setPosition(ball, { x: Math.random()*800+100, y: 100 });
             }
         }
     });
@@ -139,37 +149,38 @@ window.addEventListener("load", () => {
 
 
 
+
 function border(x, y, width, height) {
     return Matter.Bodies.rectangle(x, y, width, height, {
         isStatic: true,
         render: {
             fillStyle: "#000000",
-            // strokeStyle: "black",
+            strokeStyle: "black",
             lineWidth: 1
         }
     });
 }
 
-    function staticBox2(x, y, width, height, colorHex) {
-        return Matter.Bodies.rectangle(900, 500, 1000, height, {
-            isStatic: true,
-            angle: 2,
-            render: {
-                fillStyle: colorHex,
-                strokeStyle: "black",
-                lineWidth: 1
-            }
-        });
-    }
-    function staticBox3(x, y, width, height, colorHex, angles) {
-        return Matter.Bodies.rectangle(x, y, width, height, {
-            isStatic: true,
+function staticBox2(x, y, width, height, colorHex) {
+    return Matter.Bodies.rectangle(900, 500, 1000, height, {
+        isStatic: true,
+        angle: 2.11,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
+}
+function staticBox3(x, y, width, height, colorHex, angles) {
+    return Matter.Bodies.rectangle(x, y, width, height, {
+        isStatic: true,
 
-            angle: angles,
-            render: {
-                fillStyle: colorHex,
-                strokeStyle: "black",
-                lineWidth: 1
-            }
-        });
+        angle: angles,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
 }
