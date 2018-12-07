@@ -40,7 +40,7 @@ window.addEventListener('load', function() {
     });
     Matter.Body.setInertia(ball, Infinity);
     // ball.inertia(Infinity);
-    world.gravity.y = .75;
+    world.gravity.y = .8;
     Matter.World.add(world, ball);
     bodies.push(ball);
     // alert(ball.radius)
@@ -123,10 +123,10 @@ window.addEventListener('load', function() {
             var pair = pairs[i];
 
             if (pair.bodyA === ball&&pair.bodyB === bumper1) {
-                bumper1.render.fillStyle = COLOR.BUMPER_ALT;
-                setTimeout(function() {
-                 bumper1.render.fillStyle = COLOR.BUMPER;
-                 }, 300);
+                    bumper1.render.fillStyle = COLOR.BUMPER_ALT;
+                    setTimeout(function() {
+                        bumper1.render.fillStyle = COLOR.BUMPER;
+                    }, 300);
             }
 
         }
@@ -161,7 +161,7 @@ window.addEventListener('load', function() {
         if (ball.position.x > 400 && ball.position.y >300) {//wind gust
             // Matter.Body.applyForce(ball,{ x: 0, y: 100 });
             // setVelocity(ball, { x: 0, y: -10 });
-            Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0.0, y: -.02});
+            Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: -0.02, y: -.02});
         }
     });
 
