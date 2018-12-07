@@ -161,7 +161,7 @@ window.addEventListener('load', function() {
         if (ball.position.x > 400 && ball.position.y >300) {//wind gust
             // Matter.Body.applyForce(ball,{ x: 0, y: 100 });
             // setVelocity(ball, { x: 0, y: -10 });
-            Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0.0, y: -.02});
+            Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: -0.02, y: -.02});
         }
     });
 
