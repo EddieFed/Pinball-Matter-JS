@@ -104,12 +104,17 @@ var ball = Matter.Bodies.circle(100, 100, 20, {
     var test = Matter.Bodies.rectangle(200, 440, 100, 100, {
         isStatic: true,
         isSensor:true,
+       // chamfer: { radius: -10 },
         render: {
             fillStyle: '#00FF00',
             strokeStyle: 'black',
             visible: true
         }
     });
+
+    var curve =
+
+
 
 
 
