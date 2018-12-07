@@ -22,7 +22,7 @@ window.addEventListener("load", () => {
     // Canvas reference
     c = document.getElementById("ca");
 
-    // Matter.js setup
+        // Matter.js setup
     engine = Matter.Engine.create();
     world = engine.world;
     world.bounds = {
@@ -136,6 +136,22 @@ window.addEventListener("load", () => {
                 Matter.Body.setPosition(ball, { x: Math.random()*800+100, y: 100 });
             }
         }
+    });
+
+    window.addEventListener('keyup', function (event) {
+        if (event.defaultPrevented) {
+            return;
+        }
+
+        var key = event.key || event.keyCode;
+
+        if (key === "ArrowRight") {// if clicked left arrow
+
+        }
+        else if (key === "ArrowLeft") {//if clicked right arrow
+
+        }
+
     });
 
     // Basic render

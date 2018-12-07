@@ -6,8 +6,9 @@ window.addEventListener('load', function() {
 
     //Fetch our canvas
     var canvas = document.getElementById('world');
+    var Body =Matter.body;
 
-    //Setup Matter JS
+    //Setup Matter JS j
     engine = Matter.Engine.create();
     world = engine.world;
     render = Matter.Render.create({
@@ -17,11 +18,15 @@ window.addEventListener('load', function() {
             width: 500,
             height: 500,
             background: 'transparent',
-            wireframes: false,
-            showAngleIndicator: false
+            wireframes: false
         }
     });
     bodies = [];
+
+    
+
+
+        
 
     //Add a ball
     var ball = Matter.Bodies.circle(100, 0, 10, {
@@ -79,14 +84,28 @@ window.addEventListener('load', function() {
     Matter.World.add(world,launcher);
     bodies.push(launcher);
 
-    var invisCheck = Matter.Bodies.rectangle(80,400,40,50, {
+    var invisCheck = Matter.Bodies.rectangle(100,150,20,50, {
         isStatic: true,
+        isSensor: true,
         render:{
             visible: true
         }
     });
+    
     Matter.World.add(world,invisCheck);
     bodies.push(invisCheck);
+
+    // const CUSTOM_PATH = '425.6 327 273.8 315.6...';
+
+    // function customShape(x, y) {
+    //     let vertices = Matter.Vertices.fromPath(CUSTOM_PATH);
+    //     return Matter.Bodies.fromVertices(x, y, vertices, {
+    //         // set options if you need them...
+    //     });
+    // }
+
+    // Matter.World.add(customShape(100,100));
+
     // Matter.Constraint.create(lWall);
     // Matter.Constraint.create(lWall2);
     // launcher.constrain();
@@ -96,6 +115,7 @@ window.addEventListener('load', function() {
             visible: true
         }
     });
+    //k
     Matter.World.add(world,lWall);
     bodies.push(lWall);
 
@@ -126,12 +146,47 @@ window.addEventListener('load', function() {
     Matter.World.add(world, paddle2);
     bodies.push(paddle2);
 
-    Matter.Events.on(engine, 'collisionStart', function (event) {
+    // Matter.Events.on(engine, 'collisionStart', function (event) {
+    //     var pairs = event.pairs;
+    //     for(var i=0, j=pairs.length;i!=j;++i){
+    //         var pair =pairs[i];
+    //         if(pair.bodyA === ball && pair.bodyB === invisCheck){
+    
+    //             Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: .50, y: 0});
+    //         }
+    //             //alert("yo");
+    //             //Matter.Body.applyForce(bodies[0],{x:bodies[0].position.x, y: bodies[0].position.y}, {x:.5, y: 0});            }
+    //     }
+    // });
+
+    Matter.Events.on(engine, 'collisionStart', function(event) {
+
         var pairs = event.pairs;
-        for(var i=0, j=pairs.length;i!=j;++i){
-            var pair =pairs[i];
-            if(pair.bodyA === bodies[0] && pair.bodyB === bodies[2]){
-                Matter.Body.applyForce(bodies[0], {x: bodies[0].position.x, y: bodies[0].position.y}, {x: 10, y:0})
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === ball&&pair.bodyB === invisCheck) {
+                boolea=true;
+            } else if (pair.bodyB === ball&&pair.bodyA === invisCheck) {
+
+                boolea=true;
+            }
+        }
+    });
+    Matter.Events.on(engine, 'collisionEnd', function(event) {
+
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === ball&&pair.bodyB === invisCheck) {
+
+                boolea=false;
+            } else if (pair.bodyB === ball&&pair.bodyA === invisCheck) {
+
+                boolea=false;
             }
         }
     });
@@ -173,6 +228,15 @@ window.addEventListener('load', function() {
     Matter.Engine.run(engine);
     Matter.Render.run(render);
 
+    Matter.Events.on(engine, 'afterUpdate', function(event) {
+
+        if(boolea==true){
+
+            Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: .50, y: 0});
+
+        }
+    });
+
 });
 
 
@@ -186,7 +250,7 @@ window.addEventListener('keyup', function (event) {
     if (key === "ArrowLeft") {
         // alert(bodies[0].radius);
         Matter.Body.scale(bodies[1], 1, .5);
-        Matter.Body.applyForce(bodies[0],{x:bodies[0].position.x, y: bodies[0].position.y}, {x: 0, y: -1.5});
+        Matter.Body.applyForce(bodies[0],{x:bodies[0].position.x, y: bodies[0].position.y}, {x: 0, y: -0.75});
 
         //Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0, y: -0.05});
 

@@ -2,15 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Physics game</title>
+    <title>Physics Game</title>
+    <meta name="author" content="Eddie Federmeyer">
 
+    <link rel="stylesheet" href="style.css">
+
+    <!--<script src="../.%23%20Global%20Scripts/p5.js"></script>-->
+    <!--<script src="matter.js"></script>-->
     <script src="../.%23%20Global%20Scripts/matter.js"></script>
-    <script src="Scripts/index.js"></script>
+    <script src="script.js"></script>
 
 
 </head>
 <body>
-<p>Hello!</p>
+
+
+<button id="bu" onclick="render.options.wireframes = !(render.options.wireframes); render.options.showAngleIndicator = !(render.options.showAngleIndicator);" >
+    Stuff
+</button>
+
+<canvas id="ca" width="750" height="750">
+    HTML canvas not supported by browser!
+</canvas>
+
 
 </body>
 </html>

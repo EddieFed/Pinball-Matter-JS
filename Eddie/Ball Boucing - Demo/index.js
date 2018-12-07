@@ -41,7 +41,7 @@ window.addEventListener("load", () => {
     world = engine.world;
     world.bounds = {
         min: { x: 0, y: 0},
-        max: { x: 1000, y: 800 }
+        max: { x: c.width, y: c.height }
     };
 
     mouseConstraint = Matter.MouseConstraint.create(engine, {
@@ -63,10 +63,10 @@ window.addEventListener("load", () => {
         ball(500, 400, 20),
 
         // Window edges (top, bottom, left, right)
-        border(500, -5, 1000, 10),
-        border(500, 805, 1000, 10),
-        border(-5, 400, 10, 800),
-        border(1005, 400, 10, 800)
+        border(c.width/2, -5, c.width, 10),
+        border(c.width/2, c.height + 5, c.width, 10),
+        border(-5, c.height/2, 10, c.height),
+        border(c.width + 5, c.height/2, 10, c.height)
     ]);
 
 
@@ -104,30 +104,6 @@ function border(x, y, width, height) {
         }
     });
 }
-
-window.addEventListener('keyup', function (event) {
-    if (event.defaultPrevented) {
-        return;
-    }
-
-    var key = event.key || event.keyCode;
-
-    if (key === "ArrowLeft") {
-        // alert(bodies[0].radius);
-        Matter.Body.scale(bodies[0], 2, 2);
-        // alert(bodies[0].radius)
-    } else if (key === "ArrowRight") {
-        // Matter.Body.rotate(bodies[1], -1)
-        // Matter.Body.setAngularVelocity(bodies[1], )
-        Matter.Body.applyForce(bodies[1], {x:bodies[1].position.x+20, y:bodies[1].position.y}, {x: 0, y: -6})
-        // setTimeout(function() {
-        //     Matter.Body.setAngularVelocity(bodies[1], 0)
-        //     Matter.Body.setVelocity(bodies[1], 0)
-        // }, 1000);
-        // Matter.Body.setAngularVelocity(bodies[1], 1)
-
-    }
-});
 
 function ball(x, y, r) {
     return Matter.Bodies.circle(x, y, r, {
