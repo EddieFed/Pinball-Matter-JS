@@ -29,7 +29,7 @@ window.addEventListener('load', function() {
         
 
     //Add a ball
-    var ball = Matter.Bodies.circle(100, 0, 10, {
+    var ball = Matter.Bodies.circle(170, 450, 7, {
         radius: 15,
         density: 0.04,
         friction: 0.01,
@@ -94,6 +94,13 @@ window.addEventListener('load', function() {
     
     Matter.World.add(world,invisCheck);
     bodies.push(invisCheck);
+
+    var elastic = Constraint.create({ 
+        pointA: anchor, 
+        bodyB: ball, 
+        stiffness: 0.05
+    });
+    Matter.world.add(world,elastic);
 
     // const CUSTOM_PATH = '425.6 327 273.8 315.6...';
 
@@ -213,16 +220,26 @@ window.addEventListener('load', function() {
     // });
     //
     //Make interactive
-    // var mouseConstraint = Matter.MouseConstraint.create(engine, { //Create Constraint
-    //     element: canvas,
-    //     constraint: {
-    //         render: {
-    //             visible: false
-    //         },
-    //         stiffness:0.8
-    //     }
-    // });
-    // Matter.World.add(world, mouseConstraint);
+    var mouseConstraint = Matter.MouseConstraint.create(engine, { //Create Constraint
+        element: canvas,
+        constraint: {
+            render: {
+                visible: false
+            },
+            stiffness:0.8
+        }
+    });
+    Matter.World.add(world, mouseConstraint);
+
+    Events.on(engine, 'afterUpdate', function() {
+        if (mouseConstraint.mouse.button === -1 && (ball.position.x > 190 || ball.position.y < 430)) {
+            // ball = Bodies.polygon(170, 450, 7, 20, ballOptions);
+            // World.add(engine.world, ball);
+            elastic.bodyB = ball;
+        }
+    });
+
+    render.mouse = mouse;
 
     //Start the engine
     Matter.Engine.run(engine);
