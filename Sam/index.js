@@ -7,7 +7,7 @@ window.addEventListener('load', function() {
 var engine = Matter.Engine.create();
 var world = engine.world;
  var   Body = Matter.Body;
-
+//var star = Vertices.fromPath('50 0 63 38 100 38 69 59 82 100 50 75 18 100 31 59 0 38 37 38');
 var render = Matter.Render.create({
     canvas: myCanvas,
     engine: engine,
@@ -46,7 +46,14 @@ var ball = Matter.Bodies.circle(100, 100, 20, {
 
 
 
-
+    // var starttetst = Matter.Bodies.fromVertices(100,100,Vertices.fromPath('50 0 63 38 100 38 69 59 82 100 50 75 18 100 31 59 0 38 37 38'),{
+    //     isStatic: true,
+    //     render: {
+    //         fillStyle: '#000000',
+    //         strokeStyle: 'black',
+    //         visible: true
+    //     }
+    // });
 
 
     var floor = Matter.Bodies.rectangle(250, 495, 700, 10, {
@@ -104,7 +111,7 @@ var ball = Matter.Bodies.circle(100, 100, 20, {
     var test = Matter.Bodies.rectangle(200, 440, 100, 100, {
         isStatic: true,
         isSensor:true,
-       // chamfer: { radius: -10 },
+
         render: {
             fillStyle: '#00FF00',
             strokeStyle: 'black',
@@ -112,7 +119,7 @@ var ball = Matter.Bodies.circle(100, 100, 20, {
         }
     });
 
-    var curve =
+
 
 
 
@@ -185,6 +192,8 @@ Matter.World.add(world, test);
 
     Matter.World.add(world, p1);
     Matter.World.add(world, p2);
+    //Matter.World.add(world, starttetst);
+
 
     Matter.World.add(world, wall1);
     Matter.World.add(world, top);
@@ -195,7 +204,7 @@ Matter.Engine.run(engine);
 Matter.Render.run(render);
 //https://blog.alexandergottlieb.com/matter-js-the-missing-tutorial-70aafc06b167
 //https://codepen.io/lonekorean/pen/KXLrVX
-
+//https://github.com/liabru/matter-js/blob/master/examples/concave.js//concave poly
     Matter.Events.on(engine, 'afterUpdate', function(event) {
 
         if(boolea==true){
