@@ -29,6 +29,7 @@ var paddleRight = {};
 
 var ball;
 var bumpers = [];
+var deadZones = [];
 
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
@@ -88,22 +89,15 @@ window.addEventListener("load", () => {
         }
     });
 
-    bumper1 = Matter.Bodies.circle(200, 250, 40, {
-        angle: 1.57,
-        isStatic: true, //An immovable object
-        density: 0.4,
-        friction: 0.01,
-        frictionAir: 0.00001,
-        restitution: 1.25,
-        render: {
-            fillStyle: '#0036f3',
-            strokeStyle: 'black',
-            lineWidth: 1
-        }
-    });
-    bumper1.restitution =1.25;
+
     bumpers.push(makeBumper(200, 250, 40));
     bumpers.push(makeBumper(600, 250, 40));
+
+    // deadZones.push(makeWall(500, 825, 250, 50));
+    // deadZones.push(makeWall(400, 800, 50, 125));
+    // deadZones.push(makeWall(600, 800, 50, 125));
+
+
 
     // Add all bodies to the world
     Matter.World.add(game.world, [
@@ -112,6 +106,10 @@ window.addEventListener("load", () => {
         ball,
         bumpers[0],
         bumpers[1],
+
+        // deadZones[0],
+        // deadZones[1],
+        // deadZones[2],
 
         paddleLeft.ball,
         paddleLeft.paddle,
@@ -217,14 +215,23 @@ window.addEventListener("load", () => {
         for (var i = 0, j = pairs.length; i !== j; ++i) {
             var pair = pairs[i];
 
-            for ( k = 0; k<bumpers.length; ++k) {
-                if (pair.bodyA === ball&&pair.bodyB === bumpers[k]) {
-                    bumpers[k].render.fillStyle = COLOR.BUMPER_ALT;
-                    setTimeout(function() {
-                        bumpers[k].render.fillStyle = COLOR.BUMPER;
-                    }, 200);
-                    break;
-                }
+            if (pair.bodyA === ball&&pair.bodyB === bumpers[0]) {
+                bumpers[0].render.fillStyle = COLOR.BUMPER_ALT;
+                setTimeout(function() {
+                    bumpers[0].render.fillStyle = COLOR.BUMPER;
+                }, 200);
+            } else if (pair.bodyA === ball&&pair.bodyB === bumpers[1]) {
+                bumpers[1].render.fillStyle = COLOR.BUMPER_ALT;
+                setTimeout(function() {
+                    bumpers[1].render.fillStyle = COLOR.BUMPER;
+                }, 200);
+            }
+
+            if (pair.bodyA === ball&&pair.bodyB === bumpers[0]) {
+                bumpers[0].render.fillStyle = COLOR.BUMPER_ALT;
+                setTimeout(function() {
+                    bumpers[0].render.fillStyle = COLOR.BUMPER;
+                }, 200);
             }
 
 
@@ -336,15 +343,26 @@ function makeBumper(x, y, radius) {
         density: 0.4,
         friction: 0.01,
         frictionAir: 0.00001,
-        restitution: 1.25,
+        restitution: 1.1,
         render: {
             fillStyle: '#0036f3',
             strokeStyle: 'black',
             lineWidth: 1
         }
     });
-    bumper.restitution = 1.25;
+    bumper.restitution = 1.1;
     return bumper;
+}
+
+function makeWall(x, y, w, h) {
+    return Matter.Bodies.rectangle(x, y, w, h, {//this is the bottom red box
+        isStatic: true, //An immovable object
+        isSensor:true,
+        render: {
+            fillStyle: '#FF0000',
+            strokeStyle: "black",
+            visible: true
+        }
 }
 
 function staticCircle(x, y, radius, colorHex) {
@@ -376,17 +394,6 @@ function staticBox(x, y, width, height, colorHex, angle) {
     });
 }
 
-function staticBox2(x, y, width, height, colorHex) {
-    return Matter.Bodies.rectangle(900, 500, 1000, height, {
-        isStatic: true,
-        angle: 2.11,
-        render: {
-            fillStyle: colorHex,
-            strokeStyle: "black",
-            lineWidth: 1
-        }
-    });
-}
 function staticBox3(x, y, width, height, colorHex, angles) {
     return Matter.Bodies.rectangle(x, y, width, height, {
         isStatic: true,
