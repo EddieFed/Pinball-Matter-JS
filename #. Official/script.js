@@ -35,6 +35,10 @@ var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
 var x = 750;
 
+const COLOR = {
+    BUMPER: '#0036f3',
+    BUMPER_ALT: '#00e5ff',
+};
 
 // Wait until window finishes loading!
 window.addEventListener("load", () => {
@@ -46,11 +50,6 @@ window.addEventListener("load", () => {
     game.world.bounds = {
         min: { x: 0, y: 0},
         max: { x: c.width, y: c.height }
-    };
-
-    const COLOR = {
-        BUMPER: '#0036f3',
-        BUMPER_ALT: '#00e5ff',
     };
 
     // **!!REMEMBER!!** Set Renderer to match Canvas
@@ -125,44 +124,50 @@ window.addEventListener("load", () => {
         staticCircle(paddleRight.ball.position.x - 20, paddleRight.ball.position.y + 45, 10, "#FFFFFF"),
         staticCircle(paddleRight.ball.position.x - 60, paddleRight.ball.position.y - 20, 10, "#FFFFFF"),
 
-        //              ** Window borders **
-        border(c.width/2, -15, c.width, 30),             // Top
-        border(c.width/2, c.height + 15, c.width, 30),   // Bottom
-        border(-15, c.height/2, 30, c.height),           // Left
-        border(c.width + 15, c.height/2, 30, c.height),   // Right
+        // Window borders
+        border(c.width/2   , -15          , c.width + 0 , 30          ),     // Top
+        border(c.width/2   , c.height + 15, c.width + 0 , 30          ),     // Bottom
+        border(-15         , c.height/2   , 30          , c.height + 0),    // Left
+        border(c.width + 15, c.height/2   , 30          , c.height + 0),    // Right
 
-        staticBox3(100, 560, 265, 20, "#000000", .3),//left slide
-        staticBox3(650, 560, 265, 20, "#000000", -.3),//left slide
-        //left rounded top
 
-        staticBox(5, 0, 150, 140, "#000000", 1.8),//top left filler
-        staticBox(-15, 170, 100, 50, "#000000",1.8),
-        staticBox(-5, 150, 100, 50, "#000000", 1.9),
-        staticBox(5, 130, 100, 50, "#000000", 2),
-        staticBox(15, 110, 100, 50, "#000000", 2.1),
-        staticBox(25, 90, 100, 50, "#000000", 2.2),
-        staticBox(35, 70, 100, 50, "#000000", 2.3),
-        staticBox(45, 58, 100, 50, "#000000", 2.4),
-        staticBox(55, 45, 100, 50, "#000000", 2.5),
-        staticBox(65, 35, 100, 50, "#000000", 2.6),
-        staticBox(75, 25, 100, 50, "#000000", 2.7),
-        staticBox(85, 20, 100, 50, "#000000", 2.7  ),
-        staticBox(95, 15, 100, 50, "#000000", 2.7),
-        staticBox(105, 10, 100, 50, "#000000", 2.8),
-        staticBox(115, 7, 100, 50, "#000000", 2.8),
-        staticBox(120, 0, 100, 50, "#000000", 2.9),
-        staticBox(125, 0, 100, 50, "#000000", 2.9),
-        staticBox(135, 0, 100, 50, "#000000", 2.9),
-        staticBox(145, -2, 100, 50, "#000000", 2.9),
-        staticBox(155, -4, 100, 50, "#000000", 2.9),
-        staticBox(165, -6, 100, 50, "#000000", 2.9),
-        staticBox(175, -10, 100, 50, "#000000", 3),
-        staticBox(185, -15, 100, 50, "#000000",3),
-        staticBox(205, -15, 100, 50, "#000000", 3),
-        staticBox(225, -16, 100, 50, "#000000", 3.03),
-        staticBox(265, -23, 100, 50, "#000000", 3.05),
-        staticBox(295, -25, 100, 50, "#000000", 3.05),
-        staticBox(315, -25, 100, 50, "#000000", 3.05),
+        // Left Slide
+        staticBox3(100, 560, 265, 20, "#000000", .3 ),
+
+
+        //Right Slide
+        staticBox3(650, 560, 265, 20, "#000000", -.3),
+
+
+        // Left Rounded Top
+        staticBox(5  , 0  , 150, 140, "#000000", 1.8 ),
+        staticBox(-15, 170, 100, 50 , "#000000", 1.8 ),
+        staticBox(-5 , 150, 100, 50 , "#000000", 1.9 ),
+        staticBox(5  , 130, 100, 50 , "#000000", 2   ),
+        staticBox(15 , 110, 100, 50 , "#000000", 2.1 ),
+        staticBox(25 , 90 , 100, 50 , "#000000", 2.2 ),
+        staticBox(35 , 70 , 100, 50 , "#000000", 2.3 ),
+        staticBox(45 , 58 , 100, 50 , "#000000", 2.4 ),
+        staticBox(55 , 45 , 100, 50 , "#000000", 2.5 ),
+        staticBox(65 , 35 , 100, 50 , "#000000", 2.6 ),
+        staticBox(75 , 25 , 100, 50 , "#000000", 2.7 ),
+        staticBox(85 , 20 , 100, 50 , "#000000", 2.7 ),
+        staticBox(95 , 15 , 100, 50 , "#000000", 2.7 ),
+        staticBox(105, 10 , 100, 50 , "#000000", 2.8 ),
+        staticBox(115, 7  , 100, 50 , "#000000", 2.8 ),
+        staticBox(120, 0  , 100, 50 , "#000000", 2.9 ),
+        staticBox(125, 0  , 100, 50 , "#000000", 2.9 ),
+        staticBox(135, 0  , 100, 50 , "#000000", 2.9 ),
+        staticBox(145, -2 , 100, 50 , "#000000", 2.9 ),
+        staticBox(155, -4 , 100, 50 , "#000000", 2.9 ),
+        staticBox(165, -6 , 100, 50 , "#000000", 2.9 ),
+        staticBox(175, -10, 100, 50 , "#000000", 3   ),
+        staticBox(185, -15, 100, 50 , "#000000", 3   ),
+        staticBox(205, -15, 100, 50 , "#000000", 3   ),
+        staticBox(225, -16, 100, 50 , "#000000", 3.03),
+        staticBox(265, -23, 100, 50 , "#000000", 3.05),
+        staticBox(295, -25, 100, 50 , "#000000", 3.05),
+        staticBox(315, -25, 100, 50 , "#000000", 3.05),
 
         //right rounded top
         staticBox(-5+x, 0, 150, 140, "#000000", -1.8),//top right filler
