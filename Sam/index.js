@@ -12,8 +12,8 @@ var render = Matter.Render.create({
     canvas: myCanvas,
     engine: engine,
     options: {
-        width: 800,
-        height: 800,
+        width: 500,
+        height: 500,
         background: '#888888',
         wireframes: false,
         showAngleIndicator: true
@@ -31,9 +31,9 @@ var render = Matter.Render.create({
     });
     Matter.World.add(world, mouseConstraint);
 
-var ball = Matter.Bodies.circle(100, 100, 20, {
+var ball = Matter.Bodies.circle(300, 100, 20, {
     mass: 1,
-    friction: .4,
+    friction: .1,
     frictionAir: 0.001,
     restitution: .7,
     inertia:0,
@@ -46,14 +46,7 @@ var ball = Matter.Bodies.circle(100, 100, 20, {
 
 
 
-    // var starttetst = Matter.Bodies.fromVertices(100,100,Vertices.fromPath('50 0 63 38 100 38 69 59 82 100 50 75 18 100 31 59 0 38 37 38'),{
-    //     isStatic: true,
-    //     render: {
-    //         fillStyle: '#000000',
-    //         strokeStyle: 'black',
-    //         visible: true
-    //     }
-    // });
+
 
 
     var floor = Matter.Bodies.rectangle(250, 495, 700, 10, {
@@ -132,9 +125,9 @@ var ball = Matter.Bodies.circle(100, 100, 20, {
         for (var i = 0, j = pairs.length; i != j; ++i) {
             var pair = pairs[i];
 
-            if (pair.bodyA === ball&&pair.bodyB === test) {
+            if (pair.bodyA === ball&&pair.bodyB === test) {//checks what objects collided
               boolea=true;
-            } else if (pair.bodyB === ball&&pair.bodyA === test) {
+            } else if (pair.bodyB === ball&&pair.bodyA === test) {//check reverse
 
                 boolea=true;
             }
@@ -163,7 +156,7 @@ var ball = Matter.Bodies.circle(100, 100, 20, {
                     right=false;
                 }
                 else{
-                    Body.setPosition(ball,{x:520, y:ball.position.y});
+                    Body.setPosition(ball,{x:p2.position.x+30, y:p2.position.y+(ball.position.y-p1.position.y)});
                     left=true;
                 }
 
@@ -173,7 +166,7 @@ var ball = Matter.Bodies.circle(100, 100, 20, {
                     left=false;
                 }
                 else{
-                    Body.setPosition(ball,{x:-20, y:ball.position.y});
+                    Body.setPosition(ball,{x:p1.position.x-30,  y:p1.position.y+(ball.position.y-p2.position.y)});
                     right=true;
                 }
 
@@ -192,7 +185,6 @@ Matter.World.add(world, test);
 
     Matter.World.add(world, p1);
     Matter.World.add(world, p2);
-    //Matter.World.add(world, starttetst);
 
 
     Matter.World.add(world, wall1);
@@ -202,12 +194,12 @@ Matter.World.add(world, test);
 
 Matter.Engine.run(engine);
 Matter.Render.run(render);
-//https://blog.alexandergottlieb.com/matter-js-the-missing-tutorial-70aafc06b167
-//https://codepen.io/lonekorean/pen/KXLrVX
+//https://blog.alexandergottlieb.com/matter-js-the-missing-tutorial-70aafc06b167//basics
+//https://codepen.io/lonekorean/pen/KXLrVX// pinball example
 //https://github.com/liabru/matter-js/blob/master/examples/concave.js//concave poly
-    Matter.Events.on(engine, 'afterUpdate', function(event) {
+    Matter.Events.on(engine, 'afterUpdate', function(event) {// after each update of the engine
 
-        if(boolea==true){
+        if(boolea===true){//only on when ball is in the green square
             Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: -0.001, y: -.000});
 
         }
