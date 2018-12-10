@@ -28,10 +28,11 @@ var paddleLeft = {};
 var paddleRight = {};
 
 var ball;
-var bumper1;
+var bumpers = [];
 
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
+var x = 750;
 
 
 // Wait until window finishes loading!
@@ -101,13 +102,16 @@ window.addEventListener("load", () => {
         }
     });
     bumper1.restitution =1.25;
+    bumpers.push(makeBumper(200, 250, 40));
+    bumpers.push(makeBumper(600, 250, 40));
 
     // Add all bodies to the world
     Matter.World.add(game.world, [
         mouseConstraint(),
 
         ball,
-        bumper1,
+        bumpers[0],
+        bumpers[1],
 
         paddleLeft.ball,
         paddleLeft.paddle,
@@ -127,7 +131,71 @@ window.addEventListener("load", () => {
         border(c.width/2, -15, c.width, 30),             // Top
         border(c.width/2, c.height + 15, c.width, 30),   // Bottom
         border(-15, c.height/2, 30, c.height),           // Left
-        border(c.width + 15, c.height/2, 30, c.height)   // Right
+        border(c.width + 15, c.height/2, 30, c.height),   // Right
+
+        staticBox3(100, 560, 265, 20, "#000000", .3),//left slide
+        staticBox3(650, 560, 265, 20, "#000000", -.3),//left slide
+        //left rounded top
+
+        staticBox(5, 0, 150, 140, "#000000", 1.8),//top left filler
+        staticBox(-15, 170, 100, 50, "#000000",1.8),
+        staticBox(-5, 150, 100, 50, "#000000", 1.9),
+        staticBox(5, 130, 100, 50, "#000000", 2),
+        staticBox(15, 110, 100, 50, "#000000", 2.1),
+        staticBox(25, 90, 100, 50, "#000000", 2.2),
+        staticBox(35, 70, 100, 50, "#000000", 2.3),
+        staticBox(45, 58, 100, 50, "#000000", 2.4),
+        staticBox(55, 45, 100, 50, "#000000", 2.5),
+        staticBox(65, 35, 100, 50, "#000000", 2.6),
+        staticBox(75, 25, 100, 50, "#000000", 2.7),
+        staticBox(85, 20, 100, 50, "#000000", 2.7  ),
+        staticBox(95, 15, 100, 50, "#000000", 2.7),
+        staticBox(105, 10, 100, 50, "#000000", 2.8),
+        staticBox(115, 7, 100, 50, "#000000", 2.8),
+        staticBox(120, 0, 100, 50, "#000000", 2.9),
+        staticBox(125, 0, 100, 50, "#000000", 2.9),
+        staticBox(135, 0, 100, 50, "#000000", 2.9),
+        staticBox(145, -2, 100, 50, "#000000", 2.9),
+        staticBox(155, -4, 100, 50, "#000000", 2.9),
+        staticBox(165, -6, 100, 50, "#000000", 2.9),
+        staticBox(175, -10, 100, 50, "#000000", 3),
+        staticBox(185, -15, 100, 50, "#000000",3),
+        staticBox(205, -15, 100, 50, "#000000", 3),
+        staticBox(225, -16, 100, 50, "#000000", 3.03),
+        staticBox(265, -23, 100, 50, "#000000", 3.05),
+        staticBox(295, -25, 100, 50, "#000000", 3.05),
+        staticBox(315, -25, 100, 50, "#000000", 3.05),
+
+        //right rounded top
+        staticBox(-5+x, 0, 150, 140, "#000000", -1.8),//top right filler
+        staticBox(15+x, 170, 100, 50, "#000000", -1.8),
+        staticBox(5+x, 150, 100, 50, "#000000", -1.9),
+        staticBox(-5+x, 130, 100, 50, "#000000", -2),
+        staticBox(-15+x, 110, 100, 50, "#000000", -2.1),
+        staticBox(-25+x, 90, 100, 50, "#000000", -2.2),
+        staticBox(-35+x, 70, 100, 50, "#000000", -2.3),
+        staticBox(-45+x, 58, 100, 50, "#000000", -2.4),
+        staticBox(-55+x, 45, 100, 50, "#000000", -2.5),
+        staticBox(-65+x, 35, 100, 50, "#000000", -2.6),
+        staticBox(-75+x, 25, 100, 50, "#000000", -2.7),
+        staticBox(-85+x, 20, 100, 50, "#000000", -2.7  ),
+        staticBox(-95+x, 15, 100, 50, "#000000", -2.7),
+        staticBox(-105+x, 10, 100, 50, "#000000", -2.8),
+        staticBox(-115+x, 7, 100, 50, "#000000", -2.8),
+        staticBox(-120+x, 0, 100, 50, "#000000", -2.9),
+        staticBox(-125+x, 0, 100, 50, "#000000", -2.9),
+        staticBox(-135+x, 0, 100, 50, "#000000", -2.9),
+        staticBox(-145+x, -2, 100, 50, "#000000", -2.9),
+        staticBox(-155+x, -4, 100, 50, "#000000", -2.9),
+        staticBox(-165+x, -6, 100, 50, "#000000", -2.9),
+        staticBox(-175+x, -10, 100, 50, "#000000", -3),
+        staticBox(-185+x, -15, 100, 50, "#000000", -3),
+        staticBox(-205+x, -15, 100, 50, "#000000", -3),
+        staticBox(-225+x, -16, 100, 50, "#000000", -3.03),
+        staticBox(-265+x, -23, 100, 50, "#000000", -3.05),
+        staticBox(-295+x, -25, 100, 50, "#000000", -3.05),
+        staticBox(-315+x, -25, 100, 50, "#000000", -3.05),
+
     ]);
 
     // Basic render
@@ -140,14 +208,6 @@ window.addEventListener("load", () => {
             x: Math.max(Math.min(ball.velocity.x, 20), -20),
             y: Math.max(Math.min(ball.velocity.y, 20), -20),
         });
-
-        // // cheap way to keep ball from going back down the shooter lane
-        // if (ball.position.x > 500 && ball.velocity.y > 0) {
-        //     Matter.Body.setVelocity(ball, { x: 0, y: -10 });
-        // }
-        // if (ball.position.x > 20 && ball.velocity.y <50) {
-        //     Matter.Body.setVelocity(ball, { x: 20, y: -10 });
-        // }
     });
 
     Matter.Events.on(game.engine, 'collisionStart', function(event) {
@@ -157,12 +217,16 @@ window.addEventListener("load", () => {
         for (var i = 0, j = pairs.length; i !== j; ++i) {
             var pair = pairs[i];
 
-            if (pair.bodyA === ball&&pair.bodyB === bumper1) {
-                bumper1.render.fillStyle = COLOR.BUMPER_ALT;
-                setTimeout(function() {
-                    bumper1.render.fillStyle = COLOR.BUMPER;
-                }, 300);
+            for ( k = 0; k<bumpers.length; ++k) {
+                if (pair.bodyA === ball&&pair.bodyB === bumpers[k]) {
+                    bumpers[k].render.fillStyle = COLOR.BUMPER_ALT;
+                    setTimeout(function() {
+                        bumpers[k].render.fillStyle = COLOR.BUMPER;
+                    }, 200);
+                    break;
+                }
             }
+
 
         }
     });
@@ -265,6 +329,23 @@ function makePaddle(x, y, direction) {
 
 }
 
+function makeBumper(x, y, radius) {
+    bumper =  Matter.Bodies.circle(x, y, radius, {
+        angle: 1.57,
+        isStatic: true, //An immovable object
+        density: 0.4,
+        friction: 0.01,
+        frictionAir: 0.00001,
+        restitution: 1.25,
+        render: {
+            fillStyle: '#0036f3',
+            strokeStyle: 'black',
+            lineWidth: 1
+        }
+    });
+    bumper.restitution = 1.25;
+    return bumper;
+}
 
 function staticCircle(x, y, radius, colorHex) {
     return Matter.Bodies.circle(x, y, radius, {
@@ -279,6 +360,41 @@ function staticCircle(x, y, radius, colorHex) {
             visible: false,
             fillStyle: colorHex,
             strokeStyle: "#000000",
+            lineWidth: 1
+        }
+    });
+}
+function staticBox(x, y, width, height, colorHex, angle) {
+    return Matter.Bodies.rectangle(x, y, width, height, {
+        isStatic: true,
+        angle: angle,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
+}
+
+function staticBox2(x, y, width, height, colorHex) {
+    return Matter.Bodies.rectangle(900, 500, 1000, height, {
+        isStatic: true,
+        angle: 2.11,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
+}
+function staticBox3(x, y, width, height, colorHex, angles) {
+    return Matter.Bodies.rectangle(x, y, width, height, {
+        isStatic: true,
+
+        angle: angles,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
             lineWidth: 1
         }
     });
