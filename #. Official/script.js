@@ -32,6 +32,7 @@ var bumpers = [];
 
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
+var x = 750;
 
 
 // Wait until window finishes loading!
@@ -130,7 +131,71 @@ window.addEventListener("load", () => {
         border(c.width/2, -15, c.width, 30),             // Top
         border(c.width/2, c.height + 15, c.width, 30),   // Bottom
         border(-15, c.height/2, 30, c.height),           // Left
-        border(c.width + 15, c.height/2, 30, c.height)   // Right
+        border(c.width + 15, c.height/2, 30, c.height),   // Right
+
+        staticBox3(100, 560, 265, 20, "#000000", .3),//left slide
+        staticBox3(650, 560, 265, 20, "#000000", -.3),//left slide
+        //left rounded top
+
+        staticBox(5, 0, 150, 140, "#000000", 1.8),//top left filler
+        staticBox(-15, 170, 100, 50, "#000000",1.8),
+        staticBox(-5, 150, 100, 50, "#000000", 1.9),
+        staticBox(5, 130, 100, 50, "#000000", 2),
+        staticBox(15, 110, 100, 50, "#000000", 2.1),
+        staticBox(25, 90, 100, 50, "#000000", 2.2),
+        staticBox(35, 70, 100, 50, "#000000", 2.3),
+        staticBox(45, 58, 100, 50, "#000000", 2.4),
+        staticBox(55, 45, 100, 50, "#000000", 2.5),
+        staticBox(65, 35, 100, 50, "#000000", 2.6),
+        staticBox(75, 25, 100, 50, "#000000", 2.7),
+        staticBox(85, 20, 100, 50, "#000000", 2.7  ),
+        staticBox(95, 15, 100, 50, "#000000", 2.7),
+        staticBox(105, 10, 100, 50, "#000000", 2.8),
+        staticBox(115, 7, 100, 50, "#000000", 2.8),
+        staticBox(120, 0, 100, 50, "#000000", 2.9),
+        staticBox(125, 0, 100, 50, "#000000", 2.9),
+        staticBox(135, 0, 100, 50, "#000000", 2.9),
+        staticBox(145, -2, 100, 50, "#000000", 2.9),
+        staticBox(155, -4, 100, 50, "#000000", 2.9),
+        staticBox(165, -6, 100, 50, "#000000", 2.9),
+        staticBox(175, -10, 100, 50, "#000000", 3),
+        staticBox(185, -15, 100, 50, "#000000",3),
+        staticBox(205, -15, 100, 50, "#000000", 3),
+        staticBox(225, -16, 100, 50, "#000000", 3.03),
+        staticBox(265, -23, 100, 50, "#000000", 3.05),
+        staticBox(295, -25, 100, 50, "#000000", 3.05),
+        staticBox(315, -25, 100, 50, "#000000", 3.05),
+
+        //right rounded top
+        staticBox(-5+x, 0, 150, 140, "#000000", -1.8),//top right filler
+        staticBox(15+x, 170, 100, 50, "#000000", -1.8),
+        staticBox(5+x, 150, 100, 50, "#000000", -1.9),
+        staticBox(-5+x, 130, 100, 50, "#000000", -2),
+        staticBox(-15+x, 110, 100, 50, "#000000", -2.1),
+        staticBox(-25+x, 90, 100, 50, "#000000", -2.2),
+        staticBox(-35+x, 70, 100, 50, "#000000", -2.3),
+        staticBox(-45+x, 58, 100, 50, "#000000", -2.4),
+        staticBox(-55+x, 45, 100, 50, "#000000", -2.5),
+        staticBox(-65+x, 35, 100, 50, "#000000", -2.6),
+        staticBox(-75+x, 25, 100, 50, "#000000", -2.7),
+        staticBox(-85+x, 20, 100, 50, "#000000", -2.7  ),
+        staticBox(-95+x, 15, 100, 50, "#000000", -2.7),
+        staticBox(-105+x, 10, 100, 50, "#000000", -2.8),
+        staticBox(-115+x, 7, 100, 50, "#000000", -2.8),
+        staticBox(-120+x, 0, 100, 50, "#000000", -2.9),
+        staticBox(-125+x, 0, 100, 50, "#000000", -2.9),
+        staticBox(-135+x, 0, 100, 50, "#000000", -2.9),
+        staticBox(-145+x, -2, 100, 50, "#000000", -2.9),
+        staticBox(-155+x, -4, 100, 50, "#000000", -2.9),
+        staticBox(-165+x, -6, 100, 50, "#000000", -2.9),
+        staticBox(-175+x, -10, 100, 50, "#000000", -3),
+        staticBox(-185+x, -15, 100, 50, "#000000", -3),
+        staticBox(-205+x, -15, 100, 50, "#000000", -3),
+        staticBox(-225+x, -16, 100, 50, "#000000", -3.03),
+        staticBox(-265+x, -23, 100, 50, "#000000", -3.05),
+        staticBox(-295+x, -25, 100, 50, "#000000", -3.05),
+        staticBox(-315+x, -25, 100, 50, "#000000", -3.05),
+
     ]);
 
     // Basic render
@@ -295,6 +360,41 @@ function staticCircle(x, y, radius, colorHex) {
             visible: false,
             fillStyle: colorHex,
             strokeStyle: "#000000",
+            lineWidth: 1
+        }
+    });
+}
+function staticBox(x, y, width, height, colorHex, angle) {
+    return Matter.Bodies.rectangle(x, y, width, height, {
+        isStatic: true,
+        angle: angle,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
+}
+
+function staticBox2(x, y, width, height, colorHex) {
+    return Matter.Bodies.rectangle(900, 500, 1000, height, {
+        isStatic: true,
+        angle: 2.11,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
+}
+function staticBox3(x, y, width, height, colorHex, angles) {
+    return Matter.Bodies.rectangle(x, y, width, height, {
+        isStatic: true,
+
+        angle: angles,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
             lineWidth: 1
         }
     });
