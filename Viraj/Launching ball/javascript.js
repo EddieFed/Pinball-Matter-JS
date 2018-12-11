@@ -97,18 +97,18 @@ window.addEventListener('load', function() {
     bodies.push(invisCheck);
 
     var ground = Bodies.rectangle(395, 600, 815, 50, { isStatic: true }),
-        rockOptions = { density: 0.004 },
-        rock = Bodies.polygon(170, 450, 8, 20, rockOptions),
+        paddleOptions = { density: 0.004 },
+        paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
         anchor = { x: 170, y: 450 },
         elastic = Constraint.create({ 
             pointA: anchor, 
-            bodyB: rock, 
+            bodyB: paddle, 
             stiffness: 0.05
         });
 
-    World.add(engine.world, [ground,rock,elastic]);
+    World.add(engine.world, [ground,paddle,elastic]);
 
-    // Matter.World.add(world,[ground,rock,elastic]);
+    // Matter.World.add(world,[ground,paddle,elastic]);
 
     // var elastic = Constraint.create({ 
     //     pointA: anchor, 

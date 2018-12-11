@@ -869,7 +869,7 @@ var Axes = require('../geometry/Axes');
     /**
      * A `Number` that defines the density of the body, that is its mass per unit area.
      * If you pass the density via `Body.create` the `mass` property is automatically calculated for you based on the size (area) of the object.
-     * This is generally preferable to simply setting mass and allows for more intuitive definition of materials (e.g. rock has a higher density than wood).
+     * This is generally preferable to simply setting mass and allows for more intuitive definition of materials (e.g. paddle has a higher density than wood).
      *
      * @property density
      * @type number
