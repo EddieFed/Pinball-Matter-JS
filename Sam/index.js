@@ -200,7 +200,7 @@ Matter.Render.run(render);
     Matter.Events.on(engine, 'afterUpdate', function(event) {// after each update of the engine
 
         if(boolea===true){//only on when ball is in the green square
-            Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: -0.001, y: -.000});
+            Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: -0.001, y: -.000});//left force
 
         }
     });
