@@ -9436,7 +9436,7 @@ module.exports={
         {
             "file": "src/image/filters.js",
             "line": 3,
-            "description": "<p>This module defines the filters for use with image buffers.</p>\n<p>This module is basically a collection of functions stored in an object\nas opposed to modules. The functions are destructive, modifying\nthe passed in canvas rather than creating a copy.</p>\n<p>Generally speaking users of this module will use the Filters.apply method\non a canvas to create an effect.</p>\n<p>A number of functions are borrowed/adapted from\n<a href=\"http://www.html5rocks.com/en/tutorials/canvas/imagefilters/\">http://www.html5rocks.com/en/tutorials/canvas/imagefilters/</a>\nor the java processing implementation.</p>\n",
+            "description": "<p>This module defines the filters for use with image buffers.</p>\n<p>This module is basically a collection of functions stored in an object\nas opposed to modules. The functions are destructive, modifying\nthe passed in canvas rather than creating a copy.</p>\n<p>Generally speaking users of this module will use the Filters.apply method\non a canvas to create an effect.</p>\n<p>A number of functions are borrowed/adapted from\n<a href=\"http://www.html5paddles.com/en/tutorials/canvas/imagefilters/\">http://www.html5paddles.com/en/tutorials/canvas/imagefilters/</a>\nor the java processing implementation.</p>\n",
             "class": "p5",
             "module": "Events"
         },
@@ -9852,9 +9852,9 @@ module.exports={
             "type": "Number",
             "readonly": "",
             "example": [
-                "\n<div><code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/rockies.jpg');\n}\n\nfunction setup() {\n  createCanvas(100, 100);\n  image(img, 0, 0);\n  for (var i = 0; i < img.width; i++) {\n    var c = img.get(i, img.height / 2);\n    stroke(c);\n    line(i, height / 2, i, height);\n  }\n}\n</code></div>"
+                "\n<div><code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/paddleies.jpg');\n}\n\nfunction setup() {\n  createCanvas(100, 100);\n  image(img, 0, 0);\n  for (var i = 0; i < img.width; i++) {\n    var c = img.get(i, img.height / 2);\n    stroke(c);\n    line(i, height / 2, i, height);\n  }\n}\n</code></div>"
             ],
-            "alt": "rocky mountains in top and horizontal lines in corresponding colors in bottom.",
+            "alt": "paddley mountains in top and horizontal lines in corresponding colors in bottom.",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image"
@@ -9868,9 +9868,9 @@ module.exports={
             "type": "Number",
             "readonly": "",
             "example": [
-                "\n<div><code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/rockies.jpg');\n}\n\nfunction setup() {\n  createCanvas(100, 100);\n  image(img, 0, 0);\n  for (var i = 0; i < img.height; i++) {\n    var c = img.get(img.width / 2, i);\n    stroke(c);\n    line(0, i, width / 2, i);\n  }\n}\n</code></div>"
+                "\n<div><code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/paddleies.jpg');\n}\n\nfunction setup() {\n  createCanvas(100, 100);\n  image(img, 0, 0);\n  for (var i = 0; i < img.height; i++) {\n    var c = img.get(img.width / 2, i);\n    stroke(c);\n    line(0, i, width / 2, i);\n  }\n}\n</code></div>"
             ],
-            "alt": "rocky mountains on right and vertical lines in corresponding colors on left.",
+            "alt": "paddley mountains on right and vertical lines in corresponding colors on left.",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image"
@@ -9905,9 +9905,9 @@ module.exports={
             "itemtype": "method",
             "name": "loadPixels",
             "example": [
-                "\n<div><code>\nvar myImage;\nvar halfImage;\n\nfunction preload() {\n  myImage = loadImage('assets/rockies.jpg');\n}\n\nfunction setup() {\n  myImage.loadPixels();\n  halfImage = 4 * width * height / 2;\n  for (var i = 0; i < halfImage; i++) {\n    myImage.pixels[i + halfImage] = myImage.pixels[i];\n  }\n  myImage.updatePixels();\n}\n\nfunction draw() {\n  image(myImage, 0, 0);\n}\n</code></div>"
+                "\n<div><code>\nvar myImage;\nvar halfImage;\n\nfunction preload() {\n  myImage = loadImage('assets/paddleies.jpg');\n}\n\nfunction setup() {\n  myImage.loadPixels();\n  halfImage = 4 * width * height / 2;\n  for (var i = 0; i < halfImage; i++) {\n    myImage.pixels[i + halfImage] = myImage.pixels[i];\n  }\n  myImage.updatePixels();\n}\n\nfunction draw() {\n  image(myImage, 0, 0);\n}\n</code></div>"
             ],
-            "alt": "2 images of rocky mountains vertically stacked",
+            "alt": "2 images of paddley mountains vertically stacked",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image"
@@ -9919,9 +9919,9 @@ module.exports={
             "itemtype": "method",
             "name": "updatePixels",
             "example": [
-                "\n<div><code>\nvar myImage;\nvar halfImage;\n\nfunction preload() {\n  myImage = loadImage('assets/rockies.jpg');\n}\n\nfunction setup() {\n  myImage.loadPixels();\n  halfImage = 4 * width * height / 2;\n  for (var i = 0; i < halfImage; i++) {\n    myImage.pixels[i + halfImage] = myImage.pixels[i];\n  }\n  myImage.updatePixels();\n}\n\nfunction draw() {\n  image(myImage, 0, 0);\n}\n</code></div>"
+                "\n<div><code>\nvar myImage;\nvar halfImage;\n\nfunction preload() {\n  myImage = loadImage('assets/paddleies.jpg');\n}\n\nfunction setup() {\n  myImage.loadPixels();\n  halfImage = 4 * width * height / 2;\n  for (var i = 0; i < halfImage; i++) {\n    myImage.pixels[i + halfImage] = myImage.pixels[i];\n  }\n  myImage.updatePixels();\n}\n\nfunction draw() {\n  image(myImage, 0, 0);\n}\n</code></div>"
             ],
-            "alt": "2 images of rocky mountains vertically stacked",
+            "alt": "2 images of paddley mountains vertically stacked",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image",
@@ -9994,9 +9994,9 @@ module.exports={
                 "type": "Number[]|Color|p5.Image"
             },
             "example": [
-                "\n<div><code>\nvar myImage;\nvar c;\n\nfunction preload() {\n  myImage = loadImage('assets/rockies.jpg');\n}\n\nfunction setup() {\n  background(myImage);\n  noStroke();\n  c = myImage.get(60, 90);\n  fill(c);\n  rect(25, 25, 50, 50);\n}\n\n//get() returns color here\n</code></div>"
+                "\n<div><code>\nvar myImage;\nvar c;\n\nfunction preload() {\n  myImage = loadImage('assets/paddleies.jpg');\n}\n\nfunction setup() {\n  background(myImage);\n  noStroke();\n  c = myImage.get(60, 90);\n  fill(c);\n  rect(25, 25, 50, 50);\n}\n\n//get() returns color here\n</code></div>"
             ],
-            "alt": "image of rocky mountains with 50x50 green rect in front",
+            "alt": "image of paddley mountains with 50x50 green rect in front",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image"
@@ -10051,9 +10051,9 @@ module.exports={
                 }
             ],
             "example": [
-                "\n<div><code>\nvar img;\n\nfunction preload() {\n  img = loadImage('assets/rockies.jpg');\n}\n\nfunction draw() {\n  image(img, 0, 0);\n}\n\nfunction mousePressed() {\n  img.resize(50, 100);\n}\n</code></div>"
+                "\n<div><code>\nvar img;\n\nfunction preload() {\n  img = loadImage('assets/paddleies.jpg');\n}\n\nfunction draw() {\n  image(img, 0, 0);\n}\n\nfunction mousePressed() {\n  img.resize(50, 100);\n}\n</code></div>"
             ],
-            "alt": "image of rocky mountains. zoomed in",
+            "alt": "image of paddley mountains. zoomed in",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image"
@@ -10065,9 +10065,9 @@ module.exports={
             "itemtype": "method",
             "name": "copy",
             "example": [
-                "\n<div><code>\nvar photo;\nvar bricks;\nvar x;\nvar y;\n\nfunction preload() {\n  photo = loadImage('assets/rockies.jpg');\n  bricks = loadImage('assets/bricks.jpg');\n}\n\nfunction setup() {\n  x = bricks.width / 2;\n  y = bricks.height / 2;\n  photo.copy(bricks, 0, 0, x, y, 0, 0, x, y);\n  image(photo, 0, 0);\n}\n</code></div>"
+                "\n<div><code>\nvar photo;\nvar bricks;\nvar x;\nvar y;\n\nfunction preload() {\n  photo = loadImage('assets/paddleies.jpg');\n  bricks = loadImage('assets/bricks.jpg');\n}\n\nfunction setup() {\n  x = bricks.width / 2;\n  y = bricks.height / 2;\n  photo.copy(bricks, 0, 0, x, y, 0, 0, x, y);\n  image(photo, 0, 0);\n}\n</code></div>"
             ],
-            "alt": "image of rocky mountains and smaller image on top of bricks at top left",
+            "alt": "image of paddley mountains and smaller image on top of bricks at top left",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image",
@@ -10183,9 +10183,9 @@ module.exports={
                 }
             ],
             "example": [
-                "\n<div><code>\nvar photo, maskImage;\nfunction preload() {\n  photo = loadImage('assets/rockies.jpg');\n  maskImage = loadImage('assets/mask2.png');\n}\n\nfunction setup() {\n  createCanvas(100, 100);\n  photo.mask(maskImage);\n  image(photo, 0, 0);\n}\n</code></div>"
+                "\n<div><code>\nvar photo, maskImage;\nfunction preload() {\n  photo = loadImage('assets/paddleies.jpg');\n  maskImage = loadImage('assets/mask2.png');\n}\n\nfunction setup() {\n  createCanvas(100, 100);\n  photo.mask(maskImage);\n  image(photo, 0, 0);\n}\n</code></div>"
             ],
-            "alt": "image of rocky mountains with white at right\n\n\nhttp://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/",
+            "alt": "image of paddley mountains with white at right\n\n\nhttp://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image"
@@ -10210,9 +10210,9 @@ module.exports={
                 }
             ],
             "example": [
-                "\n<div><code>\nvar photo1;\nvar photo2;\n\nfunction preload() {\n  photo1 = loadImage('assets/rockies.jpg');\n  photo2 = loadImage('assets/rockies.jpg');\n}\n\nfunction setup() {\n  photo2.filter('gray');\n  image(photo1, 0, 0);\n  image(photo2, width / 2, 0);\n}\n</code></div>"
+                "\n<div><code>\nvar photo1;\nvar photo2;\n\nfunction preload() {\n  photo1 = loadImage('assets/paddleies.jpg');\n  photo2 = loadImage('assets/paddleies.jpg');\n}\n\nfunction setup() {\n  photo2.filter('gray');\n  image(photo1, 0, 0);\n  image(photo2, width / 2, 0);\n}\n</code></div>"
             ],
-            "alt": "2 images of rocky mountains left one in color, right in black and white",
+            "alt": "2 images of paddley mountains left one in color, right in black and white",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image"
@@ -10224,9 +10224,9 @@ module.exports={
             "itemtype": "method",
             "name": "blend",
             "example": [
-                "\n<div><code>\nvar mountains;\nvar bricks;\n\nfunction preload() {\n  mountains = loadImage('assets/rockies.jpg');\n  bricks = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  mountains.blend(bricks, 0, 0, 33, 100, 67, 0, 33, 100, ADD);\n  image(mountains, 0, 0);\n  image(bricks, 0, 0);\n}\n</code></div>\n<div><code>\nvar mountains;\nvar bricks;\n\nfunction preload() {\n  mountains = loadImage('assets/rockies.jpg');\n  bricks = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  mountains.blend(bricks, 0, 0, 33, 100, 67, 0, 33, 100, DARKEST);\n  image(mountains, 0, 0);\n  image(bricks, 0, 0);\n}\n</code></div>\n<div><code>\nvar mountains;\nvar bricks;\n\nfunction preload() {\n  mountains = loadImage('assets/rockies.jpg');\n  bricks = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  mountains.blend(bricks, 0, 0, 33, 100, 67, 0, 33, 100, LIGHTEST);\n  image(mountains, 0, 0);\n  image(bricks, 0, 0);\n}\n</code></div>"
+                "\n<div><code>\nvar mountains;\nvar bricks;\n\nfunction preload() {\n  mountains = loadImage('assets/paddleies.jpg');\n  bricks = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  mountains.blend(bricks, 0, 0, 33, 100, 67, 0, 33, 100, ADD);\n  image(mountains, 0, 0);\n  image(bricks, 0, 0);\n}\n</code></div>\n<div><code>\nvar mountains;\nvar bricks;\n\nfunction preload() {\n  mountains = loadImage('assets/paddleies.jpg');\n  bricks = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  mountains.blend(bricks, 0, 0, 33, 100, 67, 0, 33, 100, DARKEST);\n  image(mountains, 0, 0);\n  image(bricks, 0, 0);\n}\n</code></div>\n<div><code>\nvar mountains;\nvar bricks;\n\nfunction preload() {\n  mountains = loadImage('assets/paddleies.jpg');\n  bricks = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  mountains.blend(bricks, 0, 0, 33, 100, 67, 0, 33, 100, LIGHTEST);\n  image(mountains, 0, 0);\n  image(bricks, 0, 0);\n}\n</code></div>"
             ],
-            "alt": "image of rocky mountains. Brick images on left and right. Right overexposed\nimage of rockies. Brickwall images on left and right. Right mortar transparent\nimage of rockies. Brickwall images on left and right. Right translucent",
+            "alt": "image of paddley mountains. Brick images on left and right. Right overexposed\nimage of paddleies. Brickwall images on left and right. Right mortar transparent\nimage of paddleies. Brickwall images on left and right. Right translucent",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image",
@@ -10357,9 +10357,9 @@ module.exports={
                 }
             ],
             "example": [
-                "\n<div><code>\nvar photo;\n\nfunction preload() {\n  photo = loadImage('assets/rockies.jpg');\n}\n\nfunction draw() {\n  image(photo, 0, 0);\n}\n\nfunction keyTyped() {\n  if (key === 's') {\n    photo.save('photo', 'png');\n  }\n}\n</code></div>"
+                "\n<div><code>\nvar photo;\n\nfunction preload() {\n  photo = loadImage('assets/paddleies.jpg');\n}\n\nfunction draw() {\n  image(photo, 0, 0);\n}\n\nfunction keyTyped() {\n  if (key === 's') {\n    photo.save('photo', 'png');\n  }\n}\n</code></div>"
             ],
-            "alt": "image of rocky mountains.",
+            "alt": "image of paddley mountains.",
             "class": "p5.Image",
             "module": "Image",
             "submodule": "Image"
@@ -10386,9 +10386,9 @@ module.exports={
             "itemtype": "method",
             "name": "blend",
             "example": [
-                "\n<div><code>\nvar img0;\nvar img1;\n\nfunction preload() {\n  img0 = loadImage('assets/rockies.jpg');\n  img1 = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  background(img0);\n  image(img1, 0, 0);\n  blend(img1, 0, 0, 33, 100, 67, 0, 33, 100, LIGHTEST);\n}\n</code></div>\n<div><code>\nvar img0;\nvar img1;\n\nfunction preload() {\n  img0 = loadImage('assets/rockies.jpg');\n  img1 = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  background(img0);\n  image(img1, 0, 0);\n  blend(img1, 0, 0, 33, 100, 67, 0, 33, 100, DARKEST);\n}\n</code></div>\n<div><code>\nvar img0;\nvar img1;\n\nfunction preload() {\n  img0 = loadImage('assets/rockies.jpg');\n  img1 = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  background(img0);\n  image(img1, 0, 0);\n  blend(img1, 0, 0, 33, 100, 67, 0, 33, 100, ADD);\n}\n</code></div>"
+                "\n<div><code>\nvar img0;\nvar img1;\n\nfunction preload() {\n  img0 = loadImage('assets/paddleies.jpg');\n  img1 = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  background(img0);\n  image(img1, 0, 0);\n  blend(img1, 0, 0, 33, 100, 67, 0, 33, 100, LIGHTEST);\n}\n</code></div>\n<div><code>\nvar img0;\nvar img1;\n\nfunction preload() {\n  img0 = loadImage('assets/paddleies.jpg');\n  img1 = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  background(img0);\n  image(img1, 0, 0);\n  blend(img1, 0, 0, 33, 100, 67, 0, 33, 100, DARKEST);\n}\n</code></div>\n<div><code>\nvar img0;\nvar img1;\n\nfunction preload() {\n  img0 = loadImage('assets/paddleies.jpg');\n  img1 = loadImage('assets/bricks_third.jpg');\n}\n\nfunction setup() {\n  background(img0);\n  image(img1, 0, 0);\n  blend(img1, 0, 0, 33, 100, 67, 0, 33, 100, ADD);\n}\n</code></div>"
             ],
-            "alt": "image of rocky mountains. Brick images on left and right. Right overexposed\nimage of rockies. Brickwall images on left and right. Right mortar transparent\nimage of rockies. Brickwall images on left and right. Right translucent",
+            "alt": "image of paddley mountains. Brick images on left and right. Right overexposed\nimage of paddleies. Brickwall images on left and right. Right mortar transparent\nimage of paddleies. Brickwall images on left and right. Right translucent",
             "class": "p5",
             "module": "Image",
             "submodule": "Pixels",
@@ -10507,9 +10507,9 @@ module.exports={
             "itemtype": "method",
             "name": "copy",
             "example": [
-                "\n<div><code>\nvar img;\n\nfunction preload() {\n  img = loadImage('assets/rockies.jpg');\n}\n\nfunction setup() {\n  background(img);\n  copy(img, 7, 22, 10, 10, 35, 25, 50, 50);\n  stroke(255);\n  noFill();\n  // Rectangle shows area being copied\n  rect(7, 22, 10, 10);\n}\n</code></div>"
+                "\n<div><code>\nvar img;\n\nfunction preload() {\n  img = loadImage('assets/paddleies.jpg');\n}\n\nfunction setup() {\n  background(img);\n  copy(img, 7, 22, 10, 10, 35, 25, 50, 50);\n  stroke(255);\n  noFill();\n  // Rectangle shows area being copied\n  rect(7, 22, 10, 10);\n}\n</code></div>"
             ],
-            "alt": "image of rocky mountains. Brick images on left and right. Right overexposed\nimage of rockies. Brickwall images on left and right. Right mortar transparent\nimage of rockies. Brickwall images on left and right. Right translucent",
+            "alt": "image of paddley mountains. Brick images on left and right. Right overexposed\nimage of paddleies. Brickwall images on left and right. Right mortar transparent\nimage of paddleies. Brickwall images on left and right. Right translucent",
             "class": "p5",
             "module": "Image",
             "submodule": "Pixels",
@@ -10675,9 +10675,9 @@ module.exports={
                 "type": "Number[]|p5.Image"
             },
             "example": [
-                "\n<div>\n<code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/rockies.jpg');\n}\nfunction setup() {\n  image(img, 0, 0);\n  var c = get();\n  image(c, width / 2, 0);\n}\n</code>\n</div>\n\n<div>\n<code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/rockies.jpg');\n}\nfunction setup() {\n  image(img, 0, 0);\n  var c = get(50, 90);\n  fill(c);\n  noStroke();\n  rect(25, 25, 50, 50);\n}\n</code>\n</div>"
+                "\n<div>\n<code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/paddleies.jpg');\n}\nfunction setup() {\n  image(img, 0, 0);\n  var c = get();\n  image(c, width / 2, 0);\n}\n</code>\n</div>\n\n<div>\n<code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/paddleies.jpg');\n}\nfunction setup() {\n  image(img, 0, 0);\n  var c = get(50, 90);\n  fill(c);\n  noStroke();\n  rect(25, 25, 50, 50);\n}\n</code>\n</div>"
             ],
-            "alt": "2 images of the rocky mountains, side-by-side\nImage of the rocky mountains with 50x50 green rect in center of canvas",
+            "alt": "2 images of the paddley mountains, side-by-side\nImage of the paddley mountains with 50x50 green rect in center of canvas",
             "class": "p5",
             "module": "Image",
             "submodule": "Pixels"
@@ -10689,9 +10689,9 @@ module.exports={
             "itemtype": "method",
             "name": "loadPixels",
             "example": [
-                "\n<div>\n<code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/rockies.jpg');\n}\n\nfunction setup() {\n  image(img, 0, 0);\n  var d = pixelDensity();\n  var halfImage = 4 * (img.width * d) * (img.height * d / 2);\n  loadPixels();\n  for (var i = 0; i < halfImage; i++) {\n    pixels[i + halfImage] = pixels[i];\n  }\n  updatePixels();\n}\n</code>\n</div>"
+                "\n<div>\n<code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/paddleies.jpg');\n}\n\nfunction setup() {\n  image(img, 0, 0);\n  var d = pixelDensity();\n  var halfImage = 4 * (img.width * d) * (img.height * d / 2);\n  loadPixels();\n  for (var i = 0; i < halfImage; i++) {\n    pixels[i + halfImage] = pixels[i];\n  }\n  updatePixels();\n}\n</code>\n</div>"
             ],
-            "alt": "two images of the rocky mountains. one on top, one on bottom of canvas.",
+            "alt": "two images of the paddley mountains. one on top, one on bottom of canvas.",
             "class": "p5",
             "module": "Image",
             "submodule": "Pixels"
@@ -10720,9 +10720,9 @@ module.exports={
                 }
             ],
             "example": [
-                "\n<div>\n<code>\nvar black = color(0);\nset(30, 20, black);\nset(85, 20, black);\nset(85, 75, black);\nset(30, 75, black);\nupdatePixels();\n</code>\n</div>\n\n<div>\n<code>\nfor (var i = 30; i < width - 15; i++) {\n  for (var j = 20; j < height - 25; j++) {\n    var c = color(204 - j, 153 - i, 0);\n    set(i, j, c);\n  }\n}\nupdatePixels();\n</code>\n</div>\n\n<div>\n<code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/rockies.jpg');\n}\n\nfunction setup() {\n  set(0, 0, img);\n  updatePixels();\n  line(0, 0, width, height);\n  line(0, height, width, 0);\n}\n</code>\n</div>"
+                "\n<div>\n<code>\nvar black = color(0);\nset(30, 20, black);\nset(85, 20, black);\nset(85, 75, black);\nset(30, 75, black);\nupdatePixels();\n</code>\n</div>\n\n<div>\n<code>\nfor (var i = 30; i < width - 15; i++) {\n  for (var j = 20; j < height - 25; j++) {\n    var c = color(204 - j, 153 - i, 0);\n    set(i, j, c);\n  }\n}\nupdatePixels();\n</code>\n</div>\n\n<div>\n<code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/paddleies.jpg');\n}\n\nfunction setup() {\n  set(0, 0, img);\n  updatePixels();\n  line(0, 0, width, height);\n  line(0, height, width, 0);\n}\n</code>\n</div>"
             ],
-            "alt": "4 black points in the shape of a square middle-right of canvas.\nsquare with orangey-brown gradient lightening at bottom right.\nimage of the rocky mountains. with lines like an 'x' through the center.",
+            "alt": "4 black points in the shape of a square middle-right of canvas.\nsquare with orangey-brown gradient lightening at bottom right.\nimage of the paddley mountains. with lines like an 'x' through the center.",
             "class": "p5",
             "module": "Image",
             "submodule": "Pixels"
@@ -10760,9 +10760,9 @@ module.exports={
                 }
             ],
             "example": [
-                "\n<div>\n<code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/rockies.jpg');\n}\n\nfunction setup() {\n  image(img, 0, 0);\n  var d = pixelDensity();\n  var halfImage = 4 * (img.width * d) * (img.height * d / 2);\n  loadPixels();\n  for (var i = 0; i < halfImage; i++) {\n    pixels[i + halfImage] = pixels[i];\n  }\n  updatePixels();\n}\n</code>\n</div>"
+                "\n<div>\n<code>\nvar img;\nfunction preload() {\n  img = loadImage('assets/paddleies.jpg');\n}\n\nfunction setup() {\n  image(img, 0, 0);\n  var d = pixelDensity();\n  var halfImage = 4 * (img.width * d) * (img.height * d / 2);\n  loadPixels();\n  for (var i = 0; i < halfImage; i++) {\n    pixels[i + halfImage] = pixels[i];\n  }\n  updatePixels();\n}\n</code>\n</div>"
             ],
-            "alt": "two images of the rocky mountains. one on top, one on bottom of canvas.",
+            "alt": "two images of the paddley mountains. one on top, one on bottom of canvas.",
             "class": "p5",
             "module": "Image",
             "submodule": "Pixels"
@@ -26429,7 +26429,7 @@ module.exports={
             "line": " src/events/keyboard.js:387"
         },
         {
-            "message": "Missing item type\nThis module defines the filters for use with image buffers.\n\nThis module is basically a collection of functions stored in an object\nas opposed to modules. The functions are destructive, modifying\nthe passed in canvas rather than creating a copy.\n\nGenerally speaking users of this module will use the Filters.apply method\non a canvas to create an effect.\n\nA number of functions are borrowed/adapted from\nhttp://www.html5rocks.com/en/tutorials/canvas/imagefilters/\nor the java processing implementation.",
+            "message": "Missing item type\nThis module defines the filters for use with image buffers.\n\nThis module is basically a collection of functions stored in an object\nas opposed to modules. The functions are destructive, modifying\nthe passed in canvas rather than creating a copy.\n\nGenerally speaking users of this module will use the Filters.apply method\non a canvas to create an effect.\n\nA number of functions are borrowed/adapted from\nhttp://www.html5paddles.com/en/tutorials/canvas/imagefilters/\nor the java processing implementation.",
             "line": " src/image/filters.js:3"
         },
         {
@@ -26457,11 +26457,11 @@ module.exports={
             "line": " src/image/filters.js:122"
         },
         {
-            "message": "Missing item type\nConverts the image to black and white pixels depending if they are above or\nbelow the threshold defined by the level parameter. The parameter must be\nbetween 0.0 (black) and 1.0 (white). If no level is specified, 0.5 is used.\n\nBorrowed from http://www.html5rocks.com/en/tutorials/canvas/imagefilters/",
+            "message": "Missing item type\nConverts the image to black and white pixels depending if they are above or\nbelow the threshold defined by the level parameter. The parameter must be\nbetween 0.0 (black) and 1.0 (white). If no level is specified, 0.5 is used.\n\nBorrowed from http://www.html5paddles.com/en/tutorials/canvas/imagefilters/",
             "line": " src/image/filters.js:159"
         },
         {
-            "message": "Missing item type\nConverts any colors in the image to grayscale equivalents.\nNo parameter is used.\n\nBorrowed from http://www.html5rocks.com/en/tutorials/canvas/imagefilters/",
+            "message": "Missing item type\nConverts any colors in the image to grayscale equivalents.\nNo parameter is used.\n\nBorrowed from http://www.html5paddles.com/en/tutorials/canvas/imagefilters/",
             "line": " src/image/filters.js:193"
         },
         {
@@ -58570,7 +58570,7 @@ module.exports = p5;
  * on a canvas to create an effect.
  *
  * A number of functions are borrowed/adapted from
- * http://www.html5rocks.com/en/tutorials/canvas/imagefilters/
+ * http://www.html5paddles.com/en/tutorials/canvas/imagefilters/
  * or the java processing implementation.
  */
 
@@ -58720,7 +58720,7 @@ Filters.apply = function(canvas, func, filterParam) {
  * below the threshold defined by the level parameter. The parameter must be
  * between 0.0 (black) and 1.0 (white). If no level is specified, 0.5 is used.
  *
- * Borrowed from http://www.html5rocks.com/en/tutorials/canvas/imagefilters/
+ * Borrowed from http://www.html5paddles.com/en/tutorials/canvas/imagefilters/
  *
  * @private
  * @param  {Canvas} canvas
@@ -58753,7 +58753,7 @@ Filters.threshold = function(canvas, level) {
  * Converts any colors in the image to grayscale equivalents.
  * No parameter is used.
  *
- * Borrowed from http://www.html5rocks.com/en/tutorials/canvas/imagefilters/
+ * Borrowed from http://www.html5paddles.com/en/tutorials/canvas/imagefilters/
  *
  * @private
  * @param {Canvas} canvas
@@ -60112,7 +60112,7 @@ p5.Image = function(width, height) {
    * <div><code>
    * var img;
    * function preload() {
-   *   img = loadImage('assets/rockies.jpg');
+   *   img = loadImage('assets/paddleies.jpg');
    * }
    *
    * function setup() {
@@ -60127,7 +60127,7 @@ p5.Image = function(width, height) {
    * </code></div>
    *
    * @alt
-   * rocky mountains in top and horizontal lines in corresponding colors in bottom.
+   * paddley mountains in top and horizontal lines in corresponding colors in bottom.
    *
    */
   this.width = width;
@@ -60139,7 +60139,7 @@ p5.Image = function(width, height) {
    * <div><code>
    * var img;
    * function preload() {
-   *   img = loadImage('assets/rockies.jpg');
+   *   img = loadImage('assets/paddleies.jpg');
    * }
    *
    * function setup() {
@@ -60154,7 +60154,7 @@ p5.Image = function(width, height) {
    * </code></div>
    *
    * @alt
-   * rocky mountains on right and vertical lines in corresponding colors on left.
+   * paddley mountains on right and vertical lines in corresponding colors on left.
    *
    */
   this.height = height;
@@ -60255,7 +60255,7 @@ p5.Image.prototype._setProperty = function(prop, value) {
  * var halfImage;
  *
  * function preload() {
- *   myImage = loadImage('assets/rockies.jpg');
+ *   myImage = loadImage('assets/paddleies.jpg');
  * }
  *
  * function setup() {
@@ -60273,7 +60273,7 @@ p5.Image.prototype._setProperty = function(prop, value) {
  * </code></div>
  *
  * @alt
- * 2 images of rocky mountains vertically stacked
+ * 2 images of paddley mountains vertically stacked
  *
  */
 p5.Image.prototype.loadPixels = function() {
@@ -60300,7 +60300,7 @@ p5.Image.prototype.loadPixels = function() {
  * var halfImage;
  *
  * function preload() {
- *   myImage = loadImage('assets/rockies.jpg');
+ *   myImage = loadImage('assets/paddleies.jpg');
  * }
  *
  * function setup() {
@@ -60318,7 +60318,7 @@ p5.Image.prototype.loadPixels = function() {
  * </code></div>
  *
  * @alt
- * 2 images of rocky mountains vertically stacked
+ * 2 images of paddley mountains vertically stacked
  *
  */
 /**
@@ -60352,7 +60352,7 @@ p5.Image.prototype.updatePixels = function(x, y, w, h) {
  * var c;
  *
  * function preload() {
- *   myImage = loadImage('assets/rockies.jpg');
+ *   myImage = loadImage('assets/paddleies.jpg');
  * }
  *
  * function setup() {
@@ -60367,7 +60367,7 @@ p5.Image.prototype.updatePixels = function(x, y, w, h) {
  * </code></div>
  *
  * @alt
- * image of rocky mountains with 50x50 green rect in front
+ * image of paddley mountains with 50x50 green rect in front
  *
  */
 p5.Image.prototype.get = function(x, y, w, h) {
@@ -60426,7 +60426,7 @@ p5.Image.prototype.set = function(x, y, imgOrCol) {
  * var img;
  *
  * function preload() {
- *   img = loadImage('assets/rockies.jpg');
+ *   img = loadImage('assets/paddleies.jpg');
  * }
 
  * function draw() {
@@ -60439,7 +60439,7 @@ p5.Image.prototype.set = function(x, y, imgOrCol) {
  * </code></div>
  *
  * @alt
- * image of rocky mountains. zoomed in
+ * image of paddley mountains. zoomed in
  *
  */
 p5.Image.prototype.resize = function(width, height) {
@@ -60522,7 +60522,7 @@ p5.Image.prototype.resize = function(width, height) {
  * var y;
  *
  * function preload() {
- *   photo = loadImage('assets/rockies.jpg');
+ *   photo = loadImage('assets/paddleies.jpg');
  *   bricks = loadImage('assets/bricks.jpg');
  * }
  *
@@ -60535,7 +60535,7 @@ p5.Image.prototype.resize = function(width, height) {
  * </code></div>
  *
  * @alt
- * image of rocky mountains and smaller image on top of bricks at top left
+ * image of paddley mountains and smaller image on top of bricks at top left
  *
  */
 /**
@@ -60589,7 +60589,7 @@ p5.Image.prototype.copy = function() {
  * <div><code>
  * var photo, maskImage;
  * function preload() {
- *   photo = loadImage('assets/rockies.jpg');
+ *   photo = loadImage('assets/paddleies.jpg');
  *   maskImage = loadImage('assets/mask2.png');
  * }
  *
@@ -60601,7 +60601,7 @@ p5.Image.prototype.copy = function() {
  * </code></div>
  *
  * @alt
- * image of rocky mountains with white at right
+ * image of paddley mountains with white at right
  *
  *
  * http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
@@ -60657,8 +60657,8 @@ p5.Image.prototype.mask = function(p5Image) {
  * var photo2;
  *
  * function preload() {
- *   photo1 = loadImage('assets/rockies.jpg');
- *   photo2 = loadImage('assets/rockies.jpg');
+ *   photo1 = loadImage('assets/paddleies.jpg');
+ *   photo2 = loadImage('assets/paddleies.jpg');
  * }
  *
  * function setup() {
@@ -60669,7 +60669,7 @@ p5.Image.prototype.mask = function(p5Image) {
  * </code></div>
  *
  * @alt
- * 2 images of rocky mountains left one in color, right in black and white
+ * 2 images of paddley mountains left one in color, right in black and white
  *
  */
 p5.Image.prototype.filter = function(operation, value) {
@@ -60709,7 +60709,7 @@ p5.Image.prototype.filter = function(operation, value) {
  * var bricks;
  *
  * function preload() {
- *   mountains = loadImage('assets/rockies.jpg');
+ *   mountains = loadImage('assets/paddleies.jpg');
  *   bricks = loadImage('assets/bricks_third.jpg');
  * }
  *
@@ -60724,7 +60724,7 @@ p5.Image.prototype.filter = function(operation, value) {
  * var bricks;
  *
  * function preload() {
- *   mountains = loadImage('assets/rockies.jpg');
+ *   mountains = loadImage('assets/paddleies.jpg');
  *   bricks = loadImage('assets/bricks_third.jpg');
  * }
  *
@@ -60739,7 +60739,7 @@ p5.Image.prototype.filter = function(operation, value) {
  * var bricks;
  *
  * function preload() {
- *   mountains = loadImage('assets/rockies.jpg');
+ *   mountains = loadImage('assets/paddleies.jpg');
  *   bricks = loadImage('assets/bricks_third.jpg');
  * }
  *
@@ -60751,9 +60751,9 @@ p5.Image.prototype.filter = function(operation, value) {
  * </code></div>
  *
  * @alt
- * image of rocky mountains. Brick images on left and right. Right overexposed
- * image of rockies. Brickwall images on left and right. Right mortar transparent
- * image of rockies. Brickwall images on left and right. Right translucent
+ * image of paddley mountains. Brick images on left and right. Right overexposed
+ * image of paddleies. Brickwall images on left and right. Right mortar transparent
+ * image of paddleies. Brickwall images on left and right. Right translucent
  *
  */
 /**
@@ -60812,7 +60812,7 @@ p5.Image.prototype.isModified = function() {
  * var photo;
  *
  * function preload() {
- *   photo = loadImage('assets/rockies.jpg');
+ *   photo = loadImage('assets/paddleies.jpg');
  * }
  *
  * function draw() {
@@ -60827,7 +60827,7 @@ p5.Image.prototype.isModified = function() {
  * </code></div>
  *
  * @alt
- * image of rocky mountains.
+ * image of paddley mountains.
  *
  */
 p5.Image.prototype.save = function(filename, extension) {
@@ -60944,7 +60944,7 @@ p5.prototype.pixels = [];
  * var img1;
  *
  * function preload() {
- *   img0 = loadImage('assets/rockies.jpg');
+ *   img0 = loadImage('assets/paddleies.jpg');
  *   img1 = loadImage('assets/bricks_third.jpg');
  * }
  *
@@ -60959,7 +60959,7 @@ p5.prototype.pixels = [];
  * var img1;
  *
  * function preload() {
- *   img0 = loadImage('assets/rockies.jpg');
+ *   img0 = loadImage('assets/paddleies.jpg');
  *   img1 = loadImage('assets/bricks_third.jpg');
  * }
  *
@@ -60974,7 +60974,7 @@ p5.prototype.pixels = [];
  * var img1;
  *
  * function preload() {
- *   img0 = loadImage('assets/rockies.jpg');
+ *   img0 = loadImage('assets/paddleies.jpg');
  *   img1 = loadImage('assets/bricks_third.jpg');
  * }
  *
@@ -60986,9 +60986,9 @@ p5.prototype.pixels = [];
  * </code></div>
  *
  * @alt
- * image of rocky mountains. Brick images on left and right. Right overexposed
- * image of rockies. Brickwall images on left and right. Right mortar transparent
- * image of rockies. Brickwall images on left and right. Right translucent
+ * image of paddley mountains. Brick images on left and right. Right overexposed
+ * image of paddleies. Brickwall images on left and right. Right mortar transparent
+ * image of paddleies. Brickwall images on left and right. Right translucent
  *
  *
  */
@@ -61037,7 +61037,7 @@ p5.prototype.blend = function() {
  * var img;
  *
  * function preload() {
- *   img = loadImage('assets/rockies.jpg');
+ *   img = loadImage('assets/paddleies.jpg');
  * }
  *
  * function setup() {
@@ -61051,9 +61051,9 @@ p5.prototype.blend = function() {
  * </code></div>
  *
  * @alt
- * image of rocky mountains. Brick images on left and right. Right overexposed
- * image of rockies. Brickwall images on left and right. Right mortar transparent
- * image of rockies. Brickwall images on left and right. Right translucent
+ * image of paddley mountains. Brick images on left and right. Right overexposed
+ * image of paddleies. Brickwall images on left and right. Right mortar transparent
+ * image of paddleies. Brickwall images on left and right. Right translucent
  *
  */
 /**
@@ -61295,7 +61295,7 @@ p5.prototype.filter = function(operation, value) {
  * <code>
  * var img;
  * function preload() {
- *   img = loadImage('assets/rockies.jpg');
+ *   img = loadImage('assets/paddleies.jpg');
  * }
  * function setup() {
  *   image(img, 0, 0);
@@ -61309,7 +61309,7 @@ p5.prototype.filter = function(operation, value) {
  * <code>
  * var img;
  * function preload() {
- *   img = loadImage('assets/rockies.jpg');
+ *   img = loadImage('assets/paddleies.jpg');
  * }
  * function setup() {
  *   image(img, 0, 0);
@@ -61322,8 +61322,8 @@ p5.prototype.filter = function(operation, value) {
  * </div>
  *
  * @alt
- * 2 images of the rocky mountains, side-by-side
- * Image of the rocky mountains with 50x50 green rect in center of canvas
+ * 2 images of the paddley mountains, side-by-side
+ * Image of the paddley mountains with 50x50 green rect in center of canvas
  *
  */
 p5.prototype.get = function(x, y, w, h) {
@@ -61342,7 +61342,7 @@ p5.prototype.get = function(x, y, w, h) {
  * <code>
  * var img;
  * function preload() {
- *   img = loadImage('assets/rockies.jpg');
+ *   img = loadImage('assets/paddleies.jpg');
  * }
  *
  * function setup() {
@@ -61359,7 +61359,7 @@ p5.prototype.get = function(x, y, w, h) {
  * </div>
  *
  * @alt
- * two images of the rocky mountains. one on top, one on bottom of canvas.
+ * two images of the paddley mountains. one on top, one on bottom of canvas.
  *
  */
 p5.prototype.loadPixels = function() {
@@ -61421,7 +61421,7 @@ p5.prototype.loadPixels = function() {
  * <code>
  * var img;
  * function preload() {
- *   img = loadImage('assets/rockies.jpg');
+ *   img = loadImage('assets/paddleies.jpg');
  * }
  *
  * function setup() {
@@ -61436,7 +61436,7 @@ p5.prototype.loadPixels = function() {
  * @alt
  * 4 black points in the shape of a square middle-right of canvas.
  * square with orangey-brown gradient lightening at bottom right.
- * image of the rocky mountains. with lines like an 'x' through the center.
+ * image of the paddley mountains. with lines like an 'x' through the center.
  */
 p5.prototype.set = function(x, y, imgOrCol) {
   this._renderer.set(x, y, imgOrCol);
@@ -61461,7 +61461,7 @@ p5.prototype.set = function(x, y, imgOrCol) {
  * <code>
  * var img;
  * function preload() {
- *   img = loadImage('assets/rockies.jpg');
+ *   img = loadImage('assets/paddleies.jpg');
  * }
  *
  * function setup() {
@@ -61477,7 +61477,7 @@ p5.prototype.set = function(x, y, imgOrCol) {
  * </code>
  * </div>
  * @alt
- * two images of the rocky mountains. one on top, one on bottom of canvas.
+ * two images of the paddley mountains. one on top, one on bottom of canvas.
  */
 p5.prototype.updatePixels = function(x, y, w, h) {
   p5._validateParameters('updatePixels', arguments);

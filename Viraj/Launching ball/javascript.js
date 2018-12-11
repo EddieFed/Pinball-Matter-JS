@@ -7,6 +7,7 @@ window.addEventListener('load', function() {
     //Fetch our canvas
     var canvas = document.getElementById('world');
     var Body =Matter.body;
+    var World = Matter.world;
 
     //Setup Matter JS j
     engine = Matter.Engine.create();
@@ -95,12 +96,26 @@ window.addEventListener('load', function() {
     Matter.World.add(world,invisCheck);
     bodies.push(invisCheck);
 
-    var elastic = Constraint.create({ 
-        pointA: anchor, 
-        bodyB: ball, 
-        stiffness: 0.05
-    });
-    Matter.world.add(world,elastic);
+    var ground = Bodies.rectangle(395, 600, 815, 50, { isStatic: true }),
+        paddleOptions = { density: 0.004 },
+        paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
+        anchor = { x: 170, y: 450 },
+        elastic = Constraint.create({ 
+            pointA: anchor, 
+            bodyB: paddle, 
+            stiffness: 0.05
+        });
+
+    World.add(engine.world, [ground,paddle,elastic]);
+
+    // Matter.World.add(world,[ground,paddle,elastic]);
+
+    // var elastic = Constraint.create({ 
+    //     pointA: anchor, 
+    //     bodyB: ball, 
+    //     stiffness: 0.05
+    // });
+    // Matter.world.add(world,elastic);
 
     // const CUSTOM_PATH = '425.6 327 273.8 315.6...';
 
@@ -231,15 +246,15 @@ window.addEventListener('load', function() {
     });
     Matter.World.add(world, mouseConstraint);
 
-    Events.on(engine, 'afterUpdate', function() {
-        if (mouseConstraint.mouse.button === -1 && (ball.position.x > 190 || ball.position.y < 430)) {
-            // ball = Bodies.polygon(170, 450, 7, 20, ballOptions);
-            // World.add(engine.world, ball);
-            elastic.bodyB = ball;
-        }
-    });
+    // Events.on(engine, 'afterUpdate', function() {
+    //     if (mouseConstraint.mouse.button === -1 && (ball.position.x > 190 || ball.position.y < 430)) {
+    //         // ball = Bodies.polygon(170, 450, 7, 20, ballOptions);
+    //         // World.add(engine.world, ball);
+    //         elastic.bodyB = ball;
+    //     }
+    // });
 
-    render.mouse = mouse;
+    // render.mouse = mouse;
 
     //Start the engine
     Matter.Engine.run(engine);
