@@ -7,6 +7,7 @@ window.addEventListener('load', function() {
 var engine = Matter.Engine.create();
 var world = engine.world;
  var   Body = Matter.Body;
+ var balls =[];
 //var star = Vertices.fromPath('50 0 63 38 100 38 69 59 82 100 50 75 18 100 31 59 0 38 37 38');
 var render = Matter.Render.create({
     canvas: myCanvas,
@@ -44,7 +45,15 @@ var ball = Matter.Bodies.circle(300, 100, 20, {
     }
 });
 
-
+    var powerup = Matter.Bodies.circle(375, 400, 20, {
+        isStatic: true,
+        isSensor:true,
+        render: {
+            fillStyle: '#F333FF',
+            strokeStyle: 'black',
+            lineWidth: 1
+        }
+    });
 
 
 
@@ -131,7 +140,48 @@ var ball = Matter.Bodies.circle(300, 100, 20, {
 
                 boolea=true;
             }
+
+
+            if (pair.bodyA === ball&&pair.bodyB === powerup) {
+                balls.push("ball"+balls.length);
+                balls[balls.length-1]=  Matter.Bodies.circle(300, 100, 20, {
+                    mass: 1,
+                    friction: .1,
+                    frictionAir: 0.001,
+                    restitution: .7,
+                    inertia:0,
+                    render: {
+                        fillStyle: '#F35e66',
+                        strokeStyle: 'black',
+                        lineWidth: 1
+                    }
+                });
+                Matter.World.add(world, balls[balls.length-1]);
+
+
+
+
+
+
+
+
+            } else if (pair.bodyB === ball&&pair.bodyA === powerup) {
+
+
+
+
+
+            }
+
+
+
         }
+
+
+
+
+
+
     });
 
 
@@ -181,8 +231,9 @@ var ball = Matter.Bodies.circle(300, 100, 20, {
 
 
 Matter.World.add(world, test);
+balls.push(ball);
     Matter.World.add(world, ball);
-
+    Matter.World.add(world, powerup);
     Matter.World.add(world, p1);
     Matter.World.add(world, p2);
 
