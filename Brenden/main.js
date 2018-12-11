@@ -1,6 +1,8 @@
 var engine, world, render;
 var bodies;
-
+var ballmin=0;
+var moveright=true;
+var Body = Matter.Body;
 window.addEventListener('load', function() {
 
     //Fetch our canvas
@@ -9,6 +11,7 @@ window.addEventListener('load', function() {
     //Setup Matter JS
     engine = Matter.Engine.create();
     world = engine.world;
+
     render = Matter.Render.create({
         canvas: canvas,
         engine: engine,
@@ -25,19 +28,21 @@ window.addEventListener('load', function() {
         BUMPER: '#0036f3',
         BUMPER_ALT: '#00e5ff',
     };
+
     //Add a ball
     var ball = Matter.Bodies.circle(250, 250, 10, {
         radius: 200,
         density: 0.04,
         friction: 0.01,
         frictionAir: 0.00001,
-        restitution: 1,
+        restitution: 0,
         render: {
             fillStyle: '#F35e66',
             strokeStyle: 'black',
             lineWidth: 1
         }
     });
+
     Matter.Body.setInertia(ball, Infinity);
     // ball.inertia(Infinity);
     world.gravity.y = .8;
@@ -121,7 +126,6 @@ window.addEventListener('load', function() {
 
         for (var i = 0, j = pairs.length; i != j; ++i) {
             var pair = pairs[i];
-
             if (pair.bodyA === ball&&pair.bodyB === bumper1) {
                     bumper1.render.fillStyle = COLOR.BUMPER_ALT;
                     setTimeout(function() {
@@ -158,16 +162,32 @@ window.addEventListener('load', function() {
         // if (ball.position.x > 500 && ball.velocity.y > 0) {
         //     Matter.Body.setVelocity(ball, { x: 0, y: -10 });
         // }
-        if (ball.position.x > 400 && ball.position.y >300) {//wind gust
+        if (ball.position.x > ballmin && ball.position.y >300&&ball.position.x < ballmin+75 && ball.position.y >300) {//wind gust
             // Matter.Body.applyForce(ball,{ x: 0, y: 100 });
             // setVelocity(ball, { x: 0, y: -10 });
-            Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: -0.02, y: -.02});
+            Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x:0, y: -.02});
         }
+
     });
 
 });
-
-
+setInterval(myMethod, 500);
+function myMethod( )
+{
+    if(moveright){
+        ballmin+=25;
+    }
+    if(!moveright){
+        ballmin-=25;
+    }
+    if(ballmin>449){
+        moveright=false;
+    }
+    if(ballmin<55){
+        moveright=true;
+    }
+    Body.setPosition(bumper1,{x:ballmin,y:100});
+}
 window.addEventListener('keyup', function (event) {
     if (event.defaultPrevented) {
         return;
