@@ -1,8 +1,8 @@
 
 window.addEventListener('load', function() {
-    var boolea = false;
-    var left =false;
-    var right = false;
+    var boolea = [];
+    var left =[];
+    var right=[];
     var myCanvas = document.getElementById('world');
 var engine = Matter.Engine.create();
 var world = engine.world;
@@ -13,8 +13,8 @@ var render = Matter.Render.create({
     canvas: myCanvas,
     engine: engine,
     options: {
-        width: 500,
-        height: 500,
+        width: 800,
+        height: 800,
         background: '#888888',
         wireframes: false,
         showAngleIndicator: true
@@ -34,7 +34,7 @@ var render = Matter.Render.create({
 
 var ball = Matter.Bodies.circle(300, 100, 20, {
     mass: 1,
-    friction: .1,
+    friction: .01,
     frictionAir: 0.001,
     restitution: .7,
     inertia:0,
@@ -128,50 +128,74 @@ var ball = Matter.Bodies.circle(300, 100, 20, {
 
 
     Matter.Events.on(engine, 'collisionStart', function(event) {
-
+        for(var k=0;k<balls.length;k++){
         var pairs = event.pairs;
 
         for (var i = 0, j = pairs.length; i != j; ++i) {
             var pair = pairs[i];
 
-            if (pair.bodyA === ball&&pair.bodyB === test) {//checks what objects collided
-              boolea=true;
-            } else if (pair.bodyB === ball&&pair.bodyA === test) {//check reverse
 
-                boolea=true;
+                if (pair.bodyA === balls[k]&&pair.bodyB === test) {//checks what objects collided
+                    boolea[k]=true;
+                } else if (pair.bodyB === balls[k]&&pair.bodyA === test) {//check reverse
+
+                    boolea[k]=true;
+                }
+
+
+                if (pair.bodyA === balls[k]&&pair.bodyB === powerup) {
+                    balls.push("ball"+balls.length);
+                    balls[balls.length-1]=  Matter.Bodies.circle(300, 100, 20, {
+                        mass: 1,
+                        friction: .01,
+                        frictionAir: 0.001,
+                        restitution: .7,
+                        inertia:0,
+                        render: {
+                            fillStyle: '#F35e66',
+                            strokeStyle: 'black',
+                            lineWidth: 1
+                        }
+                    });
+                    Matter.World.add(world, balls[balls.length-1]);
+                    left.push(false);
+                    right.push(false);
+                    boolea.push(false);
+
+
+
+
+
+
+
+
+
+                } else if (pair.bodyB === balls[k]&&pair.bodyA === powerup) {
+
+                    balls.push("ball"+balls.length);
+                    balls[balls.length-1]=  Matter.Bodies.circle(300, 100, 20, {
+                        mass: 1,
+                        friction: .01,
+                        frictionAir: 0.001,
+                        restitution: .7,
+                        inertia:0,
+                        render: {
+                            fillStyle: '#F35e66',
+                            strokeStyle: 'black',
+                            lineWidth: 1
+                        }
+                    });
+                    Matter.World.add(world, balls[balls.length-1]);
+                    left.push(false);
+                    right.push(false);
+                    boolea.push(false);
+
+
+
+                }
             }
 
 
-            if (pair.bodyA === ball&&pair.bodyB === powerup) {
-                balls.push("ball"+balls.length);
-                balls[balls.length-1]=  Matter.Bodies.circle(300, 100, 20, {
-                    mass: 1,
-                    friction: .1,
-                    frictionAir: 0.001,
-                    restitution: .7,
-                    inertia:0,
-                    render: {
-                        fillStyle: '#F35e66',
-                        strokeStyle: 'black',
-                        lineWidth: 1
-                    }
-                });
-                Matter.World.add(world, balls[balls.length-1]);
-
-
-
-
-
-
-
-
-            } else if (pair.bodyB === ball&&pair.bodyA === powerup) {
-
-
-
-
-
-            }
 
 
 
@@ -186,43 +210,53 @@ var ball = Matter.Bodies.circle(300, 100, 20, {
 
 
     Matter.Events.on(engine, 'collisionEnd', function(event) {
-
+        for(var k=0;k<balls.length;k++){
         var pairs = event.pairs;
 
         for (var i = 0, j = pairs.length; i != j; ++i) {
             var pair = pairs[i];
 
-            if (pair.bodyA === ball&&pair.bodyB === test) {
 
 
-                boolea=false;
-            } else if (pair.bodyB === ball&&pair.bodyA === test) {
 
-                boolea=false;
+                if (pair.bodyA === balls[k] && pair.bodyB === test) {
+
+
+                    boolea[k] = false;
+                } else if (pair.bodyB === balls[k] && pair.bodyA === test) {
+
+                    boolea[k] = false;
+                }
+
+
+                else if ((pair.bodyA === balls[k] && pair.bodyB === p1) || (pair.bodyB === balls[k] && pair.bodyA === p1)) {
+                    if (right[k] === true) {
+                        right[k] = false;
+                    }
+                    else {
+                        Body.setPosition(balls[k], {
+                            x: p2.position.x + 30,
+                            y: p2.position.y + (balls[k].position.y - p1.position.y)
+                        });
+                        left[k] = true;
+                    }
+
+                }
+                if ((pair.bodyA === balls[k] && pair.bodyB === p2) || (pair.bodyB === balls[k] && pair.bodyA === p2)) {
+                    if (left[k] === true) {
+                        left[k] = false;
+                    }
+                    else {
+                        Body.setPosition(balls[k], {
+                            x: p1.position.x - 30,
+                            y: p1.position.y + (balls[k].position.y - p2.position.y)
+                        });
+                        right[k] = true;
+                    }
+
+                }
+
             }
-
-            else if ((pair.bodyA === ball&&pair.bodyB === p1)||(pair.bodyB === ball&&pair.bodyA === p1)) {
-                if(right===true){
-                    right=false;
-                }
-                else{
-                    Body.setPosition(ball,{x:p2.position.x+30, y:p2.position.y+(ball.position.y-p1.position.y)});
-                    left=true;
-                }
-
-            }
-            if ((pair.bodyA === ball&&pair.bodyB === p2)||(pair.bodyB === ball&&pair.bodyA === p2)) {
-                if(left===true){
-                    left=false;
-                }
-                else{
-                    Body.setPosition(ball,{x:p1.position.x-30,  y:p1.position.y+(ball.position.y-p2.position.y)});
-                    right=true;
-                }
-
-            }
-
-
 
             }
     });
@@ -232,6 +266,9 @@ var ball = Matter.Bodies.circle(300, 100, 20, {
 
 Matter.World.add(world, test);
 balls.push(ball);
+left.push(false);
+right.push(false);
+boolea.push(false);
     Matter.World.add(world, ball);
     Matter.World.add(world, powerup);
     Matter.World.add(world, p1);
@@ -249,10 +286,12 @@ Matter.Render.run(render);
 //https://codepen.io/lonekorean/pen/KXLrVX// pinball example
 //https://github.com/liabru/matter-js/blob/master/examples/concave.js//concave poly
     Matter.Events.on(engine, 'afterUpdate', function(event) {// after each update of the engine
+        for(var k=0;k<balls.length;k++) {
 
-        if(boolea===true){//only on when ball is in the green square
-            Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: -0.001, y: -.000});//left force
+            if (boolea[k] === true) {//only on when ball is in the green square
+                Body.applyForce(balls[k], {x: balls[k].position.x, y: balls[k].position.y}, {x: -0.003, y: -.000});//left force
 
+            }
         }
     });
 
