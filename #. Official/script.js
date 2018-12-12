@@ -29,7 +29,11 @@ var paddleRight = {};
 
 var ball;
 var bumpers = [];
-var deadZones = [];
+var deadZone;
+
+var portal1, portal2;
+var left =false;
+var right = false;
 
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
@@ -66,10 +70,10 @@ window.addEventListener("load", () => {
     });
 
     // Game object creation
-    paddleLeft = makePaddle(250, 600, -1);
-    paddleRight = makePaddle(500, 600, 1);
+    paddleLeft = makePaddle(190, 660, -1);
+    paddleRight = makePaddle(430, 660, 1);
 
-    ball = Matter.Bodies.circle(450, 20, 10, {
+    ball = Matter.Bodies.circle(450, 20, 15, {
         density: 0.1,
         friction: 0.008,
         frictionAir: 0.00032,
@@ -88,14 +92,40 @@ window.addEventListener("load", () => {
         }
     });
 
+    bumpers.push(makeBumper(200, 200, 30));
+    bumpers.push(makeBumper(450, 200, 30));
+    bumpers.push(makeBumper(200, 400, 30));
+    bumpers.push(makeBumper(450, 400, 30));
 
-    bumpers.push(makeBumper(200, 250, 40));
-    bumpers.push(makeBumper(600, 250, 40));
+    deadZone = makeWall(400, 810, 800, 125);
 
-    // deadZones.push(makeWall(500, 825, 250, 50));
-    // deadZones.push(makeWall(400, 800, 50, 125));
-    // deadZones.push(makeWall(600, 800, 50, 125));
+    portal1 = Matter.Bodies.rectangle(0, 450, 10, 150, {
+        isStatic: true,
+        isSensor:true,
+        render: {
+            fillStyle: '#0000FF',
+            strokeStyle: 'black',
+            visible: true
+        }
+    });
+    portal2 = Matter.Bodies.rectangle(635, 450, 10, 150, {
+        isStatic: true,
+        isSensor:true,
+        render: {
+            fillStyle: '#0000FF',
+            strokeStyle: 'black',
+            visible: true
+        }
+    });
 
+    // slingshotOptions = { density: 0.004 },
+    // paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
+    // anchor = { x: 170, y: 450 },
+    // elastic = Matter.Constraint.create({
+    //     pointA: anchor,
+    //     bodyB: ball,
+    //     stiffness: 0.05
+    // });
 
 
     // Add all bodies to the world
@@ -103,12 +133,18 @@ window.addEventListener("load", () => {
         mouseConstraint(),
 
         ball,
+        // anchor,
+        // elastic,
+
         bumpers[0],
         bumpers[1],
+        bumpers[2],
+        bumpers[3],
 
-        // deadZones[0],
-        // deadZones[1],
-        // deadZones[2],
+        deadZone,
+
+        portal1,
+        portal2,
 
         paddleLeft.ball,
         paddleLeft.paddle,
@@ -132,12 +168,14 @@ window.addEventListener("load", () => {
 
 
         // Left Slide
-        staticBox3(100, 560, 265, 20, "#000000", .3 ),
+        staticBox3(40, 620, 265, 20, "#000000", .2 ),
 
 
         //Right Slide
-        staticBox3(650, 560, 265, 20, "#000000", -.3),
+        staticBox3(545, 625, 190, 20, "#000000", -.2),
 
+        // Left Slide
+        staticBox(640, 520, 10, 600, "#000000", 0 ),
 
         // Left Rounded Top
         staticBox(5  , 0  , 150, 140, "#000000", 1.8 ),
@@ -230,18 +268,71 @@ window.addEventListener("load", () => {
                 setTimeout(function() {
                     bumpers[1].render.fillStyle = COLOR.BUMPER;
                 }, 200);
-            }
-
-            if (pair.bodyA === ball&&pair.bodyB === bumpers[0]) {
-                bumpers[0].render.fillStyle = COLOR.BUMPER_ALT;
+            }else if (pair.bodyA === ball&&pair.bodyB === bumpers[2]) {
+                bumpers[2].render.fillStyle = COLOR.BUMPER_ALT;
                 setTimeout(function() {
-                    bumpers[0].render.fillStyle = COLOR.BUMPER;
+                    bumpers[2].render.fillStyle = COLOR.BUMPER;
+                }, 200);
+            }else if (pair.bodyA === ball&&pair.bodyB === bumpers[3]) {
+                bumpers[3].render.fillStyle = COLOR.BUMPER_ALT;
+                setTimeout(function() {
+                    bumpers[3].render.fillStyle = COLOR.BUMPER;
                 }, 200);
             }
 
 
+
+            if (pair.bodyA === ball&&pair.bodyB === deadZone) {
+                //round lost
+                Matter.Body.setPosition(ball, { x: 680, y: 100 });//respawns the ball x 100-900,y 100
+                Matter.Body.setVelocity(ball, { x: 0, y: 0 });//respawns the ball x 100-900,y 100
+            }
         }
     });
+
+    Matter.Events.on(game.engine, 'collisionEnd', function(event) {
+
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if ((pair.bodyA === ball&&pair.bodyB === portal1)||(pair.bodyB === ball&&pair.bodyA === portal1)) {
+                // alert("p1")
+                if(right===true){
+                    right=false;
+                }
+                else{
+                    Matter.Body.setPosition(ball,{x:portal2.position.x+30, y:portal2.position.y+(ball.position.y-portal1.position.y)});
+                    left=true;
+                }
+
+            }
+            if ((pair.bodyA === ball&&pair.bodyB === portal2)||(pair.bodyB === ball&&pair.bodyA === portal2)) {
+                // alert("p2")
+
+                if(left===true){
+                    left=false;
+                }
+                else{
+                    Matter.Body.setPosition(ball,{x:portal1.position.x-30,  y:portal1.position.y+(ball.position.y-portal2.position.y)});
+                    right=true;
+                }
+
+            }
+
+
+
+        }
+    });
+
+    // Matter.Events.on(engine, 'afterUpdate', function() {
+    //     if (mouseConstraint.mouse.button === -1 && (paddle.position.x > 190 || paddle.position.y < 430)) {
+    //         paddle = ball(170,450,20,20,paddleOptions);
+    //         Matter.World.add(engine.world, paddle);
+    //         elastic.bodyB = paddle;
+    //     }
+    // });
 });
 
 
@@ -368,6 +459,7 @@ function makeWall(x, y, w, h) {
             strokeStyle: "black",
             visible: true
         }
+    })
 }
 
 function staticCircle(x, y, radius, colorHex) {
