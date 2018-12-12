@@ -35,6 +35,10 @@ var portal1, portal2;
 var left =false;
 var right = false;
 
+var ballmin=0;
+var fan;
+var moveright=true;
+
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
 var x = 750;
@@ -118,6 +122,14 @@ window.addEventListener("load", () => {
         }
     });
 
+    fan = Matter.Bodies.rectangle(300, 400, 50, 200, {
+        isStatic: true, //An immovable object
+        isSensor:true,
+        render: {
+            visible: true
+        }
+    });
+
     // slingshotOptions = { density: 0.004 },
     // paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
     // anchor = { x: 170, y: 450 },
@@ -131,6 +143,8 @@ window.addEventListener("load", () => {
     // Add all bodies to the world
     Matter.World.add(game.world, [
         mouseConstraint(),
+
+        fan,
 
         ball,
         // anchor,
@@ -249,6 +263,13 @@ window.addEventListener("load", () => {
             x: Math.max(Math.min(ball.velocity.x, 20), -20),
             y: Math.max(Math.min(ball.velocity.y, 20), -20),
         });
+
+        if (ball.position.x > ballmin && ball.position.y >300&&ball.position.x < ballmin+75 && ball.position.y >300) {//wind gust
+            // Matter.Body.applyForce(ball,{ x: 0, y: 100 });
+            // setVelocity(ball, { x: 0, y: -10 });
+            Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x:0, y: -.12});
+
+        }
     });
 
     Matter.Events.on(game.engine, 'collisionStart', function(event) {
@@ -303,7 +324,7 @@ window.addEventListener("load", () => {
                     right=false;
                 }
                 else{
-                    Matter.Body.setPosition(ball,{x:portal2.position.x+30, y:portal2.position.y+(ball.position.y-portal1.position.y)});
+                    Matter.Body.setPosition(ball,{x:portal2.position.x-30, y:portal2.position.y+(ball.position.y-portal1.position.y)});
                     left=true;
                 }
 
@@ -315,16 +336,34 @@ window.addEventListener("load", () => {
                     left=false;
                 }
                 else{
-                    Matter.Body.setPosition(ball,{x:portal1.position.x-30,  y:portal1.position.y+(ball.position.y-portal2.position.y)});
+                    Matter.Body.setPosition(ball,{x:portal1.position.x+30,  y:portal1.position.y+(ball.position.y-portal2.position.y)});
                     right=true;
                 }
 
             }
-
-
-
         }
     });
+
+    setInterval(myMethod, 25);
+    function myMethod( )
+    {
+        if(moveright){
+            ballmin+=2;
+        }
+        if(!moveright){
+            ballmin-=2;
+        }
+        if(ballmin>449){
+            moveright=false;
+        }
+        if(ballmin<55){
+            moveright=true;
+        }
+        // Matter.paddle.translate({x:400,y:100});
+        // bodies.setAngularVelocity(pinball,23);
+        Matter.Body.setPosition(fan,{x:ballmin+37.5,y:400});
+        // Body.setPosition(pinball,{x:ballmin,y:100});
+    }
 
     // Matter.Events.on(engine, 'afterUpdate', function() {
     //     if (mouseConstraint.mouse.button === -1 && (paddle.position.x > 190 || paddle.position.y < 430)) {
