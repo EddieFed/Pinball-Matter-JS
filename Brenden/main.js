@@ -28,7 +28,14 @@ window.addEventListener('load', function() {
         BUMPER: '#0036f3',
         BUMPER_ALT: '#00e5ff',
     };
-
+    var fan = Matter.Bodies.rectangle(300, 400, 50, 200, {
+        isStatic: true, //An immovable object
+        isSensor:true,
+        render: {
+            visible: true
+        }
+    });
+    Matter.World.add(world, fan);
     //Add a ball
     var ball = Matter.Bodies.circle(250, 250, 10, {
         radius: 200,
@@ -85,6 +92,7 @@ window.addEventListener('load', function() {
         }
     });
     Matter.World.add(world, ceiling);
+
 
     //Add a ball
     var paddle2 = Matter.Bodies.trapezoid(100, 250, 20, 80, .33, {
@@ -166,28 +174,32 @@ window.addEventListener('load', function() {
             // Matter.Body.applyForce(ball,{ x: 0, y: 100 });
             // setVelocity(ball, { x: 0, y: -10 });
             Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x:0, y: -.02});
+
         }
 
     });
-
+    setInterval(myMethod, 25);
+    function myMethod( )
+    {
+        if(moveright){
+            ballmin+=2;
+        }
+        if(!moveright){
+            ballmin-=2;
+        }
+        if(ballmin>449){
+            moveright=false;
+        }
+        if(ballmin<55){
+            moveright=true;
+        }
+        // Matter.paddle.translate({x:400,y:100});
+        // bodies.setAngularVelocity(pinball,23);
+        Matter.Body.setPosition(fan,{x:ballmin+37.5,y:400});
+        // Body.setPosition(pinball,{x:ballmin,y:100});
+    }
 });
-setInterval(myMethod, 500);
-function myMethod( )
-{
-    if(moveright){
-        ballmin+=25;
-    }
-    if(!moveright){
-        ballmin-=25;
-    }
-    if(ballmin>449){
-        moveright=false;
-    }
-    if(ballmin<55){
-        moveright=true;
-    }
-    Body.setPosition(bumper1,{x:ballmin,y:100});
-}
+
 window.addEventListener('keyup', function (event) {
     if (event.defaultPrevented) {
         return;
@@ -202,6 +214,8 @@ window.addEventListener('keyup', function (event) {
         bodies[0].render.circleRadius += 20;
         // alert(bodies[0].radius)
     } else if (key === "ArrowRight") {
+        Matter.Body.setPosition(pinball,{x:ballmin,y:100});
+
         // alert("right")
         // Matter.Body.setAngularVelocity(bodies[1], 1)
         // Matter.Body.applyForce(bodies[1],23,86);
