@@ -116,15 +116,15 @@ window.addEventListener("load", () => {
     // pinball = ball(700, 400, 20);
 
     var ground = Bodies.rectangle(395, 600, 1210, 50, { isStatic: true }),
-    paddleOptions = { density: 0.004 },
-    // paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
-    paddle = ball(170,450,20,20,paddleOptions),
-    anchor = { x: 170, y: 450 },
-    elastic = Matter.Constraint.create({
-        pointA: anchor,
-        bodyB: paddle,
-        stiffness: 0.05
-    });
+        paddleOptions = { density: 0.004 },
+        // paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
+        paddle = ball(170,450,20,20,paddleOptions),
+        anchor = { x: 170, y: 450 },
+        elastic = Matter.Constraint.create({ 
+            pointA: anchor, 
+            bodyB: paddle, 
+            stiffness: 0.05
+        });
 
     // staticCircleBot =
 
@@ -169,10 +169,10 @@ window.addEventListener("load", () => {
     ]);
 
     Matter.Events.on(engine, 'afterUpdate', function() {
-        if (mouseConstraint.mouse.button === -1 && (ball.position.x > 190 || ball.position.y < 430)) {
-            ball = ball(170,450,20,20,paddleOptions);
-            Matter.World.add(engine.world, ball);
-            elastic.bodyB = ball;
+        if (mouseConstraint.mouse.button === -1 && (paddle.position.x > 190 || paddle.position.y < 430)) {
+            paddle = ball(170,450,20,20,paddleOptions);
+            // Matter.World.add(engine.world, paddle);
+            elastic.bodyB = paddle;
         }
     });
 

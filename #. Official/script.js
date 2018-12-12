@@ -29,7 +29,11 @@ var paddleRight = {};
 
 var ball;
 var bumpers = [];
-var deadZones = [];
+var deadZone;
+
+var portal1, portal2;
+var left = false;
+var right = false;
 
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
@@ -39,6 +43,7 @@ const COLOR = {
     BUMPER: '#0036f3',
     BUMPER_ALT: '#00e5ff',
 };
+
 
 // Wait until window finishes loading!
 window.addEventListener("load", () => {
@@ -66,10 +71,45 @@ window.addEventListener("load", () => {
     });
 
     // Game object creation
-    paddleLeft = makePaddle(250, 600, -1);
-    paddleRight = makePaddle(500, 600, 1);
+    paddleLeft = makePaddle(190, 660, -1);
+    paddleRight = makePaddle(430, 660, 1);
+    bumpers.push(makeBumper(200, 200, 30));
+    bumpers.push(makeBumper(450, 200, 30));
+    bumpers.push(makeBumper(200, 400, 30));
+    bumpers.push(makeBumper(450, 400, 30));
+    deadZone = makeWall(400, 810, 800, 125);
 
-    ball = Matter.Bodies.circle(450, 20, 10, {
+
+    portal1 = Matter.Bodies.rectangle(0, 450, 10, 150, {
+        isStatic: true,
+        isSensor:true,
+        render: {
+            fillStyle: '#0000FF',
+            strokeStyle: 'black',
+            visible: true
+        }
+    });
+    portal2 = Matter.Bodies.rectangle(635, 450, 10, 150, {
+        isStatic: true,
+        isSensor:true,
+        render: {
+            fillStyle: '#0000FF',
+            strokeStyle: 'black',
+            visible: true
+        }
+    });
+
+    // slingshotOptions = { density: 0.004 },
+    // paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
+    // anchor = { x: 170, y: 450 },
+    // elastic = Matter.Constraint.create({
+    //     pointA: anchor,
+    //     bodyB: ball,
+    //     stiffness: 0.05
+    // });
+
+
+    ball = Matter.Bodies.circle(450, 20, 15, {
         density: 0.1,
         friction: 0.008,
         frictionAir: 0.00032,
@@ -89,40 +129,42 @@ window.addEventListener("load", () => {
     });
 
 
-    bumpers.push(makeBumper(200, 250, 40));
-    bumpers.push(makeBumper(600, 250, 40));
-
-    // deadZones.push(makeWall(500, 825, 250, 50));
-    // deadZones.push(makeWall(400, 800, 50, 125));
-    // deadZones.push(makeWall(600, 800, 50, 125));
-
-
-
     // Add all bodies to the world
     Matter.World.add(game.world, [
         mouseConstraint(),
 
         ball,
+        // anchor,
+        // elastic,
+
         bumpers[0],
         bumpers[1],
+        bumpers[2],
+        bumpers[3],
 
-        // deadZones[0],
-        // deadZones[1],
-        // deadZones[2],
+        deadZone,
+
+        portal1,
+        portal2,
+
 
         paddleLeft.ball,
         paddleLeft.paddle,
         paddleLeft.constrainter,
-
         paddleRight.ball,
         paddleRight.paddle,
         paddleRight.constrainter,
 
-        staticCircle(paddleLeft.ball.position.x + 20, paddleLeft.ball.position.y + 45, 10, "#FFFFFF"),
-        staticCircle(paddleLeft.ball.position.x + 60, paddleLeft.ball.position.y - 20, 10, "#FFFFFF"),
 
-        staticCircle(paddleRight.ball.position.x - 20, paddleRight.ball.position.y + 45, 10, "#FFFFFF"),
-        staticCircle(paddleRight.ball.position.x - 60, paddleRight.ball.position.y - 20, 10, "#FFFFFF"),
+        // Left Paddle Stoppers
+        staticCircle(paddleLeft.ball.position.x+20, paddleLeft.ball.position.y+45, 10, "#FFFFFF"),
+        staticCircle(paddleLeft.ball.position.x+60, paddleLeft.ball.position.y-20, 10, "#FFFFFF"),
+
+
+        // Right Paddle Stoppers
+        staticCircle(paddleRight.ball.position.x-20, paddleRight.ball.position.y+45, 10, "#FFFFFF"),
+        staticCircle(paddleRight.ball.position.x-60, paddleRight.ball.position.y-20, 10, "#FFFFFF"),
+
 
         // Window borders
         border(c.width/2   , -15          , c.width + 0 , 30          ),     // Top
@@ -132,11 +174,13 @@ window.addEventListener("load", () => {
 
 
         // Left Slide
-        staticBox3(100, 560, 265, 20, "#000000", .3 ),
-
+        staticBox3(40, 620, 265, 20, "#000000", .2),
 
         //Right Slide
-        staticBox3(650, 560, 265, 20, "#000000", -.3),
+        staticBox3(545, 625, 190, 20, "#000000", -.2),
+
+        // Launcher wall
+        staticBox(640, 520, 10, 600, "#000000", 0),
 
 
         // Left Rounded Top
@@ -169,35 +213,36 @@ window.addEventListener("load", () => {
         staticBox(295, -25, 100, 50 , "#000000", 3.05),
         staticBox(315, -25, 100, 50 , "#000000", 3.05),
 
-        //right rounded top
-        staticBox(-5+x, 0, 150, 140, "#000000", -1.8),//top right filler
-        staticBox(15+x, 170, 100, 50, "#000000", -1.8),
-        staticBox(5+x, 150, 100, 50, "#000000", -1.9),
-        staticBox(-5+x, 130, 100, 50, "#000000", -2),
-        staticBox(-15+x, 110, 100, 50, "#000000", -2.1),
-        staticBox(-25+x, 90, 100, 50, "#000000", -2.2),
-        staticBox(-35+x, 70, 100, 50, "#000000", -2.3),
-        staticBox(-45+x, 58, 100, 50, "#000000", -2.4),
-        staticBox(-55+x, 45, 100, 50, "#000000", -2.5),
-        staticBox(-65+x, 35, 100, 50, "#000000", -2.6),
-        staticBox(-75+x, 25, 100, 50, "#000000", -2.7),
-        staticBox(-85+x, 20, 100, 50, "#000000", -2.7  ),
-        staticBox(-95+x, 15, 100, 50, "#000000", -2.7),
-        staticBox(-105+x, 10, 100, 50, "#000000", -2.8),
-        staticBox(-115+x, 7, 100, 50, "#000000", -2.8),
-        staticBox(-120+x, 0, 100, 50, "#000000", -2.9),
-        staticBox(-125+x, 0, 100, 50, "#000000", -2.9),
-        staticBox(-135+x, 0, 100, 50, "#000000", -2.9),
-        staticBox(-145+x, -2, 100, 50, "#000000", -2.9),
-        staticBox(-155+x, -4, 100, 50, "#000000", -2.9),
-        staticBox(-165+x, -6, 100, 50, "#000000", -2.9),
-        staticBox(-175+x, -10, 100, 50, "#000000", -3),
-        staticBox(-185+x, -15, 100, 50, "#000000", -3),
-        staticBox(-205+x, -15, 100, 50, "#000000", -3),
-        staticBox(-225+x, -16, 100, 50, "#000000", -3.03),
-        staticBox(-265+x, -23, 100, 50, "#000000", -3.05),
-        staticBox(-295+x, -25, 100, 50, "#000000", -3.05),
-        staticBox(-315+x, -25, 100, 50, "#000000", -3.05),
+        // Right Round Top
+        staticBox(-5+x  , 0  , 150, 140, "#000000", -1.8 ),
+        staticBox(15+x  , 170, 100, 50 , "#000000", -1.8 ),
+        staticBox(5+x   , 150, 100, 50 , "#000000", -1.9 ),
+        staticBox(-5+x  , 130, 100, 50 , "#000000", -2   ),
+        staticBox(-15+x , 110, 100, 50 , "#000000", -2.1 ),
+        staticBox(-25+x , 90 , 100, 50 , "#000000", -2.2 ),
+        staticBox(-35+x , 70 , 100, 50 , "#000000", -2.3 ),
+        staticBox(-45+x , 58 , 100, 50 , "#000000", -2.4 ),
+        staticBox(-55+x , 45 , 100, 50 , "#000000", -2.5 ),
+        staticBox(-65+x , 35 , 100, 50 , "#000000", -2.6 ),
+        staticBox(-75+x , 25 , 100, 50 , "#000000", -2.7 ),
+        staticBox(-85+x , 20 , 100, 50 , "#000000", -2.7 ),
+        staticBox(-95+x , 15 , 100, 50 , "#000000", -2.7 ),
+        staticBox(-105+x, 10 , 100, 50 , "#000000", -2.8 ),
+        staticBox(-115+x, 7  , 100, 50 , "#000000", -2.8 ),
+        staticBox(-120+x, 0  , 100, 50 , "#000000", -2.9 ),
+        staticBox(-125+x, 0  , 100, 50 , "#000000", -2.9 ),
+        staticBox(-135+x, 0  , 100, 50 , "#000000", -2.9 ),
+        staticBox(-145+x, -2 , 100, 50 , "#000000", -2.9 ),
+        staticBox(-155+x, -4 , 100, 50 , "#000000", -2.9 ),
+        staticBox(-165+x, -6 , 100, 50 , "#000000", -2.9 ),
+        staticBox(-175+x, -10, 100, 50 , "#000000", -3   ),
+        staticBox(-185+x, -15, 100, 50 , "#000000", -3   ),
+        staticBox(-205+x, -15, 100, 50 , "#000000", -3   ),
+        staticBox(-225+x, -16, 100, 50 , "#000000", -3.03),
+        staticBox(-265+x, -23, 100, 50 , "#000000", -3.05),
+        staticBox(-295+x, -25, 100, 50 , "#000000", -3.05),
+        staticBox(-315+x, -25, 100, 50 , "#000000", -3.05)
+
 
     ]);
 
@@ -205,15 +250,16 @@ window.addEventListener("load", () => {
     Matter.Engine.run(game.engine);
     Matter.Render.run(game.render);
 
-    Matter.Events.on(game.engine, 'beforeUpdate', function(event) {
-        // bumpers can quickly multiply velocity, so keep that in check
+
+    Matter.Events.on(game.engine, 'beforeUpdate', () => {
+        // Bumpers can quickly multiply velocity, so keep that in check
         Matter.Body.setVelocity(ball, {
             x: Math.max(Math.min(ball.velocity.x, 20), -20),
             y: Math.max(Math.min(ball.velocity.y, 20), -20),
         });
     });
 
-    Matter.Events.on(game.engine, 'collisionStart', function(event) {
+    Matter.Events.on(game.engine, 'collisionStart', (event) => {
 
         var pairs = event.pairs;
 
@@ -230,18 +276,64 @@ window.addEventListener("load", () => {
                 setTimeout(function() {
                     bumpers[1].render.fillStyle = COLOR.BUMPER;
                 }, 200);
-            }
-
-            if (pair.bodyA === ball&&pair.bodyB === bumpers[0]) {
-                bumpers[0].render.fillStyle = COLOR.BUMPER_ALT;
+            } else if (pair.bodyA === ball&&pair.bodyB === bumpers[2]) {
+                bumpers[2].render.fillStyle = COLOR.BUMPER_ALT;
                 setTimeout(function() {
-                    bumpers[0].render.fillStyle = COLOR.BUMPER;
+                    bumpers[2].render.fillStyle = COLOR.BUMPER;
+                }, 200);
+            } else if (pair.bodyA === ball&&pair.bodyB === bumpers[3]) {
+                bumpers[3].render.fillStyle = COLOR.BUMPER_ALT;
+                setTimeout(function() {
+                    bumpers[3].render.fillStyle = COLOR.BUMPER;
                 }, 200);
             }
 
+            if (pair.bodyA === ball&&pair.bodyB === deadZone) {
+                // Round lost
+                Matter.Body.setPosition(ball, { x: 680, y: 100 });  // Respawns the ball x 100-900,y 100
+                Matter.Body.setVelocity(ball, { x: 0, y: 0 });       // Respawns the ball x 100-900,y 100
+            }
 
         }
     });
+
+    Matter.Events.on(game.engine, 'collisionEnd', (event) => {
+
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i !== j; ++i) {
+            var pair = pairs[i];
+
+            if ((pair.bodyA === ball&&pair.bodyB === portal1)||(pair.bodyB === ball&&pair.bodyA === portal1)) {
+                // alert("p1")
+                if(right===true){
+                    right=false;
+                } else{
+                    Matter.Body.setPosition(ball,{x:portal2.position.x+30, y:portal2.position.y+(ball.position.y-portal1.position.y)});
+                    left=true;
+                }
+            }
+            if ((pair.bodyA === ball&&pair.bodyB === portal2)||(pair.bodyB === ball&&pair.bodyA === portal2)) {
+                // alert("p2")
+
+                if(left===true){
+                    left=false;
+                } else{
+                    Matter.Body.setPosition(ball,{x:portal1.position.x-30,  y:portal1.position.y+(ball.position.y-portal2.position.y)});
+                    right=true;
+                }
+            }
+        }
+
+    });
+
+    // Matter.Events.on(engine, 'afterUpdate', function() {
+    //     if (mouseConstraint.mouse.button === -1 && (paddle.position.x > 190 || paddle.position.y < 430)) {
+    //         paddle = ball(170,450,20,20,paddleOptions);
+    //         Matter.World.add(engine.world, paddle);
+    //         elastic.bodyB = paddle;
+    //     }
+    // });
 });
 
 
@@ -266,7 +358,13 @@ window.addEventListener("keyup", function (event) {
 });
 
 
+
+
+
 // <- Creation functions ->
+
+
+
 
 
 function border(x, y, width, height) {
@@ -341,8 +439,9 @@ function makePaddle(x, y, direction) {
 
 }
 
+
 function makeBumper(x, y, radius) {
-    bumper =  Matter.Bodies.circle(x, y, radius, {
+    return Matter.Bodies.circle(x, y, radius, {
         angle: 1.57,
         isStatic: true, //An immovable object
         density: 0.4,
@@ -355,9 +454,8 @@ function makeBumper(x, y, radius) {
             lineWidth: 1
         }
     });
-    bumper.restitution = 1.1;
-    return bumper;
 }
+
 
 function makeWall(x, y, w, h) {
     return Matter.Bodies.rectangle(x, y, w, h, {//this is the bottom red box
@@ -368,7 +466,9 @@ function makeWall(x, y, w, h) {
             strokeStyle: "black",
             visible: true
         }
+    })
 }
+
 
 function staticCircle(x, y, radius, colorHex) {
     return Matter.Bodies.circle(x, y, radius, {
@@ -387,6 +487,8 @@ function staticCircle(x, y, radius, colorHex) {
         }
     });
 }
+
+
 function staticBox(x, y, width, height, colorHex, angle) {
     return Matter.Bodies.rectangle(x, y, width, height, {
         isStatic: true,
@@ -398,6 +500,7 @@ function staticBox(x, y, width, height, colorHex, angle) {
         }
     });
 }
+
 
 function staticBox3(x, y, width, height, colorHex, angles) {
     return Matter.Bodies.rectangle(x, y, width, height, {
