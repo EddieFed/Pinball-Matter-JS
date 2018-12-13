@@ -83,7 +83,7 @@ window.addEventListener("load", () => {
     paddleLeft = makePaddle(190, 660, -1);
     paddleRight = makePaddle(430, 660, 1);
 
-    ball = Matter.Bodies.circle(450, 20, 15, {
+    ball = Matter.Bodies.circle(700, 200, 15, {
         density: 0.1,
         friction: 0.008,
         frictionAir: 0.00032,
@@ -156,11 +156,17 @@ window.addEventListener("load", () => {
         }
     });
 
-    var paddleOptions = { density: 0.004 },
-        // paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
-    //paddle = ball(170,450,20,20,paddleOptions),
-    paddle = Matter.Bodies.circle(170,450,20),
-    anchor = { x: 170, y: 450 },
+
+    paddle = Matter.Bodies.rectangle(695, 450, 120, 20, {
+        density: .1,
+        inertia: Infinity,
+        render: {
+            fillStyle: '#777777',
+            strokeStyle: 'black',
+            visible: true
+        }
+    }),
+    anchor = { x: 700, y: 450 },
     elastic = Matter.Constraint.create({ 
         pointA: anchor, 
         bodyB: paddle, 
@@ -300,12 +306,13 @@ window.addEventListener("load", () => {
             Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x:0, y: -.15});
 
         }
+        // Matter.Body.setPosition(paddle, {x: 695, y: paddle.position.y})
     });
 
     Matter.Events.on(game.engine, 'afterUpdate', function() {
         if (mouseConstraint.mouse.button === -1 && (paddle.position.x > 190 || paddle.position.y < 430)) {
             // paddle = ball(170,450,20,20,paddleOptions);
-            paddle = Matter.Bodies.circle(170,450,20),
+            // paddle = Matter.Bodies.circle(170,450,20),
             // Matter.World.add(engine.world, paddle);
             elastic.bodyB = paddle;
         }
@@ -350,8 +357,8 @@ window.addEventListener("load", () => {
                 lives-=1;
                 score=0;
                 updateScore();
-                Matter.Body.setPosition(ball, { x: 680, y: 100 });//respawns the ball x 100-900,y 100
-                Matter.Body.setPosition(ball, { x: 580, y: 100 });//respawns the ball x 100-900,y 100
+                Matter.Body.setPosition(ball, { x: 700, y: 200 });//respawns the ball x 100-900,y 100
+                // Matter.Body.setPosition(ball, { x: 580, y: 100 });//respawns the ball x 100-900,y 100
                 Matter.Body.setVelocity(ball, { x: 0, y: 0 });//respawns the ball x 100-900,y 100
             }
 
