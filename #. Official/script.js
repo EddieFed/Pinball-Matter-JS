@@ -170,7 +170,10 @@ window.addEventListener("load", () => {
     elastic = Matter.Constraint.create({ 
         pointA: anchor, 
         bodyB: paddle, 
-        stiffness: 0.05
+        stiffness: 0.05,
+        render: {
+            visible: false
+        }
     });
 
 
@@ -437,7 +440,7 @@ window.addEventListener("load", () => {
 
 
 
-window.addEventListener("keyup", function (event) {
+window.addEventListener("keydown", function (event) {
     if (event.defaultPrevented) {
         return;
     }
