@@ -116,15 +116,61 @@ window.addEventListener("load", () => {
     // pinball = ball(700, 400, 20);
 
     var ground = Bodies.rectangle(395, 600, 1210, 50, { isStatic: true }),
-        paddleOptions = { density: 0.004 },
+    paddleOptions = { density: 0.004 },
         // paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
-        paddle = ball(170,450,20,20,paddleOptions),
-        anchor = { x: 170, y: 450 },
-        elastic = Matter.Constraint.create({ 
-            pointA: anchor, 
-            bodyB: paddle, 
-            stiffness: 0.05
-        });
+    paddle = ball(170,450,20,20,paddleOptions),
+    anchor = { x: 170, y: 450 },
+    elastic = Matter.Constraint.create({ 
+        pointA: anchor, 
+        bodyB: paddle, 
+        stiffness: 0.05
+    });
+
+    var powerup = Matter.Bodies.circle(375, 400, 20, {
+        isStatic: true,
+        isSensor:true,
+        render: {
+            fillStyle: '#F333FF',
+            strokeStyle: 'black',
+            lineWidth: 1
+        }
+    });
+
+    Matter.Events.on(engine, 'collisionStart', function(event) {
+
+        var pairs = event.pairs;
+
+        for (var i = 0, j = pairs.length; i != j; ++i) {
+            var pair = pairs[i];
+
+            if (pair.bodyA === paddle&&pair.bodyB === powerup) {
+                alert("wrse");
+
+
+
+
+
+
+
+
+            } else if (pair.bodyB === paddle&&pair.bodyA === powerup) {
+                    alert("wers");
+
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+    });
 
     // staticCircleBot =
 
@@ -138,6 +184,7 @@ window.addEventListener("load", () => {
         paddle,
         anchor,
         elastic,
+        powerup,
 
         // paddle.thing,
         // //paddle.const,
