@@ -32,7 +32,7 @@ var render = Matter.Render.create({
     });
     Matter.World.add(world, mouseConstraint);
 
-var ball = Matter.Bodies.circle(300, 100, 20, {
+var ball = Matter.Bodies.circle(300, 100, 15, {
     mass: 1,
     friction: .01,
     frictionAir: 0.001,
@@ -55,7 +55,24 @@ var ball = Matter.Bodies.circle(300, 100, 20, {
         }
     });
 
-
+    var powerupspd = Matter.Bodies.circle(375, 400, 20, {
+        isStatic: true,
+        isSensor:true,
+        render: {
+            fillStyle: '#fff71b',
+            strokeStyle: 'black',
+            lineWidth: 1
+        }
+    });
+    // var powerslow = Matter.Bodies.circle(375, 400, 20, {
+    //     isStatic: true,
+    //     isSensor:true,
+    //     render: {
+    //         fillStyle: '#ff2121',
+    //         strokeStyle: 'black',
+    //         lineWidth: 1
+    //     }
+    // });
 
 
     var floor = Matter.Bodies.rectangle(250, 495, 700, 10, {
@@ -145,7 +162,7 @@ var ball = Matter.Bodies.circle(300, 100, 20, {
 
                 if (pair.bodyA === balls[k]&&pair.bodyB === powerup) {
                     balls.push("ball"+balls.length);
-                    balls[balls.length-1]=  Matter.Bodies.circle(300, 100, 20, {
+                    balls[balls.length-1]=  Matter.Bodies.circle(300, 100, 15, {
                         mass: 1,
                         friction: .01,
                         frictionAir: 0.001,
@@ -173,7 +190,7 @@ var ball = Matter.Bodies.circle(300, 100, 20, {
                 } else if (pair.bodyB === balls[k]&&pair.bodyA === powerup) {
 
                     balls.push("ball"+balls.length);
-                    balls[balls.length-1]=  Matter.Bodies.circle(300, 100, 20, {
+                    balls[balls.length-1]=  Matter.Bodies.circle(300, 100, 15, {
                         mass: 1,
                         friction: .01,
                         frictionAir: 0.001,
@@ -194,6 +211,18 @@ var ball = Matter.Bodies.circle(300, 100, 20, {
 
                 }
             }
+
+            if ((pair.bodyA === balls[k]&&pair.bodyB === powerupspd)||(pair.bodyB === balls[k]&&pair.bodyA === powerupspd)) {
+
+                Body.setVelocity( balls[k], {x: balls[k].velocity.x*2, y:  balls[k].velocity.y*2});
+
+
+
+
+            }
+
+
+
 
 
 
@@ -270,7 +299,10 @@ left.push(false);
 right.push(false);
 boolea.push(false);
     Matter.World.add(world, ball);
-    Matter.World.add(world, powerup);
+    //Matter.World.add(world, powerup);
+    Matter.World.add(world, powerupspd);
+   // Matter.World.add(world, powerupslow);
+
     Matter.World.add(world, p1);
     Matter.World.add(world, p2);
 
@@ -289,7 +321,7 @@ Matter.Render.run(render);
         for(var k=0;k<balls.length;k++) {
 
             if (boolea[k] === true) {//only on when ball is in the green square
-                Body.applyForce(balls[k], {x: balls[k].position.x, y: balls[k].position.y}, {x: -0.003, y: -.000});//left force
+                Body.applyForce(balls[k], {x: balls[k].position.x, y: balls[k].position.y}, {x: -0.001, y: -.000});//left force
 
             }
         }
