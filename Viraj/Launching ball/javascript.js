@@ -1,5 +1,12 @@
 var engine, world, render;
 var bodies;
+var ballmin=0;
+var moveright = true;
+
+Bodies = Matter.Bodies;
+Constraint = Matter.Constraint;
+Body = Matter.Body;
+
 
 
 window.addEventListener('load', function() {
@@ -30,8 +37,7 @@ window.addEventListener('load', function() {
         
 
     //Add a ball
-    var ball = Matter.Bodies.circle(170, 450, 7, {
-        radius: 15,
+    var ball = Matter.Bodies.circle(170, 450, 10, {
         density: 0.04,
         friction: 0.01,
         frictionAir: 0.00001,
@@ -81,7 +87,7 @@ window.addEventListener('load', function() {
     });
     Matter.World.add(world, ceiling);
 
-    var launcher = Matter.Bodies.rectangle(100,250,20,80);
+    var launcher = Matter.Bodies.rectangle(100,250,20,80, {isStatic: true});
     Matter.World.add(world,launcher);
     bodies.push(launcher);
 
@@ -106,7 +112,7 @@ window.addEventListener('load', function() {
             stiffness: 0.05
         });
 
-    World.add(engine.world, [ground,paddle,elastic]);
+    Matter.World.add(engine.world, [ground,paddle,elastic]);
 
     // Matter.World.add(world,[ground,paddle,elastic]);
 
@@ -189,10 +195,12 @@ window.addEventListener('load', function() {
             var pair = pairs[i];
 
             if (pair.bodyA === ball&&pair.bodyB === invisCheck) {
-                boolea=true;
+                Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: .50, y: 0});
+
             } else if (pair.bodyB === ball&&pair.bodyA === invisCheck) {
 
-                boolea=true;
+                Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: .50, y: 0});
+
             }
         }
     });
@@ -260,43 +268,72 @@ window.addEventListener('load', function() {
     Matter.Engine.run(engine);
     Matter.Render.run(render);
 
-    Matter.Events.on(engine, 'afterUpdate', function(event) {
+    // Matter.Events.on(engine, 'afterUpdate', function(event) {
 
-        if(boolea==true){
+    //         Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: .05, y: 0});
 
-            Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: .50, y: 0});
 
-        }
-    });
+    // });
 
+
+    if(keyIsDown(LEFT_ARROW)){
+        Matter.Body.setPosition(launcher,{x:launcher.position.x,y:launcher.position.y--});
+
+    }
+    
+    
+    // window.addEventListener('keydown', function (event) {
+    //     if (event.defaultPrevented) {
+    //         return;
+    //     }
+    
+    //     var key = event.key || event.keyCode;
+    
+    //     if (key === "ArrowLeft") {
+
+    //         setInterval(myMethod, 10);
+    //         function myMethod( )
+    //         {
+    //             if(launcher.position.y<=300){
+    //                 Matter.Body.setPosition(launcher,{x:launcher.position.x,y:launcher.position.y--});
+
+    //             }
+    
+    //         }
+    //     }
+    // });
+
+    // window.addEventListener('keyup', function (event) {
+    //     if (event.defaultPrevented) {
+    //         return;
+    //     }
+    
+    //     var key = event.key || event.keyCode;
+    
+    //     if (key === "ArrowLeft") {
+    //             if(launcher.position.y<=300){
+    //                 Matter.Body.setPosition(launcher,{x:launcher.position.x,y:launcher.position.y});
+
+    //             }
+    //     }
+    // });
 });
 
 
-window.addEventListener('keyup', function (event) {
-    if (event.defaultPrevented) {
-        return;
-    }
+// window.addEventListener('keydown', function (event) {
+//     if (event.defaultPrevented) {
+//         return;
+//     }
 
-    var key = event.key || event.keyCode;
+//     var key = event.key || event.keyCode;
 
-    if (key === "ArrowLeft") {
-        // alert(bodies[0].radius);
-        Matter.Body.scale(bodies[1], 1, .5);
-        Matter.Body.applyForce(bodies[0],{x:bodies[0].position.x, y: bodies[0].position.y}, {x: 0, y: -0.75});
+//     if (key === "ArrowLeft") {
 
-        //Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x: 0, y: -0.05});
+//         setInterval(myMethod, 500);
+//         function myMethod( )
+//         {
+//             Matter.Body.setPosition(ball,{x:ball.position.x,y:ball.position.y++});
 
-    }
-        // alert(bodies[0].radius)
-    // } else if (key === "ArrowRight") {
-    //     // Matter.Body.rotate(bodies[1], -1)
-    //     // Matter.Body.setAngularVelocity(bodies[1], )
-    //     Matter.Body.applyForce(bodies[1], {x:bodies[1].position.x+20, y:bodies[1].position.y}, {x: 0, y: -6})
-    //     setTimeout(function() {
-    //         Matter.Body.setAngularVelocity(bodies[1], 0);
-    //         Matter.Body.setVelocity(bodies[1], 0);
-    //     }, 1000);
-    //     // Matter.Body.setAngularVelocity(bodies[1], 1)
-    //
-    // }
-});
+//         }
+//     }
+// });
