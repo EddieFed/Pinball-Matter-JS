@@ -8,6 +8,7 @@ Constraint = Matter.Constraint;
 Body = Matter.Body;
 
 
+
 window.addEventListener('load', function() {
 
     //Fetch our canvas
@@ -275,27 +276,47 @@ window.addEventListener('load', function() {
     // });
 
 
-    window.addEventListener('keydown', function (event) {
-        if (event.defaultPrevented) {
-            return;
-        }
-    
-        var key = event.key || event.keyCode;
-        alert(launcher.position.y)
-    
-        if (key === "ArrowLeft") {
-    
-            setInterval(myMethod, 10);
-            function myMethod( )
-            {
-                if(launcher.position.y<=300){
-                    Matter.Body.setPosition(launcher,{x:launcher.position.x,y:launcher.position.y--});
+    if(keyIsDown(LEFT_ARROW)){
+        Matter.Body.setPosition(launcher,{x:launcher.position.x,y:launcher.position.y--});
 
-                }
+    }
     
-            }
-        }
-    });
+    
+    // window.addEventListener('keydown', function (event) {
+    //     if (event.defaultPrevented) {
+    //         return;
+    //     }
+    
+    //     var key = event.key || event.keyCode;
+    
+    //     if (key === "ArrowLeft") {
+
+    //         setInterval(myMethod, 10);
+    //         function myMethod( )
+    //         {
+    //             if(launcher.position.y<=300){
+    //                 Matter.Body.setPosition(launcher,{x:launcher.position.x,y:launcher.position.y--});
+
+    //             }
+    
+    //         }
+    //     }
+    // });
+
+    // window.addEventListener('keyup', function (event) {
+    //     if (event.defaultPrevented) {
+    //         return;
+    //     }
+    
+    //     var key = event.key || event.keyCode;
+    
+    //     if (key === "ArrowLeft") {
+    //             if(launcher.position.y<=300){
+    //                 Matter.Body.setPosition(launcher,{x:launcher.position.x,y:launcher.position.y});
+
+    //             }
+    //     }
+    // });
 });
 
 

@@ -47,6 +47,7 @@ var x = 750;
 var lives = 0;
 var score = 0;
 var highScore = 0;
+Bodies = Matter.Bodies;
 
 const COLOR = {
     BUMPER: '#0036f3',
@@ -145,26 +146,39 @@ window.addEventListener("load", () => {
         }
     });
 
-    // slingshotOptions = { density: 0.004 },
-    // paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
-    // anchor = { x: 170, y: 450 },
-    // elastic = Matter.Constraint.create({
-    //     pointA: anchor,
-    //     bodyB: ball,
-    //     stiffness: 0.05
-    // });
+    mouseConstraint = Matter.MouseConstraint.create(game.engine, {
+        element: c,
+        constraint: {
+            render: {
+                visible: false
+            },
+            stiffness:0.8
+        }
+    });
+
+    var paddleOptions = { density: 0.004 },
+        // paddle = Bodies.polygon(170, 450, 8, 20, paddleOptions),
+    //paddle = ball(170,450,20,20,paddleOptions),
+    paddle = Matter.Bodies.circle(170,450,20),
+    anchor = { x: 170, y: 450 },
+    elastic = Matter.Constraint.create({ 
+        pointA: anchor, 
+        bodyB: paddle, 
+        stiffness: 0.05
+    });
 
 
     // Add all bodies to the world
     Matter.World.add(game.world, [
-        mouseConstraint(),
+        mouseConstraint,
 
         fan,
         fanBase,
 
         ball,
-        // anchor,
-        // elastic,
+        anchor,
+        elastic,
+        paddle,
 
         bumpers[0],
         bumpers[1],
@@ -288,6 +302,15 @@ window.addEventListener("load", () => {
         }
     });
 
+    Matter.Events.on(game.engine, 'afterUpdate', function() {
+        if (mouseConstraint.mouse.button === -1 && (paddle.position.x > 190 || paddle.position.y < 430)) {
+            // paddle = ball(170,450,20,20,paddleOptions);
+            paddle = Matter.Bodies.circle(170,450,20),
+            // Matter.World.add(engine.world, paddle);
+            elastic.bodyB = paddle;
+        }
+    });
+
     Matter.Events.on(game.engine, 'collisionStart', function(event) {
 
         var pairs = event.pairs;
@@ -403,14 +426,6 @@ window.addEventListener("load", () => {
 
         // Body.setPosition(pinball,{x:ballmin,y:100});
     }
-
-    // Matter.Events.on(engine, 'afterUpdate', function() {
-    //     if (mouseConstraint.mouse.button === -1 && (paddle.position.x > 190 || paddle.position.y < 430)) {
-    //         paddle = ball(170,450,20,20,paddleOptions);
-    //         Matter.World.add(engine.world, paddle);
-    //         elastic.bodyB = paddle;
-    //     }
-    // });
 });
 
 
@@ -527,6 +542,26 @@ function makeBumper(x, y, radius) {
     bumper.restitution = 1.1;
     return bumper;
 }
+
+// function ball(x, y, r) {
+//     return Matter.Bodies.circle(x, y, r, {
+//         density: 0.3,
+//         friction: 0.008,
+//         frictionAir: 0.00032,
+//         restitution: 1,
+//         inertia: Infinity,
+//         collisionFilter: {
+//             category: defaultCategory,
+//             mask: defaultCategory
+//         },
+//         render: {
+//             fillStyle: "#F35e66",
+//             strokeStyle: "#000000",
+//             lineWidth: 1
+//         },
+//         slop: 0
+//     });
+// }
 
 function makeWall(x, y, w, h) {
     return Matter.Bodies.rectangle(x, y, w, h, {//this is the bottom red box
