@@ -37,11 +37,16 @@ var right = false;
 
 var ballmin=0;
 var fan;
+var fanBase;
 var moveright=true;
 
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
 var x = 750;
+
+var lives = 0;
+var score = 0;
+var highScore = 0;
 
 const COLOR = {
     BUMPER: '#0036f3',
@@ -126,6 +131,16 @@ window.addEventListener("load", () => {
         isStatic: true, //An immovable object
         isSensor:true,
         render: {
+            fillStyle: '#BBBBBB',
+            strokeStyle: 'black',
+            visible: true
+        }
+    });
+    fanBase = Matter.Bodies.rectangle(0, 0, 50, 20, {
+        isStatic: true, //An immovable object
+        render: {
+            fillStyle: '#777777',
+            strokeStyle: 'black',
             visible: true
         }
     });
@@ -145,6 +160,7 @@ window.addEventListener("load", () => {
         mouseConstraint(),
 
         fan,
+        fanBase,
 
         ball,
         // anchor,
@@ -260,14 +276,14 @@ window.addEventListener("load", () => {
     Matter.Events.on(game.engine, 'beforeUpdate', function(event) {
         // bumpers can quickly multiply velocity, so keep that in check
         Matter.Body.setVelocity(ball, {
-            x: Math.max(Math.min(ball.velocity.x, 20), -20),
-            y: Math.max(Math.min(ball.velocity.y, 20), -20),
+            x: Math.max(Math.min(ball.velocity.x, 17), -17),
+            y: Math.max(Math.min(ball.velocity.y, 17), -17),
         });
 
-        if (ball.position.x > ballmin && ball.position.y >300&&ball.position.x < ballmin+75 && ball.position.y >300) {//wind gust
+        if (ball.position.x > ballmin && ball.position.y >300&&ball.position.x < ballmin+75 && ball.position.y <500) {//wind gust
             // Matter.Body.applyForce(ball,{ x: 0, y: 100 });
             // setVelocity(ball, { x: 0, y: -10 });
-            Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x:0, y: -.12});
+            Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x:0, y: -.15});
 
         }
     });
@@ -281,20 +297,24 @@ window.addEventListener("load", () => {
 
             if (pair.bodyA === ball&&pair.bodyB === bumpers[0]) {
                 bumpers[0].render.fillStyle = COLOR.BUMPER_ALT;
+                score+=50;
                 setTimeout(function() {
                     bumpers[0].render.fillStyle = COLOR.BUMPER;
                 }, 200);
             } else if (pair.bodyA === ball&&pair.bodyB === bumpers[1]) {
                 bumpers[1].render.fillStyle = COLOR.BUMPER_ALT;
+                score+=50;
                 setTimeout(function() {
                     bumpers[1].render.fillStyle = COLOR.BUMPER;
                 }, 200);
             }else if (pair.bodyA === ball&&pair.bodyB === bumpers[2]) {
                 bumpers[2].render.fillStyle = COLOR.BUMPER_ALT;
+                score+=50;
                 setTimeout(function() {
                     bumpers[2].render.fillStyle = COLOR.BUMPER;
                 }, 200);
             }else if (pair.bodyA === ball&&pair.bodyB === bumpers[3]) {
+                score+=50;
                 bumpers[3].render.fillStyle = COLOR.BUMPER_ALT;
                 setTimeout(function() {
                     bumpers[3].render.fillStyle = COLOR.BUMPER;
@@ -302,12 +322,17 @@ window.addEventListener("load", () => {
             }
 
 
-
             if (pair.bodyA === ball&&pair.bodyB === deadZone) {
                 //round lost
+                lives-=1;
+                score=0;
+                updateScore();
                 Matter.Body.setPosition(ball, { x: 680, y: 100 });//respawns the ball x 100-900,y 100
+                Matter.Body.setPosition(ball, { x: 580, y: 100 });//respawns the ball x 100-900,y 100
                 Matter.Body.setVelocity(ball, { x: 0, y: 0 });//respawns the ball x 100-900,y 100
             }
+
+            updateScore();
         }
     });
 
@@ -325,7 +350,12 @@ window.addEventListener("load", () => {
                 }
                 else{
                     Matter.Body.setPosition(ball,{x:portal2.position.x-30, y:portal2.position.y+(ball.position.y-portal1.position.y)});
+                    portal1.render.fillStyle = COLOR.BUMPER_ALT;
+                    setTimeout(function() {
+                        portal1.render.fillStyle = COLOR.BUMPER;
+                    }, 200);
                     left=true;
+                    score += 20;
                 }
 
             }
@@ -337,11 +367,18 @@ window.addEventListener("load", () => {
                 }
                 else{
                     Matter.Body.setPosition(ball,{x:portal1.position.x+30,  y:portal1.position.y+(ball.position.y-portal2.position.y)});
+                    portal2.render.fillStyle = COLOR.BUMPER_ALT;
+                    setTimeout(function() {
+                        portal2.render.fillStyle = COLOR.BUMPER;
+                    }, 200);
+                    score+=20;
                     right=true;
                 }
 
             }
         }
+
+        updateScore();
     });
 
     setInterval(myMethod, 25);
@@ -362,6 +399,8 @@ window.addEventListener("load", () => {
         // Matter.paddle.translate({x:400,y:100});
         // bodies.setAngularVelocity(pinball,23);
         Matter.Body.setPosition(fan,{x:ballmin+37.5,y:400});
+        Matter.Body.setPosition(fanBase,{x:ballmin+37.5,y:510});
+
         // Body.setPosition(pinball,{x:ballmin,y:100});
     }
 
@@ -541,4 +580,13 @@ function staticBox3(x, y, width, height, colorHex, angles) {
             lineWidth: 1
         }
     });
+}
+
+function updateScore() {
+    if (score >= highScore) {
+        highScore = score;
+    }
+    document.getElementById("lives").innerHTML = "Lives: "+lives;
+    document.getElementById("score").innerHTML = "Score: "+score;
+    document.getElementById("highScore").innerHTML = "highScore: "+highScore;
 }
