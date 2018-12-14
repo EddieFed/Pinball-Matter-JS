@@ -10,11 +10,11 @@ body {
     padding: 0;
     margin: auto;
     display: block;
-    width: 1920px;
-    height: 1080px;
+    width: 750px;
+    height: 750px;
     position: absolute;
-    /*top: 0;*/
-    /*bottom: 0;*/
+    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
 
@@ -24,17 +24,17 @@ body {
 #bu {
     background-color: grey;
     border: grey;
-
 }  #bu:active {
-    background-color: darkgray;
-    border: darkgray;
-
+       background-color: darkgray;
+       border: darkgray;
 }  #bu:focus {
-    outline: transparent;
-
+          outline: transparent;
 }
 
 
-
+.text {
+    color:white;
+    font-size:45px;
+}
 
 

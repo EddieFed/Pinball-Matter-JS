@@ -28,11 +28,12 @@ var paddleLeft = {};
 var paddleRight = {};
 
 var ball;
-var bumper1;
 
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
+var x = 750;
 
+Bodies = Matter.Bodies;
 
 // Wait until window finishes loading!
 window.addEventListener("load", () => {
@@ -42,13 +43,8 @@ window.addEventListener("load", () => {
     game.engine = Matter.Engine.create();
     game.world = game.engine.world;
     game.world.bounds = {
-        min: { x: 0, y: 0},
-        max: { x: c.width, y: c.height }
-    };
-
-    const COLOR = {
-        BUMPER: '#0036f3',
-        BUMPER_ALT: '#00e5ff',
+        min: {x: 0, y: 0},
+        max: {x: c.width, y: c.height}
     };
 
     // **!!REMEMBER!!** Set Renderer to match Canvas
@@ -65,14 +61,14 @@ window.addEventListener("load", () => {
     });
 
     // Game object creation
-    paddleLeft = makePaddle(250, 600, -1);
-    paddleRight = makePaddle(500, 600, 1);
+    paddleLeft = makePaddle(190, 660, -1);
+    paddleRight = makePaddle(430, 660, 1);
 
-    ball = Matter.Bodies.circle(450, 20, 10, {
+    ball = Matter.Bodies.circle(450, 20, 15, {
         density: 0.1,
         friction: 0.008,
         frictionAir: 0.00032,
-        restitution: 1,
+        restitution: 0.8,
 
         inertia: Infinity,
         slop: 0,
@@ -87,27 +83,23 @@ window.addEventListener("load", () => {
         }
     });
 
-    bumper1 = Matter.Bodies.circle(200, 250, 40, {
-        angle: 1.57,
-        isStatic: true, //An immovable object
-        density: 0.4,
-        friction: 0.01,
-        frictionAir: 0.00001,
-        restitution: 1.25,
-        render: {
-            fillStyle: '#0036f3',
-            strokeStyle: 'black',
-            lineWidth: 1
+    // noinspection JSValidateTypes
+    mouseConstraint = Matter.MouseConstraint.create(game.engine, {
+        element: c,
+        constraint: {
+            render: {
+                visible: false
+            },
+            stiffness: 0.8
         }
     });
-    bumper1.restitution =1.25;
+
 
     // Add all bodies to the world
     Matter.World.add(game.world, [
-        mouseConstraint(),
+        mouseConstraint,
 
         ball,
-        bumper1,
 
         paddleLeft.ball,
         paddleLeft.paddle,
@@ -117,79 +109,66 @@ window.addEventListener("load", () => {
         paddleRight.paddle,
         paddleRight.constrainter,
 
-        // Left side paddle stop things
-        staticCircle(paddleLeft.ball.position.x + 20, paddleLeft.ball.position.y + 45, 20, "#FFFFFF"),  // Bottom
-        staticCircle(paddleLeft.ball.position.x + 70, paddleLeft.ball.position.y - 30, 20, "#FFFFFF"),  // Top
 
-        // Right side paddle stop things
-        staticCircle(paddleRight.ball.position.x - 20, paddleRight.ball.position.y + 45, 20, "#FFFFFF"), // Bottom
-        staticCircle(paddleRight.ball.position.x - 70, paddleRight.ball.position.y - 30, 20, "#FFFFFF"), // Top
+        // Left Paddle Stoppers
+        staticCircle(paddleLeft.ball.position.x + 15, paddleLeft.ball.position.y + 50, 20, "#FFFFFF"),  // Bottom
+        staticCircle(paddleLeft.ball.position.x + 50, paddleLeft.ball.position.y - 40 - 5 /** dont forget to include the radius of the anchor ball **/, 20, "#FFFFFF"),  // Top
 
-        //              ** Window borders **
-        border(c.width/2, -15, c.width, 30),             // Top
-        border(c.width/2, c.height + 15, c.width, 30),   // Bottom
-        border(-15, c.height/2, 30, c.height),           // Left
-        border(c.width + 15, c.height/2, 30, c.height)   // Right
+        // Right Paddle Stoppers
+        staticCircle(paddleRight.ball.position.x - 15, paddleRight.ball.position.y + 50, 20, "#FFFFFF"),    // Bottom
+        staticCircle(paddleRight.ball.position.x - 50, paddleRight.ball.position.y - 40 - 5 /** dont forget to include the radius of the anchor ball **/, 20, "#FFFFFF"),    // Top
+
+        // Window borders
+        border(c.width / 2, -15, c.width + 0, 30),     // Top
+        border(c.width / 2, c.height + 15, c.width + 0, 30),     // Bottom
+        border(-15, c.height / 2, 30, c.height + 0),    // Left
+        border(c.width + 15, c.height / 2, 30, c.height + 0),    // Right
+
+
+        // Left Slide
+        staticBox3(40, 620, 265, 20, "#000000", .2 ),
+
+
+        //Right Slide
+        staticBox3(545, 625, 190, 20, "#000000", -.2),
+
+        // Left Slide
+        staticBox(640, 520, 10, 600, "#000000", 0 ),
+
     ]);
 
     // Basic render
     Matter.Engine.run(game.engine);
     Matter.Render.run(game.render);
 
-    Matter.Events.on(game.engine, 'beforeUpdate', function(event) {
-        // bumpers can quickly multiply velocity, so keep that in check
-        Matter.Body.setVelocity(ball, {
-            x: Math.max(Math.min(ball.velocity.x, 20), -20),
-            y: Math.max(Math.min(ball.velocity.y, 20), -20),
-        });
+    window.addEventListener("keyup", function (event) {
+        if (event.defaultPrevented) {
+            return;
+        }
 
-        // // cheap way to keep ball from going back down the shooter lane
-        // if (ball.position.x > 500 && ball.velocity.y > 0) {
-        //     Matter.Body.setVelocity(ball, { x: 0, y: -10 });
-        // }
-        // if (ball.position.x > 20 && ball.velocity.y <50) {
-        //     Matter.Body.setVelocity(ball, { x: 20, y: -10 });
-        // }
-    });
-
-    Matter.Events.on(game.engine, 'collisionStart', function(event) {
-
-        var pairs = event.pairs;
-
-        for (var i = 0, j = pairs.length; i !== j; ++i) {
-            var pair = pairs[i];
-
-            if (pair.bodyA === ball&&pair.bodyB === bumper1) {
-                bumper1.render.fillStyle = COLOR.BUMPER_ALT;
-                setTimeout(function() {
-                    bumper1.render.fillStyle = COLOR.BUMPER;
-                }, 300);
-            }
-
+        var key = event.code;
+        if (key === "ArrowLeft") {
+            Matter.Body.applyForce(paddleLeft.paddle, {
+                x: paddleLeft.paddle.position.x,
+                y: paddleLeft.paddle.position.y
+            }, Matter.Vector.create(0, -150));
+        } else if (key === "ArrowRight") {
+            Matter.Body.applyForce(paddleRight.paddle, {
+                x: paddleRight.paddle.position.x,
+                y: paddleRight.paddle.position.y
+            }, Matter.Vector.create(0, -150));
         }
     });
+
 });
 
 
-
-window.addEventListener("keyup", function (event) {
-    if (event.defaultPrevented) {
-        return;
-    }
-
-    var key = event.code;
-    if (key === "ArrowLeft") {
-        Matter.Body.applyForce(paddleLeft.paddle, Matter.Vector.create(paddleLeft.paddle.positionX, paddleLeft.paddle.positionY), Matter.Vector.create(0, 20));
-    } else if (key === "ArrowRight") {
-        Matter.Body.applyForce(paddleRight.paddle, {
-            x: paddleRight.paddle.position.x,
-            y: paddleRight.paddle.position.y
-        }, Matter.Vector.create(0, -100));
-    }
-});
 
 
 // <- Creation functions ->
+
+
+
 
 
 function border(x, y, width, height) {
@@ -219,9 +198,10 @@ function mouseConstraint() {
 
 function makePaddle(x, y, direction) {
     var paddleTemp= {};
-    paddleTemp.paddle = Matter.Bodies.rectangle(x, y, 100, 15,  {
+    paddleTemp.paddle = Matter.Bodies.rectangle(x, y, 110, 15,  {
         label: "paddle",
-        density: 2/3,
+        density: 1,
+        restitution: 0,
         collisionFilter: {
             category: defaultCategory,
             mask: paddleCategory | defaultCategory
@@ -236,7 +216,7 @@ function makePaddle(x, y, direction) {
     paddleTemp.ball = Matter.Bodies.circle(x, y, 5, {
         isStatic: true,
         render: {
-            visible: true,
+            visible: false,
             fillStyle: "#F35e66",
             strokeStyle: "#000000",
             lineWidth: 1
@@ -252,16 +232,15 @@ function makePaddle(x, y, direction) {
 
     paddleTemp.constrainter = Matter.Constraint.create({
         bodyA: paddleTemp.paddle,
-        pointA: { x: direction * 35, y: 0},
+        pointA: { x: direction*40, y: 0},
         bodyB: paddleTemp.ball,
-        length: 0.01,
+        length: 0.001,
         stiffness: 1,
         render: {
-            visible: false
+            visible: true
         }
     });
     return paddleTemp;
-
 }
 
 
@@ -278,6 +257,32 @@ function staticCircle(x, y, radius, colorHex) {
             visible: true,
             fillStyle: colorHex,
             strokeStyle: "#000000",
+            lineWidth: 1
+        }
+    });
+}
+
+
+function staticBox(x, y, width, height, colorHex, angle) {
+    return Matter.Bodies.rectangle(x, y, width, height, {
+        isStatic: true,
+        angle: angle,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
+            lineWidth: 1
+        }
+    });
+}
+
+
+function staticBox3(x, y, width, height, colorHex, angles) {
+    return Matter.Bodies.rectangle(x, y, width, height, {
+        isStatic: true,
+        angle: angles,
+        render: {
+            fillStyle: colorHex,
+            strokeStyle: "black",
             lineWidth: 1
         }
     });

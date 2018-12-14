@@ -40,10 +40,6 @@ var fan;
 var fanBase;
 var moveright= true;
 
-var powerupspd;
-var powerdownspd;
-
-
 var defaultCategory = 0x0001;
 var paddleCategory = 0x0004;
 var x = 750;
@@ -185,26 +181,6 @@ window.addEventListener("load", () => {
         }
     });
 
-    powerupspd = Matter.Bodies.circle(Math.random()*500+50, Math.random()*100+450, 20, {
-        isStatic: true,
-        isSensor:true,
-        render: {
-            fillStyle: '#00bb00',
-            strokeStyle: 'black',
-            lineWidth: 1
-        }
-    });
-
-    powerdownspd = Matter.Bodies.circle(Math.random()*500+50, Math.random()*100+250, 20, {
-        isStatic: true,
-        isSensor:true,
-        render: {
-            fillStyle: '#fff71b',
-            strokeStyle: 'black',
-            lineWidth: 1
-        }
-    });
-
 
     // Add all bodies to the world
     Matter.World.add(game.world, [
@@ -225,9 +201,6 @@ window.addEventListener("load", () => {
         fanBase,
 
         deadZone,
-
-        powerupspd,
-        powerdownspd,
 
         portal1,
         portal2,
@@ -399,22 +372,6 @@ window.addEventListener("load", () => {
                 Matter.Body.setPosition(ball, { x: 700, y: 200 });  //respawns the ball x 100-900,y 100
                 // Matter.Body.setPosition(ball, { x: 580, y: 100 });  //respawns the ball x 100-900,y 100
                 Matter.Body.setVelocity(ball, { x: 0, y: 0 });       //respawns the ball x 100-900,y 100
-            }
-
-            if ((pair.bodyA === ball&&pair.bodyB === powerupspd)||(pair.bodyB === ball&&pair.bodyA === powerupspd)) {
-                Matter.Body.setVelocity( ball, {x: ball.velocity.x*3, y: ball.velocity.y*3});
-                Matter.Body.setPosition( powerupspd, {x: -100, y: -100});
-                setTimeout(function() {
-                    Matter.Body.setPosition( powerupspd, {x: Math.random()*500+50, y: Math.random()*100+450});
-                }, 5000);
-            }
-
-            if ((pair.bodyA === ball&&pair.bodyB === powerdownspd)||(pair.bodyB === ball&&pair.bodyA === powerdownspd)) {
-                Matter.Body.setVelocity( ball, {x: ball.velocity.x/6, y: ball.velocity.y/6});
-                Matter.Body.setPosition( powerdownspd, {x: -100, y: -100});
-                setTimeout(function() {
-                    Matter.Body.setPosition( powerdownspd, {x: Math.random()*500+50, y: Math.random()*100+250});
-                }, 5000);
             }
 
             updateScore();
