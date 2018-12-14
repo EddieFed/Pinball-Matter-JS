@@ -42,6 +42,7 @@ var moveright= true;
 
 var powerupspd;
 var powerdownspd;
+var isGameRunning = true;
 
 
 var defaultCategory = 0x0001;
@@ -50,6 +51,7 @@ var x = 750;
 
 var lives = 3;
 var score = 0;
+
 var highScore = 0;
 Bodies = Matter.Bodies;
 
@@ -61,6 +63,8 @@ const COLOR = {
 // Wait until window finishes loading!
 window.addEventListener("load", () => {
     c = document.getElementById("ca");
+
+    highScore = parseInt(window.location.href.substring(window.location.href.indexOf("?=") + 2, window.location.href.length));
 
     // Matter.js setup
     game.engine = Matter.Engine.create();
@@ -598,7 +602,7 @@ function makeWall(x, y, w, h) {
             strokeStyle: "black",
             visible: true
         }
-    })
+    });
 }
 
 function staticCircle(x, y, radius, colorHex) {
@@ -646,6 +650,11 @@ function staticBox3(x, y, width, height, colorHex, angles) {
 function updateScore() {
     if (score >= highScore) {
         highScore = score;
+    }
+    if (lives < 0 && isGameRunning === true) {
+        isGameRunning = false;
+        alert("Game Over!\nClick Okay to refresh");
+        window.location.assign(window.location.href + "?=" + highScore);
     }
     document.getElementById("lives").innerHTML = "Lives: " + lives;
     document.getElementById("score").innerHTML = "Score: " + score;
