@@ -27,7 +27,7 @@ var game = {};
 var paddleLeft = {};
 var paddleRight = {};
 
-var ball;
+var balls= [];
 var bumpers = [];
 var deadZone;
 
@@ -42,6 +42,7 @@ var moveright= true;
 
 var powerupspd;
 var powerdownspd;
+var powerball;
 
 
 var defaultCategory = 0x0001;
@@ -87,24 +88,7 @@ window.addEventListener("load", () => {
     paddleLeft = makePaddle(190, 660, -1);
     paddleRight = makePaddle(430, 660, 1);
 
-    ball = Matter.Bodies.circle(692.5, 400, 15, {
-        density: 0.1,
-        // friction: 0.003,
-        // frictionAir: 0.00032,
-        restitution: 0,
-        // inertia: Infinity,  // <--- Do we need this?
-        slop: 1,
-        render: {
-            visible: true,
-            fillStyle: "#F35e66",
-            strokeStyle: "#000000",
-            lineWidth: 1
-        },
-        collisionFilter: {
-            category: defaultCategory,
-            mask: defaultCategory
-        }
-    });
+    balls.push(makeBall());
 
     bumpers.push(makeBumper(200, 200, 30));
     bumpers.push(makeBumper(450, 200, 30));
@@ -205,13 +189,23 @@ window.addEventListener("load", () => {
         }
     });
 
+    powerball = Matter.Bodies.circle(Math.random()*500+50, Math.random()*100+50, 20, {
+        isStatic: true,
+        isSensor:true,
+        render: {
+            fillStyle: "purple",
+            strokeStyle: 'black',
+            lineWidth: 1
+        }
+    });
+
     rightWall = staticBox(640, 720, 10, 1000, "#000000", 0 ),
 
         // Add all bodies to the world
     Matter.World.add(game.world, [
         mouseConstraint,
 
-        ball,
+        balls[0],
 
         anchor,
         elastic,
@@ -229,6 +223,7 @@ window.addEventListener("load", () => {
 
         powerupspd,
         powerdownspd,
+        powerball,
 
         portal1,
         portal2,
@@ -335,24 +330,24 @@ window.addEventListener("load", () => {
 
     Matter.Events.on(game.engine, 'beforeUpdate', function(event) {
         // bumpers can quickly multiply velocity, so keep that in check
-        Matter.Body.setVelocity(ball, {
-            x: Math.max(Math.min(ball.velocity.x, 17), -17),
-            y: Math.max(Math.min(ball.velocity.y, 17), -17),
+        Matter.Body.setVelocity(balls[0], {
+            x: Math.max(Math.min(balls[0].velocity.x, 17), -17),
+            y: Math.max(Math.min(balls[0].velocity.y, 17), -17),
         });
 
-        if (ball.position.x > ballmin && ball.position.y >300&&ball.position.x < ballmin+75 && ball.position.y <500) {//wind gust
+        if (balls[0].position.x > ballmin && balls[0].position.y >300&&balls[0].position.x < ballmin+75 && balls[0].position.y <500) {//wind gust
             // Matter.Body.applyForce(ball,{ x: 0, y: 100 });
             // setVelocity(ball, { x: 0, y: -10 });
-            Matter.Body.applyForce( ball, {x: ball.position.x, y: ball.position.y}, {x:0, y: -.15});
+            Matter.Body.applyForce( balls[0], {x: balls[0].position.x, y: balls[0].position.y}, {x:0, y: -.15});
 
         }
         // Matter.Body.setPosition(paddle, {x: 695, y: paddle.position.y})
-        if (ball.position.x>625 && ball.position.y > 150) {
+        if (balls[0].position.x>625 && balls[0].position.y > 150) {
             Matter.Body.setPosition(rightWall, {x: rightWall.position.x, y: 780})
-            ball.restitution = 0;
+            balls[0].restitution = 0;
         } else {
-            ball.restitution = 1;
-            if (ball.position.x<625) {
+            balls[0].restitution = 1;
+            if (balls[0].position.x<625) {
                 Matter.Body.setPosition(rightWall, {x: rightWall.position.x, y: 500})
             }
         }
@@ -374,25 +369,25 @@ window.addEventListener("load", () => {
         for (var i = 0, j = pairs.length; i !== j; ++i) {
             var pair = pairs[i];
 
-            if (pair.bodyA === ball&&pair.bodyB === bumpers[0]) {
+            if (pair.bodyA === balls[0]&&pair.bodyB === bumpers[0]) {
                 bumpers[0].render.fillStyle = COLOR.BUMPER_ALT;
                 score+=50;
                 setTimeout(function() {
                     bumpers[0].render.fillStyle = COLOR.BUMPER;
                 }, 200);
-            } else if (pair.bodyA === ball&&pair.bodyB === bumpers[1]) {
+            } else if (pair.bodyA === balls[0]&&pair.bodyB === bumpers[1]) {
                 bumpers[1].render.fillStyle = COLOR.BUMPER_ALT;
                 score+=50;
                 setTimeout(function() {
                     bumpers[1].render.fillStyle = COLOR.BUMPER;
                 }, 200);
-            } else if (pair.bodyA === ball&&pair.bodyB === bumpers[2]) {
+            } else if (pair.bodyA === balls[0]&&pair.bodyB === bumpers[2]) {
                 bumpers[2].render.fillStyle = COLOR.BUMPER_ALT;
                 score+=50;
                 setTimeout(function() {
                     bumpers[2].render.fillStyle = COLOR.BUMPER;
                 }, 200);
-            } else if (pair.bodyA === ball&&pair.bodyB === bumpers[3]) {
+            } else if (pair.bodyA === balls[0]&&pair.bodyB === bumpers[3]) {
                 score+=50;
                 bumpers[3].render.fillStyle = COLOR.BUMPER_ALT;
                 setTimeout(function() {
@@ -400,34 +395,48 @@ window.addEventListener("load", () => {
                 }, 200);
             }
 
-            if (pair.bodyA === ball&&pair.bodyB === paddle) {
+            if (pair.bodyA === balls[0]&&pair.bodyB === paddle) {
                 // ball.restitution = 0;
             }
 
 
-            if (pair.bodyA === ball&&pair.bodyB === deadZone) {
+            if (pair.bodyA === balls[0]&&pair.bodyB === deadZone) {
                 //round lost
                 lives-=1;
                 score=0;
                 updateScore();
-                Matter.Body.setPosition(ball, { x: 700, y: 200 });  //respawns the ball x 100-900,y 100
+                Matter.Body.setPosition(balls[0], { x: 700, y: 200 });  //respawns the ball x 100-900,y 100
                 // Matter.Body.setPosition(ball, { x: 580, y: 100 });  //respawns the ball x 100-900,y 100
-                Matter.Body.setVelocity(ball, { x: 0, y: 0 });       //respawns the ball x 100-900,y 100
+                Matter.Body.setVelocity(balls[0], { x: 0, y: 0 });       //respawns the ball x 100-900,y 100
             }
 
-            if ((pair.bodyA === ball&&pair.bodyB === powerupspd)||(pair.bodyB === ball&&pair.bodyA === powerupspd)) {
-                Matter.Body.setVelocity( ball, {x: ball.velocity.x*3, y: ball.velocity.y*3});
+            if ((pair.bodyA === balls[0]&&pair.bodyB === powerupspd)||(pair.bodyB === balls[0]&&pair.bodyA === powerupspd)) {
+                Matter.Body.setVelocity( balls[0], {x: balls[0].velocity.x*3, y: balls[0].velocity.y*3});
                 Matter.Body.setPosition( powerupspd, {x: -100, y: -100});
+                score+=100;
                 setTimeout(function() {
                     Matter.Body.setPosition( powerupspd, {x: Math.random()*500+50, y: Math.random()*100+450});
                 }, 5000);
             }
 
-            if ((pair.bodyA === ball&&pair.bodyB === powerdownspd)||(pair.bodyB === ball&&pair.bodyA === powerdownspd)) {
-                Matter.Body.setVelocity( ball, {x: ball.velocity.x/6, y: ball.velocity.y/6});
+            if ((pair.bodyA === balls[0]&&pair.bodyB === powerdownspd)||(pair.bodyB === balls[0]&&pair.bodyA === powerdownspd)) {
+                Matter.Body.setVelocity( balls[0], {x: balls[0].velocity.x/6, y: balls[0].velocity.y/6});
                 Matter.Body.setPosition( powerdownspd, {x: -100, y: -100});
+                score+=100;
                 setTimeout(function() {
                     Matter.Body.setPosition( powerdownspd, {x: Math.random()*500+50, y: Math.random()*100+250});
+                }, 5000);
+            }
+
+            if ((pair.bodyA === balls[0]&&pair.bodyB === powerball)||(pair.bodyB === balls[0]&&pair.bodyA === powerball)) {
+                balls.push(makeBall());
+                //TODO
+
+                
+                Matter.Body.setPosition( powerball, {x: -100, y: -100});
+                score+=100;
+                setTimeout(function() {
+                    Matter.Body.setPosition( powerball, {x: Math.random()*500+50, y: Math.random()*100+50});
                 }, 5000);
             }
 
@@ -442,13 +451,13 @@ window.addEventListener("load", () => {
         for (var i = 0, j = pairs.length; i != j; ++i) {
             var pair = pairs[i];
 
-            if ((pair.bodyA === ball&&pair.bodyB === portal1)||(pair.bodyB === ball&&pair.bodyA === portal1)) {
+            if ((pair.bodyA === balls[0]&&pair.bodyB === portal1)||(pair.bodyB === balls[0]&&pair.bodyA === portal1)) {
                 // alert("p1")
                 if(right===true){
                     right=false;
                 }
                 else{
-                    Matter.Body.setPosition(ball,{x:portal2.position.x-30, y:portal2.position.y+(ball.position.y-portal1.position.y)});
+                    Matter.Body.setPosition(balls[0],{x:portal2.position.x-30, y:portal2.position.y+(balls[0].position.y-portal1.position.y)});
                     portal1.render.fillStyle = COLOR.BUMPER_ALT;
                     setTimeout(function() {
                         portal1.render.fillStyle = COLOR.BUMPER;
@@ -458,14 +467,14 @@ window.addEventListener("load", () => {
                 }
 
             }
-            if ((pair.bodyA === ball&&pair.bodyB === portal2)||(pair.bodyB === ball&&pair.bodyA === portal2)) {
+            if ((pair.bodyA === balls[0]&&pair.bodyB === portal2)||(pair.bodyB === balls[0]&&pair.bodyA === portal2)) {
                 // alert("p2")
 
                 if(left===true){
                     left=false;
                 }
                 else{
-                    Matter.Body.setPosition(ball,{x:portal1.position.x+30,  y:portal1.position.y+(ball.position.y-portal2.position.y)});
+                    Matter.Body.setPosition(balls[0],{x:portal1.position.x+30,  y:portal1.position.y+(balls[0].position.y-portal2.position.y)});
                     portal2.render.fillStyle = COLOR.BUMPER_ALT;
                     setTimeout(function() {
                         portal2.render.fillStyle = COLOR.BUMPER;
@@ -585,6 +594,27 @@ function makePaddle(x, y, direction) {
     });
     return paddleTemp;
 
+}
+
+function makeBall() {
+    return Matter.Bodies.circle(692.5, 400, 15, {
+        density: 0.1,
+        // friction: 0.003,
+        // frictionAir: 0.00032,
+        restitution: 0,
+        // inertia: Infinity,  // <--- Do we need this?
+        slop: 1,
+        render: {
+            visible: true,
+            fillStyle: "#F35e66",
+            strokeStyle: "#000000",
+            lineWidth: 1
+        },
+        collisionFilter: {
+            category: defaultCategory,
+            mask: defaultCategory
+        }
+    })
 }
 
 function makeBumper(x, y, radius) {
