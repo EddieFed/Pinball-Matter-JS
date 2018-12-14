@@ -299,8 +299,8 @@ left.push(false);
 right.push(false);
 boolea.push(false);
     Matter.World.add(world, ball);
-    //Matter.World.add(world, powerup);
-    Matter.World.add(world, powerupspd);
+    Matter.World.add(world, powerup);
+    // Matter.World.add(world, powerupspd);
    // Matter.World.add(world, powerupslow);
 
     Matter.World.add(world, p1);
