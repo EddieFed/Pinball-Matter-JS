@@ -24,12 +24,17 @@ body {
 #bu {
     background-color: grey;
     border: grey;
-
 }  #bu:active {
        background-color: darkgray;
        border: darkgray;
-
-   }  #bu:focus {
+}  #bu:focus {
           outline: transparent;
+}
 
-      }
+
+.text {
+    color:white;
+    font-size:45px;
+}
+
+
