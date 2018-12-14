@@ -95,7 +95,7 @@ window.addEventListener("load", () => {
         density: 0.1,
         // friction: 0.003,
         // frictionAir: 0.00032,
-        restitution: 1,
+        restitution: 0,
         // inertia: Infinity,  // <--- Do we need this?
         slop: 1,
         render: {
@@ -170,7 +170,7 @@ window.addEventListener("load", () => {
 
 
     // Ball launcher
-    var paddle = Matter.Bodies.rectangle(692.5, 450, 105, 50, {
+    var paddle = Matter.Bodies.rectangle(692.5, 450, 105, 40, {
         density: 1.1,
         inertia: Infinity,
         render: {
@@ -183,7 +183,7 @@ window.addEventListener("load", () => {
     var elastic = Matter.Constraint.create({
         pointA: anchor,
         bodyB: paddle,
-        stiffness: 0.8,
+        stiffness: 0.1,
         render: {
             visible: false
         }
@@ -209,8 +209,9 @@ window.addEventListener("load", () => {
         }
     });
 
+    rightWall = staticBox(640, 720, 10, 1000, "#000000", 0 ),
 
-    // Add all bodies to the world
+        // Add all bodies to the world
     Matter.World.add(game.world, [
         mouseConstraint,
 
@@ -268,7 +269,7 @@ window.addEventListener("load", () => {
         staticBox3(545, 625, 190, 20, "#000000", -.2),
 
         // Right wall
-        staticBox(640, 520, 10, 600, "#000000", 0 ),
+        rightWall,
 
         // Left Rounded Top
         staticBox(5  , 0  , 150, 140, "#000000", 1.8 ),
@@ -350,6 +351,15 @@ window.addEventListener("load", () => {
 
         }
         // Matter.Body.setPosition(paddle, {x: 695, y: paddle.position.y})
+        if (ball.position.x>625 && ball.position.y > 150) {
+            Matter.Body.setPosition(rightWall, {x: rightWall.position.x, y: 780})
+            ball.restitution = 0;
+        } else {
+            ball.restitution = 1;
+            if (ball.position.x<625) {
+                Matter.Body.setPosition(rightWall, {x: rightWall.position.x, y: 500})
+            }
+        }
     });
 
     Matter.Events.on(game.engine, 'afterUpdate', function() {
@@ -392,6 +402,10 @@ window.addEventListener("load", () => {
                 setTimeout(function() {
                     bumpers[3].render.fillStyle = COLOR.BUMPER;
                 }, 200);
+            }
+
+            if (pair.bodyA === ball&&pair.bodyB === paddle) {
+                // ball.restitution = 0;
             }
 
 
