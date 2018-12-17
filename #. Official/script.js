@@ -27,13 +27,13 @@ var game = {};
 var paddleLeft = {};
 var paddleRight = {};
 
-var ball;
+var balls = [];
 var bumpers = [];
 var deadZone;
 
 var portal1, portal2;
-var left = false;
-var right = false;
+var left = [false];
+var right = [false];
 
 var ballmin = 0;
 var fan;
@@ -65,7 +65,7 @@ const COLOR = {
 window.addEventListener("load", () => {
     c = document.getElementById("ca");
 
-    highScore = parseInt(window.location.href.substring(window.location.href.indexOf("?=") + 2, window.location.href.length));
+    // highScore = parseInt(window.location.href.substring(window.location.href.indexOf("?=") + 2, window.location.href.length));
 
     // Matter.js setup
     game.engine = Matter.Engine.create();
@@ -92,7 +92,7 @@ window.addEventListener("load", () => {
     paddleLeft = makePaddle(190, 660, -1);
     paddleRight = makePaddle(430, 660, 1);
 
-    balls.push(makeBall());
+    balls.push(makeBall(692.5, 400));
 
     bumpers.push(makeBumper(200, 200, 30));
     bumpers.push(makeBumper(450, 200, 30));
@@ -193,7 +193,7 @@ window.addEventListener("load", () => {
         }
     });
 
-    powerball = Matter.Bodies.circle(Math.random()*500+50, Math.random()*100+50, 20, {
+    powerball = Matter.Bodies.circle(Math.random()*300+250, Math.random()*100+50, 20, {
         isStatic: true,
         isSensor:true,
         render: {
@@ -333,21 +333,22 @@ window.addEventListener("load", () => {
     Matter.Render.run(game.render);
 
     Matter.Events.on(game.engine, 'beforeUpdate', function(event) {
-        // bumpers can quickly multiply velocity, so keep that in check
-        Matter.Body.setVelocity(balls[0], {
-            x: Math.max(Math.min(balls[0].velocity.x, 17), -17),
-            y: Math.max(Math.min(balls[0].velocity.y, 17), -17),
-        });
 
-        if (balls[0].position.x > ballmin && balls[0].position.y >300&&balls[0].position.x < ballmin+75 && balls[0].position.y <500) {//wind gust
-            // Matter.Body.applyForce(ball,{ x: 0, y: 100 });
-            // setVelocity(ball, { x: 0, y: -10 });
-            Matter.Body.applyForce( balls[0], {x: balls[0].position.x, y: balls[0].position.y}, {x:0, y: -.15});
+        for (i = 0; i<balls.length; i++) {
+            // bumpers can quickly multiply velocity, so keep that in check
+            Matter.Body.setVelocity(balls[i], {
+                x: Math.max(Math.min(balls[i].velocity.x, 17), -17),
+                y: Math.max(Math.min(balls[i].velocity.y, 17), -17),
+            });
 
+            if (balls[i].position.x > ballmin && balls[i].position.y >300&&balls[i].position.x < ballmin+75 && balls[i].position.y <500) {//wind gust
+                Matter.Body.applyForce( balls[i], {x: balls[i].position.x, y: balls[i].position.y}, {x:0, y: -.15});
+            }
         }
-        // Matter.Body.setPosition(paddle, {x: 695, y: paddle.position.y})
+
+
         if (balls[0].position.x>625 && balls[0].position.y > 150) {
-            Matter.Body.setPosition(rightWall, {x: rightWall.position.x, y: 780})
+            Matter.Body.setPosition(rightWall, {x: rightWall.position.x, y: 780});
             balls[0].restitution = 0;
         } else {
             balls[0].restitution = 1;
@@ -359,11 +360,10 @@ window.addEventListener("load", () => {
 
     Matter.Events.on(game.engine, 'afterUpdate', function() {
         if (mouseConstraint.mouse.button === -1 && (paddle.position.x > 190 || paddle.position.y < 430)) {
-            // paddle = ball(170,450,20,20,paddleOptions);
-            // paddle = Matter.Bodies.circle(170,450,20),
-            // Matter.World.add(engine.world, paddle);
             elastic.bodyB = paddle;
         }
+        Matter.Body.setPosition(paddle, { x: 692.5, y: paddle.position.y });  //respawns the ball x 100-900,y 100
+
     });
 
     Matter.Events.on(game.engine, 'collisionStart', function(event) {
@@ -373,76 +373,83 @@ window.addEventListener("load", () => {
         for (var i = 0, j = pairs.length; i !== j; ++i) {
             var pair = pairs[i];
 
-            if (pair.bodyA === balls[0]&&pair.bodyB === bumpers[0]) {
-                bumpers[0].render.fillStyle = COLOR.BUMPER_ALT;
-                score+=50;
-                setTimeout(function() {
-                    bumpers[0].render.fillStyle = COLOR.BUMPER;
-                }, 200);
-            } else if (pair.bodyA === balls[0]&&pair.bodyB === bumpers[1]) {
-                bumpers[1].render.fillStyle = COLOR.BUMPER_ALT;
-                score+=50;
-                setTimeout(function() {
-                    bumpers[1].render.fillStyle = COLOR.BUMPER;
-                }, 200);
-            } else if (pair.bodyA === balls[0]&&pair.bodyB === bumpers[2]) {
-                bumpers[2].render.fillStyle = COLOR.BUMPER_ALT;
-                score+=50;
-                setTimeout(function() {
-                    bumpers[2].render.fillStyle = COLOR.BUMPER;
-                }, 200);
-            } else if (pair.bodyA === balls[0]&&pair.bodyB === bumpers[3]) {
-                score+=50;
-                bumpers[3].render.fillStyle = COLOR.BUMPER_ALT;
-                setTimeout(function() {
-                    bumpers[3].render.fillStyle = COLOR.BUMPER;
-                }, 200);
+            for (k = 0; k<balls.length; k++) {
+                if (pair.bodyA === balls[k]&&pair.bodyB === bumpers[0]||(pair.bodyB === balls[k]&&pair.bodyA === bumpers[0])) {
+                    bumpers[0].render.fillStyle = COLOR.BUMPER_ALT;
+                    score+=50;
+                    setTimeout(function() {
+                        bumpers[0].render.fillStyle = COLOR.BUMPER;
+                    }, 200);
+                } else if (pair.bodyA === balls[k]&&pair.bodyB === bumpers[1]||(pair.bodyB === balls[k]&&pair.bodyA === bumpers[1])) {
+                    bumpers[1].render.fillStyle = COLOR.BUMPER_ALT;
+                    score+=50;
+                    setTimeout(function() {
+                        bumpers[1].render.fillStyle = COLOR.BUMPER;
+                    }, 200);
+                } else if (pair.bodyA === balls[k]&&pair.bodyB === bumpers[2]||(pair.bodyB === balls[k]&&pair.bodyA === bumpers[2])) {
+                    bumpers[2].render.fillStyle = COLOR.BUMPER_ALT;
+                    score+=50;
+                    setTimeout(function() {
+                        bumpers[2].render.fillStyle = COLOR.BUMPER;
+                    }, 200);
+                } else if (pair.bodyA === balls[k]&&pair.bodyB === bumpers[3]||(pair.bodyB === balls[k]&&pair.bodyA === bumpers[3])) {
+                    score+=50;
+                    bumpers[3].render.fillStyle = COLOR.BUMPER_ALT;
+                    setTimeout(function() {
+                        bumpers[3].render.fillStyle = COLOR.BUMPER;
+                    }, 200);
+                }
+
+
+                if (pair.bodyA === balls[k]&&pair.bodyB === deadZone||(pair.bodyB === balls[k]&&pair.bodyA === deadZone)) {
+                    if (balls.length>1) {
+                        Matter.World.remove(game.world, [balls[k]]);
+                        balls.splice(k, 1);
+                        left.splice(k, 1);
+                        right.splice(k, 1);
+                    } else {
+                        //round lost
+                        lives-=1;
+                        updateScore();
+                        Matter.Body.setPosition(balls[k], { x: 700, y: 200 });  //respawns the ball x 100-900,y 100
+                        // Matter.Body.setPosition(ball, { x: 580, y: 100 });  //respawns the ball x 100-900,y 100
+                        Matter.Body.setVelocity(balls[k], { x: 0, y: 0 });       //respawns the ball x 100-900,y 100
+                    }
+
+                }
+
+                if ((pair.bodyA === balls[k]&&pair.bodyB === powerupspd)||(pair.bodyB === balls[k]&&pair.bodyA === powerupspd)) {
+                    Matter.Body.setVelocity( balls[k], {x: balls[k].velocity.x*3, y: balls[k].velocity.y*3});
+                    Matter.Body.setPosition( powerupspd, {x: -100, y: -100});
+                    score+=100;
+                    setTimeout(function() {
+                        Matter.Body.setPosition( powerupspd, {x: Math.random()*500+50, y: Math.random()*100+450});
+                    }, 5000);
+                }
+
+                if ((pair.bodyA === balls[k]&&pair.bodyB === powerdownspd)||(pair.bodyB === balls[k]&&pair.bodyA === powerdownspd)) {
+                    Matter.Body.setVelocity( balls[k], {x: balls[k].velocity.x/6, y: balls[k].velocity.y/6});
+                    Matter.Body.setPosition( powerdownspd, {x: -100, y: -100});
+                    score+=100;
+                    setTimeout(function() {
+                        Matter.Body.setPosition( powerdownspd, {x: Math.random()*500+50, y: Math.random()*100+250});
+                    }, 5000);
+                }
+
+                if ((pair.bodyA === balls[k]&&pair.bodyB === powerball)||(pair.bodyB === balls[k]&&pair.bodyA === powerball)) {
+                    balls.push(makeBall(balls[k].position.x, balls[k].position.y));
+                    Matter.World.add(game.world, [balls[balls.length-1]]);
+                    left.push(false);
+                    right.push(false);
+
+                    Matter.Body.setPosition( powerball, {x: -100, y: -100});
+                    score+=100;
+                    setTimeout(function() {
+                        Matter.Body.setPosition( powerball, {x: Math.random()*300+250, y: Math.random()*100+50});
+                    }, 5000);
+                }
             }
 
-            if (pair.bodyA === balls[0]&&pair.bodyB === paddle) {
-                // ball.restitution = 0;
-            }
-
-
-            if (pair.bodyA === balls[0]&&pair.bodyB === deadZone) {
-                //round lost
-                lives-=1;
-                score=0;
-                updateScore();
-                Matter.Body.setPosition(balls[0], { x: 700, y: 200 });  //respawns the ball x 100-900,y 100
-                // Matter.Body.setPosition(ball, { x: 580, y: 100 });  //respawns the ball x 100-900,y 100
-                Matter.Body.setVelocity(balls[0], { x: 0, y: 0 });       //respawns the ball x 100-900,y 100
-            }
-
-            if ((pair.bodyA === balls[0]&&pair.bodyB === powerupspd)||(pair.bodyB === balls[0]&&pair.bodyA === powerupspd)) {
-                Matter.Body.setVelocity( balls[0], {x: balls[0].velocity.x*3, y: balls[0].velocity.y*3});
-                Matter.Body.setPosition( powerupspd, {x: -100, y: -100});
-                score+=100;
-                setTimeout(function() {
-                    Matter.Body.setPosition( powerupspd, {x: Math.random()*500+50, y: Math.random()*100+450});
-                }, 5000);
-            }
-
-            if ((pair.bodyA === balls[0]&&pair.bodyB === powerdownspd)||(pair.bodyB === balls[0]&&pair.bodyA === powerdownspd)) {
-                Matter.Body.setVelocity( balls[0], {x: balls[0].velocity.x/6, y: balls[0].velocity.y/6});
-                Matter.Body.setPosition( powerdownspd, {x: -100, y: -100});
-                score+=100;
-                setTimeout(function() {
-                    Matter.Body.setPosition( powerdownspd, {x: Math.random()*500+50, y: Math.random()*100+250});
-                }, 5000);
-            }
-
-            if ((pair.bodyA === balls[0]&&pair.bodyB === powerball)||(pair.bodyB === balls[0]&&pair.bodyA === powerball)) {
-                balls.push(makeBall());
-                //TODO
-
-
-                Matter.Body.setPosition( powerball, {x: -100, y: -100});
-                score+=100;
-                setTimeout(function() {
-                    Matter.Body.setPosition( powerball, {x: Math.random()*500+50, y: Math.random()*100+50});
-                }, 5000);
-            }
 
             updateScore();
         }
@@ -454,40 +461,42 @@ window.addEventListener("load", () => {
 
         for (var i = 0, j = pairs.length; i != j; ++i) {
             var pair = pairs[i];
+            for (k = 0; k<balls.length; k++) {
+                if ((pair.bodyA === balls[k]&&pair.bodyB === portal1)||(pair.bodyB === balls[k]&&pair.bodyA === portal1)) {
+                    // alert("p1")
+                    if(right[k]===true){
+                        right[k]=false;
+                    }
+                    else{
+                        Matter.Body.setPosition(balls[k],{x:portal2.position.x-30, y:portal2.position.y+(balls[k].position.y-portal1.position.y)});
+                        portal1.render.fillStyle = COLOR.BUMPER_ALT;
+                        setTimeout(function() {
+                            portal1.render.fillStyle = COLOR.BUMPER;
+                        }, 200);
+                        left[k]=true;
+                        score += 20;
+                    }
 
-            if ((pair.bodyA === balls[0]&&pair.bodyB === portal1)||(pair.bodyB === balls[0]&&pair.bodyA === portal1)) {
-                // alert("p1")
-                if(right===true){
-                    right=false;
                 }
-                else{
-                    Matter.Body.setPosition(balls[0],{x:portal2.position.x-30, y:portal2.position.y+(balls[0].position.y-portal1.position.y)});
-                    portal1.render.fillStyle = COLOR.BUMPER_ALT;
-                    setTimeout(function() {
-                        portal1.render.fillStyle = COLOR.BUMPER;
-                    }, 200);
-                    left=true;
-                    score += 20;
-                }
+                if ((pair.bodyA === balls[k]&&pair.bodyB === portal2)||(pair.bodyB === balls[k]&&pair.bodyA === portal2)) {
+                    // alert("p2")
 
+                    if(left[k]===true){
+                        left[k]=false;
+                    }
+                    else{
+                        Matter.Body.setPosition(balls[k],{x:portal1.position.x+30,  y:portal1.position.y+(balls[k].position.y-portal2.position.y)});
+                        portal2.render.fillStyle = COLOR.BUMPER_ALT;
+                        setTimeout(function() {
+                            portal2.render.fillStyle = COLOR.BUMPER;
+                        }, 200);
+                        score+=20;
+                        right[k]=true;
+                    }
+
+                }
             }
-            if ((pair.bodyA === balls[0]&&pair.bodyB === portal2)||(pair.bodyB === balls[0]&&pair.bodyA === portal2)) {
-                // alert("p2")
 
-                if(left===true){
-                    left=false;
-                }
-                else{
-                    Matter.Body.setPosition(balls[0],{x:portal1.position.x+30,  y:portal1.position.y+(balls[0].position.y-portal2.position.y)});
-                    portal2.render.fillStyle = COLOR.BUMPER_ALT;
-                    setTimeout(function() {
-                        portal2.render.fillStyle = COLOR.BUMPER;
-                    }, 200);
-                    score+=20;
-                    right=true;
-                }
-
-            }
         }
 
         updateScore();
@@ -600,12 +609,12 @@ function makePaddle(x, y, direction) {
 
 }
 
-function makeBall() {
-    return Matter.Bodies.circle(692.5, 400, 15, {
+function makeBall(x, y) {
+    return Matter.Bodies.circle(x, y, 15, {
         density: 0.1,
         // friction: 0.003,
         // frictionAir: 0.00032,
-        restitution: 0,
+        restitution: 1,
         // inertia: Infinity,  // <--- Do we need this?
         slop: 1,
         render: {
@@ -695,10 +704,12 @@ function updateScore() {
     if (score >= highScore) {
         highScore = score;
     }
-    if (lives < 0 && isGameRunning === true) {
-        isGameRunning = false;
+    if (lives < 1 && isGameRunning === true) {
+        // isGameRunning = false;
+        score = 0;
+        lives = 3;
         alert("Game Over!\nClick Okay to refresh");
-        window.location.assign(window.location.href + "?=" + highScore);
+        // window.location.assign(window.location.href + "?=" + highScore);
     }
     document.getElementById("lives").innerHTML = "Lives: " + lives;
     document.getElementById("score").innerHTML = "Score: " + score;
