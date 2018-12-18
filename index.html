@@ -2,21 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Redirect</title>
+    <title>PinBall!</title>
+    <meta name="author" content="Eddie Federmeyer">
 
-    <script>
-        window.location.href = "%23.%20Official/index.html"
-    </script>
+    <link rel="stylesheet" href="style.css">
+
+    <!--<script src="../.%23%20Global%20Scripts/p5.js"></script>-->
+    <!--<script src="matter.js"></script>-->
+    <script src="/Project%20Development/.%23%20Global%20Scripts/matter.js"></script>
+    <script src="script.js"></script>
+
 
 </head>
 <body>
 
-<!--
-    Do not put anything in this file, this is just reference
--->
+
+<button id="bu" onclick="game.render.options.wireframes = !(game.render.options.wireframes); game.render.options.showAngleIndicator = !(game.render.options.showAngleIndicator);" >
+    Stuff
+</button>
+
+<canvas id="ca" width="750" height="750">
+    HTML canvas not supported by browser!
+</canvas>
+
+<p id="lives" class="text">Lives: 1</p>
+<p id="score" class="text">Score: 0</p>
+<p id="highScore" class="text">High Score: 0</p>
 
 
-
-<p>Redirecting...</p>
 </body>
 </html>
